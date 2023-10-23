@@ -20,6 +20,7 @@ public class PublicDataTrendFollowingService implements TrendFollowing{
     private final int TREND_FOLLOIWNG_DEFAULT_DAY = 75;
     @Override
     public TrendFollowDto get(String ticker, String baseDt) {
+        //TODO 함수화 리팩토링
 
         //baseDt yyyymmdd
         LocalDate date = LocalDate.parse(baseDt, DateTimeFormatter.ofPattern("yyyyMMdd"));

@@ -38,4 +38,4 @@ out/
 
 
 ### sec file ###
-!**/src/main/resources/applicationsec.yml
+!**/src/main/resources/application-sec.yml

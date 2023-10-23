@@ -7,4 +7,6 @@ import java.util.List;
 public interface StockService {
 
     default List<PublicDataStockDto> get(String ticker){return null;}
+
+    default List<PublicDataStockDto> getAllByAfterBeginDate(String ticker,String beginDt){return null;}
 }

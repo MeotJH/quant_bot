@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -29,31 +28,48 @@ public class PublicDataStockService implements StockService{
     private String SERVICE_URL;
 
     private final ObjectMapper om;
+    private final RestTemplate restTemplate;
 
     @Override
     public List<PublicDataStockDto>  get(String ticker) {
-
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<?> entity = new HttpEntity<>(headers);
-
-        String encodedTicker = getEncode(ticker);
-
-        URI uri = UriComponentsBuilder.fromHttpUrl(SERVICE_URL)
-                .queryParam("serviceKey", SERVICE_KEY)
-                .queryParam("resultType", "json")
-                .queryParam("itmsNm", encodedTicker)
-                .build(true).toUri();
-
-
-        ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.GET, entity, String.class);
+        ResponseEntity<String> response = restTemplate.exchange(
+                getUrlDefaultBuilder(ticker).build(true).toUri()
+                , HttpMethod.GET
+                , getHttpEntity()
+                , String.class);
 
         return getDtos(response);
     }
 
+    @Override
+    public List<PublicDataStockDto>  getAllByAfterBeginDate(String ticker, String beginDt) {
+
+        URI uri = getUrlDefaultBuilder(ticker)
+                .queryParam("numOfRows", "100")
+                .queryParam("beginBasDt", beginDt)
+                .build(true)
+                .toUri();
+
+        ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.GET, getHttpEntity(), String.class);
+        return getDtos(response);
+    }
+
+    private HttpEntity<?> getHttpEntity() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return new HttpEntity<>(headers);
+    }
+
     private String getEncode(String ticker) {
         return URLEncoder.encode(ticker, StandardCharsets.UTF_8);
+    }
+
+
+    private UriComponentsBuilder getUrlDefaultBuilder(String ticker) {
+        return UriComponentsBuilder.fromHttpUrl(SERVICE_URL)
+                .queryParam("serviceKey", SERVICE_KEY)
+                .queryParam("resultType", "json")
+                .queryParam("itmsNm", getEncode(ticker));
     }
 
     private List<PublicDataStockDto> getDtos(ResponseEntity<String> response) {

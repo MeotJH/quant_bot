@@ -1,14 +1,15 @@
 package com.server.quant_bot.korea.service;
 
+import com.server.quant_bot.korea.dto.PublicDataStockDto;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.ResponseEntity;
 
-import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
+
 
 @SpringBootTest
 class PublicDataStockServiceTest {
@@ -18,13 +19,17 @@ class PublicDataStockServiceTest {
 
 
     @Test
-    public void getTest(){
+    @DisplayName("삼성전자 주식을 가져와야 한다.")
+    public void getServiceTest(){
         //given
+        String SAMSUNG = "삼성전자";
 
         //when
-        ResponseEntity<Map> response = stockService.get("%EC%82%BC%EC%84%B1%EC%A0%84%EC%9E%90");
+        List<PublicDataStockDto> samsungStocks = stockService.get(SAMSUNG);
+        PublicDataStockDto publicDataStockDto = samsungStocks.get(0);
+
         //then
-        Assertions.assertThat(response).isNotEqualTo(null);
+        Assertions.assertThat(publicDataStockDto.getItmsNm()).isEqualTo(SAMSUNG);
     }
 
 }

@@ -1,10 +1,10 @@
 package com.server.quant_bot.korea.service;
 
-import org.springframework.http.ResponseEntity;
+import com.server.quant_bot.korea.dto.PublicDataStockDto;
 
-import java.util.Map;
+import java.util.List;
 
 public interface StockService {
 
-    default ResponseEntity<Map> get(String ticker){return null;}
+    default List<PublicDataStockDto> get(String ticker){return null;}
 }

@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+
+### sec file ###
+!**/src/main/resources/applicationsec.yml

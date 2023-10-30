@@ -27,19 +27,26 @@
             </div>
         </div>
 
-        <div class="card text-center" v-if="initData">
-            <div class="card-header">
-                {{ stock }}
+        <div v-if="initData.trendFollowPrice !== 0">
+
+            <div class="card text-center">
+                <div class="card-header">
+                    {{ stock }}
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ isBuy }}</h5>
+                    <p class="card-text">90일 추세평균가 : {{ initData.trendFollowPrice }}원</p>
+                    <p class="card-text">금일 시장종결가 : {{ initData.baseDateClosePrice }}원</p>
+                    <a href="https://meotlog.tistory.com/69" class="btn btn-primary">추세투자법 더 알아보기</a>
+                </div>
+                <div class="card-footer text-body-secondary">
+                    2 days ago
+                </div>
             </div>
-            <div class="card-body">
-                <h5 class="card-title">{{ isBuy }}</h5>
-                <p class="card-text">90일 추세평균가 : {{ initData.trendFollowPrice }}원</p>
-                <p class="card-text">금일 시장종결가 : {{ initData.baseDateClosePrice }}원</p>
-                <a href="https://meotlog.tistory.com/69" class="btn btn-primary">추세투자법 더 알아보기</a>
-            </div>
-            <div class="card-footer text-body-secondary">
-                2 days ago
-            </div>
+
+        </div>
+        <div>
+            <canvas id="myChart"></canvas>
         </div>
     </div>
     <script>
@@ -57,19 +64,23 @@
             },
             data() {
                 return{
-                    initData : null,
+                    initData : {
+                        trendFollowPrice: 0,
+                        baseDateClosePrice: 0,
+                        buy: false,
+                    },
                     stock: "",
                 }
             },
             computed:{
                 isBuy(){
+
                     return this.initData.buy === true ? "매수" : "매도"
                 }
             },
             methods: {
                 async getData() {
                     const v = this;
-
                     if( v.stock === ""){
                         return;
                     }
@@ -77,7 +88,36 @@
                     const response = await fetch("/api/v1/trend-follow/"+ v.stock);
                     v.initData = await response.json();
                     console.info(v.initData,"v.initData")
-                }
+                    v.createChart();
+                },
+                async createChart(){
+                    const v = this;
+                    if( v.stock === ""){
+                        return;
+                    }
+
+                    const response = await fetch("/api/v1/korea/"+ v.stock);
+                    const stockData = await response.json();
+                    console.info(stockData,"stockData")
+                    new Chart(document.getElementById('myChart'), {
+                        type: 'line',
+                        data: {
+                            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                            datasets: [{
+                                label: '# of Votes',
+                                data: [100, 19, 3, 5, 2, 3],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                },
             }
         }).mount('#app');
     </script>

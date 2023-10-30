@@ -1,4 +1,4 @@
-package com.server.quant_bot.korea.config;
+package com.server.quant_bot.comm.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.modelmapper.ModelMapper;

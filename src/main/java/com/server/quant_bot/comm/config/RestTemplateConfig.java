@@ -1,4 +1,4 @@
-package com.server.quant_bot.korea.config;
+package com.server.quant_bot.comm.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

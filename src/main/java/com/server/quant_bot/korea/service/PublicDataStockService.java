@@ -91,10 +91,17 @@ public class PublicDataStockService implements StockService{
                         }
 
                     });
-
+            defineDataExist(dtos);
             return dtos;
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void defineDataExist(List<PublicDataStockDto> dtos) {
+        //TODO 백엔드 익셉션 프론트로 던져주는 로직 만들기
+        if(dtos.isEmpty()){
+            throw new RuntimeException("결과값이 없습니다.");
         }
     }
 

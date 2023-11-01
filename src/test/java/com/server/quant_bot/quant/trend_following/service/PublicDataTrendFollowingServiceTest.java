@@ -2,7 +2,7 @@ package com.server.quant_bot.quant.trend_following.service;
 
 import com.server.quant_bot.quant.trend_following.dto.TrendFollowDto;
 import com.server.quant_bot.quant.trend_following.dto.TrendFollowListDto;
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +31,25 @@ class PublicDataTrendFollowingServiceTest {
 
         //then
         if( date.getTrendFollowPrice() < date.getBaseDateClosePrice()){
-            Assertions.assertThat(date.isBuy()).isEqualTo(true);
+            Assertions.assertEquals(date.isBuy(),true);
         }else{
-            Assertions.assertThat(date.isBuy()).isEqualTo(false);
+            Assertions.assertEquals(date.isBuy(),false);
         }
+    }
+
+    @Test
+    @DisplayName("실패했으니 예외처리 되어야 한다.")
+    void getFail() {
+        //given
+        String samsung = "네이버";
+        String nowDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+
+        //then
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            trendFollowing.getOneday(samsung, nowDate);
+        });
+
+
     }
 
     @Test
@@ -49,6 +64,6 @@ class PublicDataTrendFollowingServiceTest {
         TrendFollowListDto dto = trendFollowing.getDaysByBaseDt(samsung, nowDate);
 
         //then
-        Assertions.assertThat(daysByBaseDt.getTrendFollowPrice()).isEqualTo(dto.getTrendFollowPrices().get(0));
+        Assertions.assertEquals(daysByBaseDt.getTrendFollowPrice(),dto.getTrendFollowPrices().get(0));
     }
 }

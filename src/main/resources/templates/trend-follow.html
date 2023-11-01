@@ -12,7 +12,7 @@
         <div class="input-group mb-3 mx-auto p-5" >
             <input
                     v-model="stock"
-                    v-on:keyup.enter="getData"
+                    v-on:keypress.enter="getData"
                     type="text"
                     class="form-control"
                     placeholder="회사 이름을 넣어주세요"
@@ -35,7 +35,7 @@
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">{{ isBuy }}</h5>
-                    <p class="card-text">90일 추세평균가 : {{ initData.trendFollowPrice }}원</p>
+                    <p class="card-text">75일 추세평균가 : {{ initData.trendFollowPrice }}원</p>
                     <p class="card-text">금일 시장종결가 : {{ initData.baseDateClosePrice }}원</p>
                     <a href="https://meotlog.tistory.com/69" class="btn btn-primary">추세투자법 더 알아보기</a>
                 </div>
@@ -60,7 +60,7 @@
             },
             mounted() {
                 const v = this;
-                v.getData();
+                //v.getData();
             },
             data() {
                 return{
@@ -74,7 +74,6 @@
             },
             computed:{
                 isBuy(){
-
                     return this.initData.buy === true ? "매수" : "매도"
                 }
             },
@@ -85,8 +84,7 @@
                         return;
                     }
 
-                    const response = await fetch("/api/v1/trend-follow/"+ v.stock);
-                    v.initData = await response.json();
+                    v.initData = await ( quantFetch("/api/v1/trend-follow/"+ v.stock) );
                     await v.createChart();
                 },
                 async createChart(){
@@ -94,34 +92,8 @@
                     if( v.stock === ""){
                         return;
                     }
-
-                    const response = await fetch("/api/v1/trend-follow/"+ v.stock + "/list");
-                    const stockData = await response.json();
-
-                    //TODO 얘 래핑하는 JS 필요하지 않을까?
-                    new Chart(document.getElementById('myChart'), {
-                        type: 'line',
-                        data: {
-                            labels: stockData.baseDt.reverse(),
-                            datasets: [{
-                                label: '추세이동평균선',
-                                data: stockData.trendFollowPrices.reverse(),
-                                order: 1
-                            },{
-                                label: '금일 종가',
-                                data: stockData.closePrice.reverse(),
-                                type: 'line',
-                                order: 1
-                            }]
-                        },
-                        options: {
-                            scales: {
-                                y: {
-                                    beginAtZero: false
-                                }
-                            }
-                        }
-                    });
+                    const stockData = await ( quantFetch("/api/v1/trend-follow/"+ v.stock + "/list") );
+                    callChart("myChart",stockData);
                 },
             }
         }).mount('#app');

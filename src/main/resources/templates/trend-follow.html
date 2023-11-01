@@ -40,7 +40,7 @@
                     <a href="https://meotlog.tistory.com/69" class="btn btn-primary">추세투자법 더 알아보기</a>
                 </div>
                 <div class="card-footer text-body-secondary">
-                    2 days ago
+
                 </div>
             </div>
 
@@ -87,8 +87,7 @@
 
                     const response = await fetch("/api/v1/trend-follow/"+ v.stock);
                     v.initData = await response.json();
-                    console.info(v.initData,"v.initData")
-                    v.createChart();
+                    await v.createChart();
                 },
                 async createChart(){
                     const v = this;
@@ -96,29 +95,29 @@
                         return;
                     }
 
-                    const response = await fetch("/api/v1/korea/"+ v.stock);
+                    const response = await fetch("/api/v1/trend-follow/"+ v.stock + "/list");
                     const stockData = await response.json();
-                    console.info(stockData,"stockData")
+
+                    //TODO 얘 래핑하는 JS 필요하지 않을까?
                     new Chart(document.getElementById('myChart'), {
                         type: 'line',
                         data: {
-                            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                            labels: stockData.baseDt.reverse(),
                             datasets: [{
                                 label: '추세이동평균선',
-                                data: [100, 19, 3, 5, 2, 3],
+                                data: stockData.trendFollowPrices.reverse(),
                                 order: 1
                             },{
                                 label: '금일 종가',
-                                data: [90, 15, 5, 2, 15, 8],
+                                data: stockData.closePrice.reverse(),
                                 type: 'line',
-                                // this dataset is drawn on top
                                 order: 1
                             }]
                         },
                         options: {
                             scales: {
                                 y: {
-                                    beginAtZero: true
+                                    beginAtZero: false
                                 }
                             }
                         }

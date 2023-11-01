@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * static class to get date data - Meot -
+ */
 public class DateUtill {
 
     private DateUtill(){};
@@ -13,8 +16,9 @@ public class DateUtill {
     }
 
     /**
-     * yyyMMdd로 오늘 날짜를 준다.
-     * @return
+     * return today Date format to yyyMMdd.
+     * - Meot -
+     * @return yyyyMMdd String Data
      */
     public static String getToday(){
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));

@@ -45,7 +45,7 @@ public class PublicDataStockService implements StockService{
     public List<PublicDataStockDto>  getAllByAfterBeginDate(String ticker, String beginDt) {
 
         URI uri = getUrlDefaultBuilder(ticker)
-                .queryParam("numOfRows", "100")
+                .queryParam("numOfRows", "1000")
                 .queryParam("beginBasDt", beginDt)
                 .build(true)
                 .toUri();

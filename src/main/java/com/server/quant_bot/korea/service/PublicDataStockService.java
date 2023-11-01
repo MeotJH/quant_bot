@@ -3,6 +3,7 @@ package com.server.quant_bot.korea.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.server.quant_bot.comm.exception.ResourceNotFoundException;
 import com.server.quant_bot.korea.dto.PublicDataStockDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -101,7 +102,7 @@ public class PublicDataStockService implements StockService{
     private void defineDataExist(List<PublicDataStockDto> dtos) {
         //TODO 백엔드 익셉션 프론트로 던져주는 로직 만들기
         if(dtos.isEmpty()){
-            throw new RuntimeException("결과값이 없습니다.");
+            throw new ResourceNotFoundException("결과값이 없습니다.");
         }
     }
 

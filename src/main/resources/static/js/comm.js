@@ -5,13 +5,17 @@ const quantFetch = function (url) {
             fetch(url)
                 .then(response => {
                     if (!response.ok) {
+                        return response.json();
                         throw new Error('Network response was not ok');
                     }
-                    console.info(response, "in quant fetch response")
                     return response.json();
                 })
                 .then(data => {
-                    console.log(data, "in quant data");
+                    if(data.error){
+                        console.error(data)
+                        alert(data.message)
+                        throw new Error('Network response was not ok');
+                    }
                     resolve(data);
                 })
                 .catch(error => {

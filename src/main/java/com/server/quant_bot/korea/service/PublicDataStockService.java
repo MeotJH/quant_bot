@@ -73,6 +73,13 @@ public class PublicDataStockService implements StockService{
                 .queryParam("itmsNm", getEncode(ticker));
     }
 
+    private UriComponentsBuilder getUrlNameLikeBuilder(String ticker) {
+        return UriComponentsBuilder.fromHttpUrl(SERVICE_URL)
+                .queryParam("serviceKey", SERVICE_KEY)
+                .queryParam("resultType", "json")
+                .queryParam("likeItmsNm", getEncode(ticker));
+    }
+
     private List<PublicDataStockDto> getDtos(ResponseEntity<String> response) {
         List<PublicDataStockDto> dtos = new ArrayList<>();
         try {

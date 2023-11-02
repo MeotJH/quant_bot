@@ -4,6 +4,8 @@ import com.server.quant_bot.korea.dto.PublicDataStockDto;
 import com.server.quant_bot.korea.service.StockService;
 import com.server.quant_bot.quant.trend_following.dto.TrendFollowDto;
 import com.server.quant_bot.quant.trend_following.dto.TrendFollowListDto;
+import com.server.quant_bot.quant.trend_following.dto.TrendFollowRecord;
+import com.server.quant_bot.quant.trend_following.dto.TrendFollowRecordForList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,7 +30,7 @@ public class PublicDataTrendFollowingService implements TrendFollowing{
         String beginDateStr = getTrendFollowStartDate(baseDt);
         List<PublicDataStockDto> allByAfterBeginDate = stockService.getAllByAfterBeginDate(ticker, beginDateStr);
 
-        Result result = getResultOne(allByAfterBeginDate);
+        TrendFollowRecord result = getResultOne(allByAfterBeginDate);
 
         log.info(result.trendFollowPrice() + " ::: TrendFollowPrice");
         log.info(result.baseDateClosePrice() + " ::: TodayClosePrice");
@@ -47,27 +49,27 @@ public class PublicDataTrendFollowingService implements TrendFollowing{
         String beginDateStr = getTrendFollowsStartDate(baseDt);
         List<PublicDataStockDto> allByAfterBeginDate = stockService.getAllByAfterBeginDate(ticker, beginDateStr);
 
-        List<ResultToList> results = getResultList(allByAfterBeginDate);
+        List<TrendFollowRecordForList> results = getResultList(allByAfterBeginDate);
         return toTrendFollowDtos(results);
     }
 
-    private TrendFollowListDto toTrendFollowDtos(List<ResultToList> results){
+    private TrendFollowListDto toTrendFollowDtos(List<TrendFollowRecordForList> results){
 
         TrendFollowListDto dto = new TrendFollowListDto();
-        for (ResultToList each: results) {
+        for (TrendFollowRecordForList each: results) {
 
             boolean isBuy = each.trendFollowPrice() < each.baseDateClosePrice();
-            dto.getTrendFollowPrices().add(each.trendFollowPrice);
+            dto.getTrendFollowPrices().add(each.trendFollowPrice());
             dto.getClosePrice().add(each.baseDateClosePrice());
             dto.getIsBuy().add(isBuy);
-            dto.getBaseDt().add(each.baseDt);
+            dto.getBaseDt().add(each.baseDt());
 
         }
 
         return dto;
     }
 
-    private Result getResultOne(List<PublicDataStockDto> allByAfterBeginDate) {
+    private TrendFollowRecord getResultOne(List<PublicDataStockDto> allByAfterBeginDate) {
         double temp = 0.0;
         for (PublicDataStockDto each: allByAfterBeginDate) {
             temp = temp + Double.parseDouble(each.getClpr());
@@ -75,11 +77,10 @@ public class PublicDataTrendFollowingService implements TrendFollowing{
 
         double trendFollowPrice = temp / allByAfterBeginDate.size();
         double baseDateClosePrice = Double.parseDouble(allByAfterBeginDate.get(0).getClpr());
-        Result result = new Result(trendFollowPrice, baseDateClosePrice);
-        return result;
+        return new TrendFollowRecord(trendFollowPrice, baseDateClosePrice);
     }
 
-    private List<ResultToList> getResultList(List<PublicDataStockDto> allByAfterBeginDate) {
+    private List<TrendFollowRecordForList> getResultList(List<PublicDataStockDto> allByAfterBeginDate) {
 
         //메소드로 나누자
         double temp = 0.0;
@@ -96,9 +97,9 @@ public class PublicDataTrendFollowingService implements TrendFollowing{
 
         double trendFollowPriceFirstOne = temp / index;
         double baseDateClosePriceFirstOne = Double.parseDouble(allByAfterBeginDate.get(0).getClpr());
-        ResultToList result = new ResultToList(trendFollowPriceFirstOne, baseDateClosePriceFirstOne,allByAfterBeginDate.get(0).getBasDt());
-        List<ResultToList> results = new ArrayList<>();
-        results.add(result);
+        TrendFollowRecordForList trl = new TrendFollowRecordForList(trendFollowPriceFirstOne, baseDateClosePriceFirstOne,allByAfterBeginDate.get(0).getBasDt());
+        List<TrendFollowRecordForList> trls = new ArrayList<>();
+        trls.add(trl);
 
         //index번을 추가 안한거니까
         int j = 0;
@@ -110,14 +111,20 @@ public class PublicDataTrendFollowingService implements TrendFollowing{
 
             // 그날 평균이동값과 시작일+1일 종가를 구해서 넣어준다.
             double trendFollowTemp = temp / index;
-            results.add( new ResultToList(trendFollowTemp, Double.parseDouble(allByAfterBeginDate.get(j).getClpr()), allByAfterBeginDate.get(j).getBasDt() ) );
+            trls.add(
+                    new TrendFollowRecordForList(
+                            trendFollowTemp
+                            , Double.parseDouble(allByAfterBeginDate.get(j).getClpr())
+                            , allByAfterBeginDate.get(j).getBasDt()
+                    )
+            );
 
             if( allByAfterBeginDate.get(j).getBasDt().equals(beginDateStr) ){
                 break;
             }
 
         }
-        return results;
+        return trls;
     }
 
     private String getTrendFollowStartDate(String baseDt) {
@@ -129,7 +136,4 @@ public class PublicDataTrendFollowingService implements TrendFollowing{
         LocalDate date = LocalDate.parse(baseDt, DateTimeFormatter.ofPattern(DATE_TYPE_PATTERN));
         return date.minusDays(TREND_FOLLOIWNGS_DEFAULT_DAY).format(DateTimeFormatter.ofPattern(DATE_TYPE_PATTERN));
     }
-
-    private record Result(double trendFollowPrice, double baseDateClosePrice) {}
-    private record ResultToList(double trendFollowPrice, double baseDateClosePrice, String baseDt) {}
 }

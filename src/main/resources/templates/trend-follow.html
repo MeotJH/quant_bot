@@ -83,8 +83,7 @@
                     if( v.stock === ""){
                         return;
                     }
-
-                    v.initData = await ( quantFetch("/api/v1/trend-follow/"+ v.stock) );
+                    v.initData = await quantFetch("/api/v1/trend-follow/"+ v.stock) ;
                     await v.createChart();
                 },
                 async createChart(){
@@ -92,7 +91,7 @@
                     if( v.stock === ""){
                         return;
                     }
-                    const stockData = await ( quantFetch("/api/v1/trend-follow/"+ v.stock + "/list") );
+                    const stockData = await quantFetch("/api/v1/trend-follow/"+ v.stock + "/list") ;
                     callChart("myChart",stockData);
                 },
             }

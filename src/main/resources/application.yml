@@ -8,3 +8,7 @@ spring:
 server:
   error:
     include-stacktrace: never
+
+finance:
+  news:
+    url: https://www.hankyung.com/finance

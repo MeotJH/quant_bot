@@ -4,3 +4,7 @@ spring:
       - classpath:application-sec.yml
   thymeleaf:
     cache: false
+
+server:
+  error:
+    include-stacktrace: never

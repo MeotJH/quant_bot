@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -15,12 +18,13 @@ class NewsCrawlingTest {
     Crawling crawling;
 
     @Test
-    @DisplayName("뉴스 마크업을 리스트로 가져온다")
+    @DisplayName("크롤링한 List안 Map이 비어있지 않고 href인 key가 있다.")
     void get() {
         //given
         //when
-        int i = crawling.get();
+        List<Map> maps = crawling.get();
         //then
-        Assertions.assertNotEquals(i,0);
+        Assertions.assertFalse(maps.isEmpty());
+        Assertions.assertTrue(maps.get(0).containsKey("href"));
     }
 }

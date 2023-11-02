@@ -35,6 +35,9 @@ dependencies {
 
 	// https://mvnrepository.com/artifact/nz.net.ultraq.thymeleaf/thymeleaf-layout-dialect
 	implementation group: 'nz.net.ultraq.thymeleaf', name: 'thymeleaf-layout-dialect', version: '3.1.0'
+
+	// https://mvnrepository.com/artifact/org.jsoup/jsoup 크롤링 라이브러리
+	implementation group: 'org.jsoup', name: 'jsoup', version: '1.15.3'
 }
 
 tasks.named('test') {

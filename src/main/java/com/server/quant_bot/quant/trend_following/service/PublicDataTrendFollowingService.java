@@ -1,5 +1,6 @@
 package com.server.quant_bot.quant.trend_following.service;
 
+import com.server.quant_bot.comm.utill.DateUtill;
 import com.server.quant_bot.korea.dto.PublicDataStockDto;
 import com.server.quant_bot.korea.service.StockService;
 import com.server.quant_bot.quant.trend_following.dto.TrendFollowDto;
@@ -85,9 +86,12 @@ public class PublicDataTrendFollowingService implements TrendFollowing{
         //메소드로 나누자
         double temp = 0.0;
         int index = 0;
+
         String beginDateStr = getTrendFollowStartDate( allByAfterBeginDate.get(0).getBasDt() );
+        String parseWeekendDate = changeWeekendDate(beginDateStr);
+
         for (PublicDataStockDto each: allByAfterBeginDate) {
-            if( each.getBasDt().equals(beginDateStr) ){
+            if( each.getBasDt().equals(parseWeekendDate) ){
                 break;
             }
             temp = temp + Double.parseDouble(each.getClpr());
@@ -127,10 +131,22 @@ public class PublicDataTrendFollowingService implements TrendFollowing{
         return trls;
     }
 
+    private String changeWeekendDate(String beginDateStr) {
+        String dayOfWeek = DateUtill.getDayOfWeek(beginDateStr);
+        if(dayOfWeek.equals("토요일")){
+            return DateUtill.getMinusDay(beginDateStr, 1);
+        } else if (dayOfWeek.equals("일요일")) {
+            return DateUtill.getMinusDay(beginDateStr,2);
+        }else{
+            return beginDateStr;
+        }
+    }
+
     private String getTrendFollowStartDate(String baseDt) {
         LocalDate date = LocalDate.parse(baseDt, DateTimeFormatter.ofPattern(DATE_TYPE_PATTERN));
         return date.minusDays(TREND_FOLLOIWNG_DEFAULT_DAY).format(DateTimeFormatter.ofPattern(DATE_TYPE_PATTERN));
     }
+
 
     private String getTrendFollowsStartDate(String baseDt) {
         LocalDate date = LocalDate.parse(baseDt, DateTimeFormatter.ofPattern(DATE_TYPE_PATTERN));

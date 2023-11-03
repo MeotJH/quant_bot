@@ -8,29 +8,17 @@
       xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <th:block layout:fragment="content">
     <!-- Begin Page Content -->
-    <div id="app">
+    <div class="container-fluid" id="app">
 
-        <div class="row py-5" >
-            <div class="card mx-auto" style="height: 25rem; width: 25rem;" v-for=" item in newsDto.newsList">
-                <img v-bind:src="item.src" class="card-img-top p-2" style="height: 17rem; width: 23rem;" v-bind:alt="item.alt">
+        <div class="row grid gap-5 m-5" >
+            <div class="card m-auto"  style="width: 25rem; height: 25rem;" v-for=" item in newsDto.newsList">
+                <img v-bind:src="item.src" class="card-img-top" v-bind:alt="item.alt" style="width: 23.5rem; height: 15rem;">
                 <div class="card-body">
                     <h5 class="card-title">{{ item.alt }}</h5>
                     <div class="text-center">
                         <a v-bind:href="item.href" class="btn btn-primary text-center" target='_blank' >뉴스 더보기</a>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="row py-5" >
-            <div class="card mx-auto" style="height: 25rem; width: 80rem;" >
-                <h5>코스닥</h5>
-            </div>
-        </div>
-
-        <div class="row py-5" >
-            <div class="card mx-auto" style="height: 25rem; width: 80rem;" >
-                <h5>코스피</h5>
             </div>
         </div>
 

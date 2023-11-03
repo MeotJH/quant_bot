@@ -14,7 +14,7 @@ import java.util.Map;
 class NewsCrawlingTest {
 
     @Autowired
-    NewsService newsService;
+    Crawling crawling;
 
     @Test
     @DisplayName("크롤링한 List안 Map이 비어있지 않고 href인 key가 있다.")
@@ -22,7 +22,7 @@ class NewsCrawlingTest {
         //given
         int size = 3;
         //when
-        NewsDto newsDto = newsService.get(size);
+        NewsDto newsDto = crawling.get(size);
         List<Map> maps = newsDto.newsList();
 
         //then

@@ -14,7 +14,7 @@ import java.util.*;
 
 @Slf4j
 @Service
-public class KoreaNewsService implements NewsService {
+public class NewsCrawling implements Crawling{
 
     @Value("${finance.news.url}")
     private String FINANCE_NEWS_URL;

@@ -18,7 +18,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="/js/comm.js"></script>
 </head>
-<body>
+<body class=" text-bg-light ">
 <div class="d-flex" id="wrapper">
     <!-- Sidebar-->
     <div class="border-end bg-white" id="sidebar-wrapper">
@@ -26,12 +26,12 @@
         <div class="list-group list-group-flush">
             <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/">Main</a>
             <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/view/trend-follow">추세추종 투자법</a>
-<!-- 기능 추가 아직 안했으니 닫아 놓기-->
-<!--            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Shortcuts</a>-->
-<!--            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Overview</a>-->
-<!--            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Events</a>-->
-<!--            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Profile</a>-->
-<!--            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Status</a>-->
+            <!-- 기능 추가 아직 안했으니 닫아 놓기-->
+            <!--            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Shortcuts</a>-->
+            <!--            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Overview</a>-->
+            <!--            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Events</a>-->
+            <!--            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Profile</a>-->
+            <!--            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Status</a>-->
         </div>
     </div>
     <!-- Page content wrapper-->
@@ -59,7 +59,9 @@
             </div>
         </nav>
         <!--Content 내용 영역을 참조합니다-->
-        <th:block layout:fragment="content"></th:block>
+        <div class="container-fluid">
+            <th:block layout:fragment="content"></th:block>
+        </div>
     </div>
 </div>
 <!-- Bootstrap core JS-->

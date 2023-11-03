@@ -5,12 +5,55 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/default}"
->
+      xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <th:block layout:fragment="content">
     <!-- Begin Page Content -->
-    <div class="container-fluid">
-        <h1>Main</h1>
+    <div class="container-fluid" id="app">
+
+        <div class="row grid gap-5 m-5" >
+            <div class="card m-auto"  style="width: 25rem; height: 25rem;" v-for=" item in newsDto.newsList">
+                <img v-bind:src="item.src" class="card-img-top" v-bind:alt="item.alt" style="width: 23.5rem; height: 15rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ item.alt }}</h5>
+                    <div class="text-center">
+                        <a v-bind:href="item.href" class="btn btn-primary text-center" target='_blank' >뉴스 더보기</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
+    <script>
+        const { createApp } = Vue;
+        createApp({
+            setup() {
+            },
+            mounted() {
+                const v = this;
+                v.getNews();
+            },
+            data() {
+                return{
+                    newsDto: {
+                        news : [],
+                    }
+                }
+            },
+            computed:{
+
+            },
+            methods: {
+                async getNews() {
+
+                    const v = this;
+                    v.newsDto = await quantFetch("/api/v1/news/3");
+                    console.info(v.newsDto,"v.newsDto");
+                    console.info(v.newsDto.newsList,"news")
+
+                },
+            }
+        }).mount('#app');
+    </script>
 </th:block>
 
 </html>

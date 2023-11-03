@@ -11,4 +11,4 @@ server:
 
 finance:
   news:
-    url: https://www.hankyung.com/finance
+    url: https://www.hankyung.com/economy

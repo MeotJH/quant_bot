@@ -56,9 +56,10 @@ const callChart = function (id,stockData){
 }
 
 /**
- * 0.5초당 진행률25 씩 오르는 함수
+ * time당 progress에 25씩 더해주는 함수
  * @param originVariation
- * @returns {number}
+ * @param time
+ * @returns {Promise<unknown>}
  */
 const loadingProgressOverTime = function(originVariation,time){
     return new Promise((resolve) => {
@@ -74,4 +75,22 @@ const loadingProgressOverTime = function(originVariation,time){
     });
 
 
+}
+/**
+ * array를 받아서 chunk 만큼 자른 배열을 다시 만들어 리턴해주는 함수
+ * @param array
+ * @param chunk
+ * @returns {*[]}
+ */
+const splitIntoChunk = (array, chunk) => {
+    const copyArray = Object.assign([],array);
+    const result = [];
+
+    while(copyArray.length > 0) {
+        let tempArray;
+        tempArray = copyArray.splice(0, chunk);
+        result.push(tempArray);
+    }
+
+    return result;
 }

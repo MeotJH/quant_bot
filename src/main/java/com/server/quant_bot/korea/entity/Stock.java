@@ -1,18 +1,20 @@
 package com.server.quant_bot.korea.entity;
 
 import com.server.quant_bot.comm.entity.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.Getter;
 
+import java.util.UUID;
+
+@Getter
 @Entity
 @Table(name="TB_STOCKS")
 public class Stock extends BaseEntity {
 
     @Id
     @Column
-    private String id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column
     private String stockCode;
@@ -22,4 +24,15 @@ public class Stock extends BaseEntity {
 
     @Column
     private String market;
+
+    @Override
+    public void update(Object dto) {
+
+    }
+
+    public void updateCsv(String[] dto){
+        this.stockCode = dto[0];
+        this.stockName = dto[1];
+        this.market = dto[2];
+    }
 }

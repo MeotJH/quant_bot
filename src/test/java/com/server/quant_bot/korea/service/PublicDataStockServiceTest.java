@@ -32,4 +32,18 @@ class PublicDataStockServiceTest {
         Assertions.assertThat(publicDataStockDto.getItmsNm()).isEqualTo(SAMSUNG);
     }
 
+    @Test
+    @DisplayName("삼성전자 주식을 가져와야 한다.")
+    public void getByTikerLikeTest(){
+        //given
+        String SAMSUNG = "삼성";
+
+        //when
+        List<PublicDataStockDto> samsungStocks = stockService.get(SAMSUNG);
+        PublicDataStockDto publicDataStockDto = samsungStocks.get(0);
+
+        //then
+        Assertions.assertThat(publicDataStockDto.getItmsNm()).isEqualTo(SAMSUNG);
+    }
+
 }

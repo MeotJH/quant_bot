@@ -42,6 +42,17 @@ public class PublicDataStockService implements StockService{
         return getDtos(response);
     }
 
+
+    public List<PublicDataStockDto>  getByTikerLike(String ticker) {
+        ResponseEntity<String> response = restTemplate.exchange(
+                getUrlNameLikeBuilder(ticker).build(true).toUri()
+                , HttpMethod.GET
+                , getHttpEntity()
+                , String.class);
+
+        return getDtos(response);
+    }
+
     @Override
     public List<PublicDataStockDto>  getAllByAfterBeginDate(String ticker, String beginDt) {
 
@@ -107,7 +118,7 @@ public class PublicDataStockService implements StockService{
     }
 
     private void defineDataExist(List<PublicDataStockDto> dtos) {
-        //TODO 백엔드 익셉션 프론트로 던져주는 로직 만들기
+
         if(dtos.isEmpty()){
             throw new ResourceNotFoundException("결과값이 없습니다.");
         }

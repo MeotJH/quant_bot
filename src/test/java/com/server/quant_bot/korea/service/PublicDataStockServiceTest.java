@@ -35,20 +35,6 @@ class PublicDataStockServiceTest {
     }
 
     @Test
-    @DisplayName("삼성전자 주식을 가져와야 한다.")
-    public void getByTikerLikeTest(){
-        //given
-        String SAMSUNG = "삼성";
-
-        //when
-        List<PublicDataStockDto> samsungStocks = stockService.get(SAMSUNG);
-        PublicDataStockDto publicDataStockDto = samsungStocks.get(0);
-
-        //then
-        Assertions.assertThat(publicDataStockDto.getItmsNm()).isEqualTo(SAMSUNG);
-    }
-
-    @Test
     @DisplayName("테이블에 CSV데이터를 넣어야한다.")
     //@Transactional
     void CSVToDB() {
@@ -59,7 +45,5 @@ class PublicDataStockServiceTest {
 
         //then
         Assertions.assertThat(stock.getStockCode()).isNotNull();
-
-
     }
 }

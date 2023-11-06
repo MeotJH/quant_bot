@@ -157,7 +157,6 @@
                     v.newsDto = await quantFetch("/api/v1/news/4");
                     v.marketDto = await quantFetch("/api/v1/korea/market");
                     v.splitNewsDto = splitIntoChunk(v.newsDto.newsList, 2);
-                    console.info(v.marketDto,"market")
 
                 },
                 swichProgressBar(){

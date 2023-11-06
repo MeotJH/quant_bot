@@ -13,7 +13,9 @@
         <h3 class="text-center pt-5">한국 경제뉴스</h3>
         <hr class="hr" />
 
+        <!-- 사이즈에 따른 동적 변화 if-->
         <div v-if="viewWidth > 1600" >
+
             <div class="row py-5 px-5 justify-content-evenly" v-for="dto in splitNewsDto" v-if="isNewsExist">
                 <div class="card col w-50 p-3 mx-2"  v-for="item in dto">
                     <img v-bind:src="item.src" class="card-img-top p-2 mx-auto" style="height: 25rem; width: 30rem;" v-bind:alt="item.alt">
@@ -30,9 +32,23 @@
                     <div class="progress-bar" :style="{ width: progressTime + '%' }" >{{progressTime}}% </div>
                 </div>
             </div>
+
+            <h3 class="text-center pt-5">한국증시</h3>
+            <hr class="hr" />
+
+            <div class="row py-5 px-5 justify-content-evenly" >
+                <div class="card col w-50 p-3 mx-2"  >
+                    <h5>코스닥</h5>
+                </div>
+                <div class="card col w-50 p-3 mx-2"  >
+                    <h5>코스피</h5>
+                </div>
+            </div>
         </div >
 
+        <!-- 사이즈에 따른 동적 변화 else-->
         <div v-else>
+
             <div class="row py-5 px-5 justify-content-evenly" v-for="item in newsDto.newsList" v-if="isNewsExist">
                 <div class="card col w-50 p-3 mx-2">
                     <img v-bind:src="item.src" class="card-img-top p-2 mx-auto" style="height: 10rem; width: 10rem;" v-bind:alt="item.alt">
@@ -44,20 +60,22 @@
                     </div>
                 </div>
             </div>
+
+            <h3 class="text-center pt-5">한국증시</h3>
+            <hr class="hr" />
+
+            <div class="row py-5 px-5 justify-content-evenly" >
+                <div class="card col w-50 p-3 mx-2"  >
+                    <h5>코스닥</h5>
+                </div>
+            </div>
+            <div class="row py-5 px-5 justify-content-evenly" >
+                <div class="card col w-50 p-3 mx-2"  >
+                    <h5>코스피</h5>
+                </div>
+            </div>
         </div>
 
-
-        <h3 class="text-center pt-5">한국증시</h3>
-        <hr class="hr" />
-
-        <div class="row py-5 px-5 justify-content-evenly" >
-            <div class="card col w-50 p-3 mx-2"  >
-                <h5>코스닥</h5>
-            </div>
-            <div class="card col w-50 p-3 mx-2"  >
-                <h5>코스피</h5>
-            </div>
-        </div>
     </div>
     <script>
         const { createApp } = Vue;

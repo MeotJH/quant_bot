@@ -10,29 +10,34 @@
     <!-- Begin Page Content -->
     <div id="app">
 
-        <div class="row py-5" >
-            <div class="card mx-auto" style="height: 25rem; width: 25rem;" v-for=" item in newsDto.newsList">
-                <img v-bind:src="item.src" class="card-img-top p-2" style="height: 17rem; width: 23rem;" v-bind:alt="item.alt">
+        <h3 class="text-center pt-5">한국 경제뉴스</h3>
+        <hr class="hr" />
+
+        <div class="row py-5 px-5 justify-content-evenly" v-for="dto in newsDto">
+            <div class="card col w-50 p-3 mx-2"  v-for="item in dto">
+                <img v-bind:src="item.src" class="card-img-top p-2 mx-auto" style="height: 25rem; width: 30rem;" v-bind:alt="item.alt">
                 <div class="card-body">
-                    <h5 class="card-title">{{ item.alt }}</h5>
+                    <h5 class="card-title text-center">{{ item.alt }}</h5>
                     <div class="text-center">
                         <a v-bind:href="item.href" class="btn btn-primary text-center" target='_blank' >뉴스 더보기</a>
                     </div>
                 </div>
+                </div>
             </div>
         </div>
 
-        <div class="row py-5" >
-            <div class="card mx-auto" style="height: 25rem; width: 80rem;" >
+        <h3 class="text-center pt-5">한국증시</h3>
+        <hr class="hr" />
+
+        <div class="row py-5 px-5 justify-content-evenly" >
+            <div class="card col w-50 p-3 mx-2"  >
                 <h5>코스닥</h5>
             </div>
-        </div>
-
-        <div class="row py-5" >
-            <div class="card mx-auto" style="height: 25rem; width: 80rem;" >
+            <div class="card col w-50 p-3 mx-2"  >
                 <h5>코스피</h5>
             </div>
         </div>
+
 
     </div>
     <script>
@@ -58,10 +63,30 @@
                 async getNews() {
 
                     const v = this;
-                    v.newsDto = await quantFetch("/api/v1/news/3");
+                    const temp = await quantFetch("/api/v1/news/4");
+                    v.newsDto = v.splitIntoChunk(temp.newsList, 2);
+
                     console.info(v.newsDto,"v.newsDto");
                     console.info(v.newsDto.newsList,"news")
 
+                },
+                /**
+                 * 배열을 chunk만큼 잘라서 새로운 배열로 만들어준다
+                 * @param array
+                 * @param chunk
+                 * @returns {*[]}
+                 */
+                splitIntoChunk(array, chunk) {
+
+                    const result = [];
+
+                    while(array.length > 0) {
+                        let tempArray;
+                        tempArray = array.splice(0, chunk);
+                        result.push(tempArray);
+                    }
+
+                    return result;
                 },
             }
         }).mount('#app');

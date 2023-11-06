@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class NewsController {
 
-    private final NewsService crawling;
+    private final NewsService newsService;
 
     @GetMapping("/{size}")
     public NewsDto findStockByTicker(@PathVariable int size){
-        return crawling.get(size);
+        return newsService.get(size);
     }
 }

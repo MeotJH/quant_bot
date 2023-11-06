@@ -54,3 +54,24 @@ const callChart = function (id,stockData){
         }
     });
 }
+
+/**
+ * 0.5초당 진행률25 씩 오르는 함수
+ * @param originVariation
+ * @returns {number}
+ */
+const loadingProgressOverTime = function(originVariation,time){
+    return new Promise((resolve) => {
+        setTimeout(() =>{
+            let progress = originVariation;
+            if( 0 <= progress && progress < 100 ){
+                progress += 25;
+            }else{
+                progress = 100;
+            }
+            resolve(progress);
+        }, time)
+    });
+
+
+}

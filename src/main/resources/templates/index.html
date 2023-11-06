@@ -13,7 +13,7 @@
         <h3 class="text-center pt-5">한국 경제뉴스</h3>
         <hr class="hr" />
 
-        <div class="row py-5 px-5 justify-content-evenly" v-for="dto in newsDto">
+        <div class="row py-5 px-5 justify-content-evenly" v-for="dto in newsDto" v-if="isNewsExist">
             <div class="card col w-50 p-3 mx-2"  v-for="item in dto">
                 <img v-bind:src="item.src" class="card-img-top p-2 mx-auto" style="height: 25rem; width: 30rem;" v-bind:alt="item.alt">
                 <div class="card-body">
@@ -22,9 +22,16 @@
                         <a v-bind:href="item.href" class="btn btn-primary text-center" target='_blank' >뉴스 더보기</a>
                     </div>
                 </div>
-                </div>
             </div>
         </div>
+
+        <div class="row py-5 px-5 justify-content-evenly" v-else>
+            <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar" :style="{ width: progressTime + '%' }" >{{progressTime}}% </div>
+            </div>
+        </div>
+
+
 
         <h3 class="text-center pt-5">한국증시</h3>
         <hr class="hr" />
@@ -37,27 +44,46 @@
                 <h5>코스피</h5>
             </div>
         </div>
-
-
     </div>
     <script>
         const { createApp } = Vue;
         createApp({
             setup() {
             },
-            mounted() {
+            async mounted() {
                 const v = this;
-                v.getNews();
+                await v.getNews();
+                v.swichProgressBar();
+                v.callProgressSystem();
+            },
+            updated(){
+                const v = this;
             },
             data() {
                 return{
                     newsDto: {
                         news : [],
-                    }
+                    },
+                    isNewsExist: false,
+                    progressTime: 0,
                 }
             },
             computed:{
-
+                widthBySec: async function(){
+                    const v = this;
+                    //v.progressTime = await loadingProgressOverTime(v.progressTime);
+                    console.info(v.progressTime,"v.progressTime");
+                    // if( 0 <= v.progressTime && v.progressTime <= 100 ){
+                    //     setTimeout(()=>{
+                    //         v.progressTime += 25;
+                    //     },500)
+                    // }else{
+                    //     v.progressTime = 100;
+                    // }
+                    return v.progressTime;
+                }
+            },
+            watch:{
             },
             methods: {
                 async getNews() {
@@ -65,9 +91,6 @@
                     const v = this;
                     const temp = await quantFetch("/api/v1/news/4");
                     v.newsDto = v.splitIntoChunk(temp.newsList, 2);
-
-                    console.info(v.newsDto,"v.newsDto");
-                    console.info(v.newsDto.newsList,"news")
 
                 },
                 /**
@@ -88,9 +111,27 @@
 
                     return result;
                 },
+                swichProgressBar(){
+                    const v = this;
+                    v. isNewsExist = v.newsDto.length > 0 ? true : false;
+                },
+                async callProgressSystem(){
+                    const v = this;
+                    const time = 500;
+                    let progress = 0;
+                    while( progress >= v.progressTime ){
+                        v.progressTime = progress;
+                        progress = await loadingProgressOverTime(v.progressTime,time);
+                    }
+                }
             }
         }).mount('#app');
     </script>
+    <style>
+        .invisible {
+            visibility: hidden;
+        }
+    </style>
 </th:block>
 
 </html>

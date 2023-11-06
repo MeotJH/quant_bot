@@ -113,16 +113,12 @@
 
                     const v = this;
                     v.newsDto = await quantFetch("/api/v1/news/4");
-                    console.info(v.newsDto,"v.news")
                     v.splitNewsDto = splitIntoChunk(v.newsDto.newsList, 2);
-                    console.info(v.splitNewsDto,"split")
-                    console.info(v.newsDto,"v.newsDtoasasa")
 
                 },
                 swichProgressBar(){
                     const v = this;
                     v.isNewsExist = v.splitNewsDto.length > 0 ? true : false;
-                    console.info(v.isNewsExist,"v.isNewsExist")
                 },
                 async callProgress(){
                     const v = this;
@@ -134,7 +130,6 @@
                     }
                 },
                 handleResize(event) {
-                    //width 1600 되면 리사이즈
                     this.viewWidth = window.innerWidth;
                 }
             }

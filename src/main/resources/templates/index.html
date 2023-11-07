@@ -39,12 +39,12 @@
             <div class="row py-5 px-5 justify-content-evenly" v-if="isMarketDataSet">
                 <div class="card col w-50 p-3 mx-2"  >
                     <h5>코스닥</h5>
-                    <h5 class="text-danger">{{ splitKospi }}</h5>
+                    <h5 v-bind:style="{ color: marketTextColor.kosdaq }" >{{ splitKospi }}</h5>
                     <img class="card-img-top p-2 mx-auto"  :src="marketDto.maps.img[0]" style="height: 25rem; width: 30rem;">
                 </div>
                 <div class="card col w-50 p-3 mx-2"  >
                     <h5>코스닥</h5>
-                    <h5 class="text-danger">{{ splitKosdaq }}</h5>
+                    <h5 v-bind:style="{ color: marketTextColor.kospi }">{{ splitKosdaq }}</h5>
                     <img class="card-img-top p-2 mx-auto"  :src="marketDto.maps.img[1]" style="height: 25rem; width: 30rem;">
                 </div>
             </div>
@@ -128,6 +128,10 @@
                     isNewsExist: false,
                     progressTime: 0,
                     viewWidth: window.innerWidth,
+                    marketTextColor:{
+                        kospi: '',
+                        kosdaq: '',
+                    },
                 }
             },
             computed:{
@@ -135,13 +139,15 @@
                     const v = this;
 
                     const words = v.marketDto.maps.data[0].split(' ');
-                  return words[0] + "  " + words[1] + "\n" + words[2] + words[3]
+                    v.marketTextColor.kospi = v.selectColorByWord(words[1]);
+                    return words[0] + "  " + words[1] + "\n" + words[2] + words[3]
                 },
                 splitKosdaq: function(){
                     const v = this;
 
                     const words = v.marketDto.maps.data[1].split(' ');
-                    return words[0] + "  " + words[1] + "\n" + words[2] + words[3]
+                    v.marketTextColor.kosdaq = v.selectColorByWord(words[1]);
+                    return words[0] + "  " + words[1] + "\n" + words[2] + words[3];
                 },
                 isMarketDataSet: function(){
                     const v = this;
@@ -174,6 +180,9 @@
                 },
                 handleResize(event) {
                     this.viewWidth = window.innerWidth;
+                },
+                selectColorByWord(word){
+                    return word.includes("상승") ? 'red' : 'blue';
                 }
             }
         }).mount('#app');

@@ -15,15 +15,20 @@
                     v-on:keypress.enter="getData"
                     type="text"
                     class="form-control"
-                    placeholder="회사 이름을 넣어주세요"
+                    placeholder="Search"
+                    data-bs-toggle="modal"
+                    data-bs-target="#staticBackdrop"
                     aria-label="Recipient's username"
                     aria-describedby="basic-addon2">
             <div class="input-group-append">
-                <button
-                        class="btn btn-outline-secondary"
-                        type="button"
-                        v-on:click="getData"> Button
-                </button>
+<!--                <button-->
+<!--                        class="btn btn-outline-secondary"-->
+<!--                        type="button"-->
+<!--                        data-bs-toggle="modal"-->
+<!--                        data-bs-target="#staticBackdrop"-->
+<!--                        v-on:click="getData">-->
+<!--                Button-->
+<!--                </button>-->
             </div>
         </div>
 
@@ -48,6 +53,7 @@
         <div>
             <canvas id="myChart"></canvas>
         </div>
+        <th:block th:replace="/comm/modal.html :: fragment-modal"/>
     </div>
     <script>
         const { createApp, ref } = Vue;

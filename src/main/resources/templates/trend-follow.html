@@ -21,14 +21,6 @@
                     aria-label="Recipient's username"
                     aria-describedby="basic-addon2">
             <div class="input-group-append">
-<!--                <button-->
-<!--                        class="btn btn-outline-secondary"-->
-<!--                        type="button"-->
-<!--                        data-bs-toggle="modal"-->
-<!--                        data-bs-target="#staticBackdrop"-->
-<!--                        v-on:click="getData">-->
-<!--                Button-->
-<!--                </button>-->
             </div>
         </div>
 
@@ -53,9 +45,9 @@
         <div>
             <canvas id="myChart"></canvas>
         </div>
-        <th:block th:replace="/comm/modal.html :: fragment-modal('trend-follow','modal-xl')"/>
+        <th:block th:replace="~{/comm/modal.html :: fragment-modal('trend-follow','modal-xl')}"/>
     </div>
-    <script>
+    <script >
         const { createApp, ref } = Vue;
         createApp({
             setup() {

@@ -11,7 +11,7 @@
                 aria-labelledby="staticBackdropLabel"
                 aria-hidden="true"
         >
-            <div th:class="${size} eq null ? 'modal-dialog' : 'modal-dialog '+${size} ">
+            <div th:class=" 'modal-dialog '+${size} ">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="staticBackdropLabel">주식 검색</h5>
@@ -19,7 +19,7 @@
                     </div>
                     <div class="modal-body">
                         <th:block th:with="templateName = 'fragment-'+${bodyName} ">
-                            <th:block th:replace="/modal/trend-follow.html :: ${templateName}"></th:block>
+                            <th:block th:replace="~{ /modal/trend-follow.html :: ${templateName} }"></th:block>
                         </th:block>
                     </div>
                     <div class="modal-footer">

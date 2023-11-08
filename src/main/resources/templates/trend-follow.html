@@ -68,6 +68,7 @@
                         buy: false,
                     },
                     stock: "",
+                    keyword: "",
                 }
             },
             computed:{
@@ -92,6 +93,11 @@
                     const stockData = await quantFetch("/api/v1/trend-follow/"+ v.stock + "/list") ;
                     callChart("myChart",stockData);
                 },
+                changeKeyword(e){
+                    console.info(e.target.value,"e.target.value ")
+                    this.keyword = e.target.value
+                    console.info(this.keyword)
+                }
             }
         }).mount('#app');
     </script>

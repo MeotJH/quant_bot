@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
     <!-- Modal -->
-    <th:block th:fragment="fragment-modal" >
+    <th:block th:fragment="fragment-modal(bodyName)" >
         <div
                 class="modal fade"
                 id="staticBackdrop"
@@ -18,7 +18,9 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        ...
+                        <th:block th:with="templateName = 'fragment-'+${bodyName} ">
+                            <th:block th:replace="/modal/trend-follow.html :: ${templateName}"></th:block>
+                        </th:block>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

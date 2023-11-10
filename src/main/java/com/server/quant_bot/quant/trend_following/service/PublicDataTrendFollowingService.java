@@ -54,6 +54,11 @@ public class PublicDataTrendFollowingService implements TrendFollowing{
         return toTrendFollowDtos(results);
     }
 
+    @Override
+    public List<String> getStocksByKeyword(String keyword) {
+        return TrendFollowing.super.getStocksByKeyword(keyword);
+    }
+
     private TrendFollowListDto toTrendFollowDtos(List<TrendFollowRecordForList> results){
 
         TrendFollowListDto dto = new TrendFollowListDto();

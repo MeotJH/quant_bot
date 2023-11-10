@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.server.quant_bot.comm.exception.ResourceNotFoundException;
 import com.server.quant_bot.korea.dto.PublicDataStockDto;
 import com.server.quant_bot.korea.entity.Stock;
+import com.server.quant_bot.korea.mapping.StockMapping;
 import com.server.quant_bot.korea.repository.StockRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -83,6 +84,11 @@ public class PublicDataStockService implements StockService{
             e.printStackTrace();
         }
         return stocks;
+    }
+
+    @Override
+    public List<StockMapping> getStocksByStockLike(String keyword) {
+        return stockRepository.findStocksByStockNameLike(keyword);
     }
 
     private HttpEntity<?> getHttpEntity() {

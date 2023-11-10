@@ -76,6 +76,11 @@
                     return this.initData.buy === true ? "매수" : "매도"
                 }
             },
+            watch:{
+                keyword: function (val){
+                    console.info(val,"watched");
+                }
+            },
             methods: {
                 async getData() {
                     const v = this;
@@ -94,9 +99,10 @@
                     callChart("myChart",stockData);
                 },
                 changeKeyword(e){
-                    console.info(e.target.value,"e.target.value ")
                     this.keyword = e.target.value
-                    console.info(this.keyword)
+                },
+                searchByKeyword(e){
+                    quantFetch("/")
                 }
             }
         }).mount('#app');

@@ -2,6 +2,7 @@ package com.server.quant_bot.korea.service;
 
 import com.server.quant_bot.korea.dto.PublicDataStockDto;
 import com.server.quant_bot.korea.entity.Stock;
+import com.server.quant_bot.korea.mapping.StockMapping;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,5 +46,19 @@ class PublicDataStockServiceTest {
 
         //then
         Assertions.assertThat(stock.getStockCode()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("주식명으로 이름이 like검색인 애들 다 가져와야 한다.")
+    void getStocksByStockLike() {
+        //gieven
+        String keyword = "삼성";
+
+        //when
+        List<StockMapping> stocksByStockLike = stockService.getStocksByStockLike("%"+keyword+"%");
+
+        //then
+        Assertions.assertThat( stocksByStockLike.get(0).getStockName().contains(keyword) ).isEqualTo(true);
+
     }
 }

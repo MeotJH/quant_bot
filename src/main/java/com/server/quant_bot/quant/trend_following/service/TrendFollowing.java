@@ -10,4 +10,6 @@ public interface TrendFollowing {
     default TrendFollowDto getOneday(String ticker, String baseDt){return null;}
 
     default TrendFollowListDto getDaysByBaseDt(String ticker, String baseDt){return null;}
+
+    default List<String> getStocksByKeyword(String keyword){return null;}
 }

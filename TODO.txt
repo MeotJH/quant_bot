@@ -12,3 +12,4 @@ TODO 4. 퀀트알림 주는 카카오톡 알림API
             4.1.3 Spring Security 셋업
         4.2 카카오톡 알림API 연동
 TODO 5. 광고달기
+TODO 6. test 컨트롤러 에러 수정

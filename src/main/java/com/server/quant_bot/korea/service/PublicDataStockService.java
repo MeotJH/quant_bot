@@ -16,12 +16,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.sql.rowset.serial.SerialException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -88,12 +90,13 @@ public class PublicDataStockService implements StockService{
 
     @Override
     public List<StockMapping> getStocksByStockLike(String keyword) {
-        return stockRepository.findStocksByStockNameLike(keyword);
+        return stockRepository.findStocksByStockNameLike("%"+keyword+"%");
     }
 
     private HttpEntity<?> getHttpEntity() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+
         return new HttpEntity<>(headers);
     }
 

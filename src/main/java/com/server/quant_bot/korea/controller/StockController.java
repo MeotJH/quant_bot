@@ -29,4 +29,9 @@ public class StockController {
     public MarketDto findMarket(){
         return marketService.getData();
     }
+
+    @GetMapping("/stocks/{keyword}")
+    public List findStocksByStockLike(@PathVariable String keyword){
+        return stockService.getStocksByStockLike(keyword);
+    }
 }

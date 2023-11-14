@@ -99,10 +99,14 @@
                     callChart("myChart",stockData);
                 },
                 changeKeyword(e){
-                    this.keyword = e.target.value
+                    const v = this;
+                    v.keyword = e.target.value
+                    v.searchByKeyword(this.keyword)
+
                 },
-                searchByKeyword(e){
-                    quantFetch("/")
+                async searchByKeyword(keyword){
+                    const fetch = await quantFetch("/api/v1/korea/stocks/"+ keyword);
+                    console.info(fetch,"fetch")
                 }
             }
         }).mount('#app');

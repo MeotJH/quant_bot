@@ -12,8 +12,6 @@ Quantobot is a web application that makes quantitative investing accessible.
 
 ## 🔈 개요 Outline
 
----
-
 수학과 통계를 기반으로 전략을 만들고 이를 바탕으로 투자하는 정량적인 투자법을 의미하는 퀀트투자는 인간의 주관이 들어가지 않는다는 점에서 장점이된다.
 왜냐하면, 시장을 상대할때 우리의 주관이 많이 반영되면서 하게되는 손실회피 편향, 확증 편향과 같은 많은 오류들이 존재하기 때문이다.
 
@@ -25,16 +23,13 @@ Quantobot is a web application that makes quantitative investing accessible.
 
 ## ⚙️ 개발환경 Development
 
----
-
 - BackEnd : Spring
-- FrontEnd : Thymeleaf (sever-side), Vue (client-side) by Cdn
+- FrontEnd : Vue (client-side) by Cdn, BootStrap, Thymeleaf (sever-side)
 - Databse : ORM(JPA), H2(local,development-enviroment), PostgreSQL (production-enviroment not yet)
 - CI/CD : gitHub, jenkins, linux
+- Test : Junit5
 
 ## 사용법 How to use
-
----
 
 - 메인화면 :
 
@@ -42,9 +37,11 @@ Quantobot is a web application that makes quantitative investing accessible.
 
     <img src="./img_for_md/main1.png" width="600rem" height="400rem" title="px(픽셀) 크기 설정" alt="main"></img>
 
-  - 한국 코스피 및 코스닥의 금일 시장 주가를 가져온다.
+- 한국 코스피 및 코스닥의 금일 시장 주가를 가져온다.
 
-    <img src="./img_for_md/main2.png" width="600rem" height="400rem" title="px(픽셀) 크기 설정" alt="main"></img>
+  <img src="./img_for_md/main2.png" width="600rem" height="400rem" title="px(픽셀) 크기 설정" alt="main"></img>
+
+---
 
 - 추세추종 투자법 :
 

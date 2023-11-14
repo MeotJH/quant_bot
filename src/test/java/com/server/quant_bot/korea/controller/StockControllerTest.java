@@ -1,5 +1,6 @@
 package com.server.quant_bot.korea.controller;
 
+import com.server.quant_bot.korea.service.MarketService;
 import com.server.quant_bot.korea.service.StockService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,11 +22,24 @@ class StockControllerTest {
     @MockBean
     StockService stockService;
 
+    @MockBean
+    MarketService marketService;
+
     @Test
     @DisplayName("API호출시 상태 200을 가져온다.")
     void findStockByTicker() throws Exception {
         mvc.perform(
                 MockMvcRequestBuilders.get("/api/v1/korea/삼성전자")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("API호출시 상태 200을 가져온다.")
+    void findStocksByStockLike() throws Exception {
+        mvc.perform(
+                MockMvcRequestBuilders.get("/api/v1/korea/stocks/삼성")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());

@@ -69,6 +69,7 @@
                     },
                     stock: "",
                     keyword: "",
+                    stocks:[],
                 }
             },
             computed:{
@@ -105,11 +106,32 @@
 
                 },
                 async searchByKeyword(keyword){
-                    const fetch = await quantFetch("/api/v1/korea/stocks/"+ keyword);
-                    console.info(fetch,"fetch")
+                    const v = this;
+                    if(keyword === ""){
+                        return;
+                    }
+                    v.stocks = await quantFetch("/api/v1/korea/stocks/"+ keyword);
+                    console.info(v.stocks,"stocks")
+                },
+                closeModal(){
+                    const v = this;
+                    v.stocks = [];
+                    v.keyword = "";
+                },
+                processModal(){
+                    const v = this;
+                    v.stock = v.keyword;
+                    v.getData();
+                    myModal.hide()
                 }
             }
         }).mount('#app');
+
+        //모달 컨트롤 위한 bootstrap
+        const myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'), {
+            keyboard: false
+        })
+
     </script>
 </th:block>
 </html>

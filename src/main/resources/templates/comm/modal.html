@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:v-on="http://www.w3.org/1999/xhtml">
     <!-- Modal -->
     <th:block th:fragment="fragment-modal(bodyName,size)" >
         <div
@@ -14,7 +14,7 @@
             <div th:class=" 'modal-dialog '+${size} ">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">주식 검색</h5>
+                        <h5 class="modal-title" id="staticBackdropLabel" th:text="${bodyName}"></h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -23,8 +23,8 @@
                         </th:block>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Search</button>
+                        <button v-on:click="closeModal" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button v-on:click="processModal" type="button" class="btn btn-primary" data-bs-dismiss="modal">Search</button>
                     </div>
                 </div>
             </div>

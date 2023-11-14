@@ -45,4 +45,26 @@ Quantobot is a web application that makes quantitative investing accessible.
 
 - 추세추종 투자법 :
 
-  - 작성중 ing
+  - 메뉴에 들어가서 원하는 주식명을 입력한다.
+
+    - 메뉴 들어가는 모습
+
+    <img src="./img_for_md/trend-follow1.png" width="1000rem" height="400rem" title="px(픽셀) 크기 설정" alt="main"></img>
+
+    - 검색 모달이 띄워지는 모습
+
+    <img src="./img_for_md/trend-follow2.png" width="1000rem" height="400rem" title="px(픽셀) 크기 설정" alt="main"></img>
+
+    - 검색해 원하는 종목명을 파악하는 모습
+
+    <img src="./img_for_md/trend-follow3.png" width="1000rem" height="400rem" title="px(픽셀) 크기 설정" alt="main"></img>
+
+  - 검색한 종목에 대한 정보와 차트가 표현된다.
+
+    - 추세추종 투자법에 따라 금일 매수가 추천되었다.
+
+    <img src="./img_for_md/trend-follow4.png" width="1000rem" height="400rem" title="px(픽셀) 크기 설정" alt="main"></img>
+
+    - 파란색인 추세선과 빨간색인 90일간의 종가를 파악해 매매에 대한 정보를 얻을 수 있다.
+
+    <img src="./img_for_md/trend-follow5.png" width="1000rem" height="400rem" title="px(픽셀) 크기 설정" alt="main"></img>

@@ -4,6 +4,8 @@
   <div>
     <div class="mb-3">
       <input
+              ref="modalSearchBar"
+              tabindex="0"
               type="text"
               :value="keyword"
               @input="changeKeyword"
@@ -12,9 +14,13 @@
               placeholder="종목을 검색하세요"
       >
     </div>
-    <ul>
-      <li v-for="stock in stocks">{{stock.stockName}}</li>
-    </ul>
+    <div class="list-group">
+      <span
+              class="list-group-item list-group-item-action"
+              v-for="(stock,index) in stocks"
+              v-on:click="processModalByClick(stock,index)"
+      >{{stock.stockName}}</span>
+    </div>
   </div>
   <!-- 팝업이라 스크립트가 app이랑 연결되어 있다. -->
 </th:block>

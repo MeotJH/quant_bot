@@ -11,8 +11,10 @@
     <div class="container-fluid" id="app">
         <div class="input-group mb-3 mx-auto p-5" >
             <input
+                    ref="searchInput"
                     v-model="stock"
                     v-on:keypress.enter="getData"
+                    v-on:click="clickSearchBar"
                     type="text"
                     class="form-control"
                     placeholder="Search"
@@ -113,6 +115,15 @@
                     v.stocks = await quantFetch("/api/v1/korea/stocks/"+ keyword);
                     console.info(v.stocks,"stocks")
                 },
+                clickSearchBar(){
+                    const v = this;
+                    //this.$refs.modalSearchBar.focus();
+                    console.info(this.$refs.modalSearchBar,"this.$refs.modalSearchBar")
+                    setTimeout( function(){ v.$refs.modalSearchBar.focus();}, 500 );
+                },
+                /**
+                 * 이하 모달 function
+                 */
                 closeModal(){
                     const v = this;
                     v.stocks = [];
@@ -122,7 +133,14 @@
                     const v = this;
                     v.stock = v.keyword;
                     v.getData();
-                    myModal.hide()
+                    myModal.hide();
+                },
+                processModalByClick(stock,index){
+                    const v = this;
+                    console.info(stock,index,"stock,modal");
+                    v.stock = v.stocks[index].stockName;
+                    v.getData();
+                    myModal.hide();
                 }
             }
         }).mount('#app');

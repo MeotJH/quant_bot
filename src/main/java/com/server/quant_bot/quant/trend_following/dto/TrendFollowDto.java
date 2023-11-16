@@ -7,8 +7,8 @@ import lombok.Getter;
 @Builder
 public class TrendFollowDto {
 
-    private double trendFollowPrice;
-    private double baseDateClosePrice;
+    private String trendFollowPrice;
+    private String baseDateClosePrice;
     private boolean isBuy;
 
 }

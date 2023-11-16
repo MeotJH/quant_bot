@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -37,10 +39,11 @@ public class PublicDataTrendFollowingService implements TrendFollowing{
         log.info(result.baseDateClosePrice() + " ::: TodayClosePrice");
 
         boolean isBuy = result.trendFollowPrice() < result.baseDateClosePrice();
+
         return TrendFollowDto
                 .builder()
-                .trendFollowPrice(result.trendFollowPrice())
-                .baseDateClosePrice(result.baseDateClosePrice())
+                .trendFollowPrice( getDoubleToMoney( result.trendFollowPrice() )  )
+                .baseDateClosePrice( getDoubleToMoney( result.baseDateClosePrice() ) )
                 .isBuy(isBuy)
                 .build();
     }
@@ -57,6 +60,11 @@ public class PublicDataTrendFollowingService implements TrendFollowing{
     @Override
     public List<String> getStocksByKeyword(String keyword) {
         return TrendFollowing.super.getStocksByKeyword(keyword);
+    }
+
+    private String getDoubleToMoney(Double target){
+        NumberFormat numberFormat = NumberFormat.getInstance();
+        return numberFormat.format( Math.round( target * 100) / 100.0 );
     }
 
     private TrendFollowListDto toTrendFollowDtos(List<TrendFollowRecordForList> results){

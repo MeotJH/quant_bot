@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
 
-    public abstract void update(Object dto);
+    public abstract BaseEntity update(Object dto);
 
     @CreatedDate
     @Column(updatable = false)

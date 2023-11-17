@@ -25,14 +25,16 @@ public class Stock extends BaseEntity {
     @Column
     private String market;
 
-    @Override
-    public void update(Object dto) {
 
-    }
 
     public void updateCsv(String[] dto){
         this.stockCode = dto[0];
         this.stockName = dto[1];
         this.market = dto[2];
+    }
+
+    @Override
+    public BaseEntity update(Object dto) {
+        return null;
     }
 }

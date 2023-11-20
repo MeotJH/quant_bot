@@ -46,7 +46,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
                         <li class="nav-item active"><a class="nav-link" href="/">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#!">Link</a></li>
+                        <li id="login-tag" class="nav-item"><a class="nav-link" href="/view/login">Login</a></li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -61,7 +61,7 @@
             </div>
         </nav>
         <!--Content 내용 영역을 참조합니다-->
-        <div class="container-fluid d-flex justify-content-center">
+        <div class="container-fluid d-flex justify-content-center align-items-center">
 <!--            <div class="mx-auto">-->
 <!--                <img-->
 <!--                    src="https://tpc.googlesyndication.com/simgad/15936664879691623473?sqp=4sqPyQQ7QjkqNxABHQAAtEIgASgBMAk4A0DwkwlYAWBfcAKAAQGIAQGdAQAAgD-oAQGwAYCt4gS4AV_FAS2ynT4&amp;rs=AOga4qlxzs6J1zIvHpOfFPTscOhToxE5oA"-->
@@ -79,5 +79,11 @@
 </div>
 <!-- Core theme JS-->
 <script src="/js/scripts.js"></script>
+<script>
+    window.onload = function() {
+        changeLoginTagBaseOnStatus();
+    };
+
+</script>
 </body>
 </html>

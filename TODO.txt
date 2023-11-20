@@ -6,8 +6,9 @@ TODO 3. 상장일 최근이라 데이터가 없는 경우에 어떻게 표현할
 TODO 4. 퀀트알림 주는 카카오톡 알림API
         4.1 로그인 기능
             4.1.0 https://gksdudrb922.tistory.com/217 spring security 셋업 참고 사이트
-            4.1.1 DB셋업
-            4.1.2 JPA셋업
-            4.1.3 Spring Security 셋업
+            4.1.1 DB셋업 - 운영용 postgre 세팅
+            4.1.4 1. access token은 JS private instance 에 보관.
+                  2. refresh token은 http only, same site strict 로 설정된 cookie 에 보관.
+                  Jwt 라도 위 2 가지만 되면, xss, csrf 공격에 대해 보안이 가능해집니다. 여기서 cookie secure 를 true 로 설정하면 스니핑 공격까지 막을 수 있습니다. 다만, 구현 난이도가 상당합니다.
         4.2 카카오톡 알림API 연동
 TODO 5. 광고달기

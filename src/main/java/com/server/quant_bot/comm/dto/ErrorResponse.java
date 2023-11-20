@@ -1,5 +1,8 @@
 package com.server.quant_bot.comm.dto;
 
+import lombok.Getter;
+
+@Getter
 public class ErrorResponse {
     private int status;
     private String message;

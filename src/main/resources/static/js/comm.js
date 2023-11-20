@@ -1,9 +1,29 @@
 //fetch함수 wraping 함수
-const quantFetch = function (url) {
+const quantFetch = function (url,data = {
+    /**
+     * 두번째 파람 값 없을때 default value
+     */
+    method: "GET",
+    headers: {
+        "Content-Type": "application/json",
+    }
+}) {
+
+    if(!data.headers){
+        data.headers = {"Content-Type": "application/json"}
+    }
+
+    console.info(data,"data");
+
     return new Promise(function(resolve, reject) {
         try {
-            fetch(url)
+            fetch(url,{
+                method: data.method,
+                headers: data.headers,
+                body: JSON.stringify(data.body)
+            })
                 .then(response => {
+                    console.info(response,"response")
                     if (!response.ok) {
                         return response.json();
                         throw new Error('Network response was not ok');
@@ -93,4 +113,24 @@ const splitIntoChunk = (array, chunk) => {
     }
 
     return result;
+}
+
+const changeLoginTagBaseOnStatus = () => {
+    const tag = document.getElementById("login-tag");
+    const localStorage = window.localStorage;
+    const token = localStorage.getItem("Authorization");
+    let loginStatus = "login";
+    tag.getElementsByClassName("nav-link")[0].setAttribute("href","/view/"+loginStatus);
+    if(token){
+        loginStatus = "logout";
+        tag.setAttribute("onclick","logout()")
+        tag.getElementsByClassName("nav-link")[0].setAttribute("href","#");
+    }
+    tag.getElementsByClassName("nav-link")[0].textContent = loginStatus;
+}
+
+const logout = () =>{
+    console.info("logout")
+    window.localStorage.removeItem("Authorization");
+    changeLoginTagBaseOnStatus();
 }

@@ -1,0 +1,75 @@
+<!--resources/templates/thymeleafEx.html-->
+
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default}"
+      xmlns:v-on="http://www.w3.org/1999/xhtml">
+<th:block layout:fragment="content">
+    <!-- Begin Page Content -->
+    <div id="app" class="w-100 p-3 d-flex justify-content-center">
+        <div class="card text-center">
+            <div class="card-header">
+                Login
+            </div>
+            <div class="card-body">
+                <div class="mb-3 text-start">
+                    <label for="email" class="form-label">Email</label>
+                    <input v-model="userOne.userId" type="email" class="form-control" id="email">
+                </div>
+                <div class="mb-3 text-start">
+                    <label for="password" class="form-label">Password</label>
+                    <input v-model="userOne.password" type="password" class="form-control" id="password" v-on:keypress.enter="login">
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="d-grid gap-2">
+                    <button type="button" class="btn btn-primary btn-lg" v-on:click="login">Log in</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const { createApp, ref } = Vue;
+        createApp({
+            setup() {
+            },
+            mounted() {
+                const v = this;
+            },
+            data() {
+                return{
+                    userOne:{
+                        userId: "",
+                        password: "",
+                    }
+                }
+            },
+            computed:{
+            },
+            methods: {
+                async login() {
+                    const v = this;
+                    const localStorage = window.localStorage;
+                    const resultData = await quantFetch("/api/v1/login",{
+                                                method: "POST",
+                                                body:{
+                                                        userId: v.userOne.userId,
+                                                        password: v.userOne.password
+                                                     }
+                                               })
+
+                    if(resultData){
+                        //setTokens
+                        localStorage.setItem("Authorization",resultData.accessToken);
+                        document.cookie = 'refreshToken='+resultData.refreshToken;
+                        location.href = "/";
+                    }
+                },
+            }
+        }).mount('#app');
+    </script>
+</th:block>
+
+</html>

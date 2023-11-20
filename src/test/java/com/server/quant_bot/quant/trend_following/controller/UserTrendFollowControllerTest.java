@@ -1,9 +1,9 @@
-package com.server.quant_bot.comm.security.controller;
+package com.server.quant_bot.quant.trend_following.controller;
 
-
-import com.server.quant_bot.comm.security.service.UserService;
 import com.server.quant_bot.korea.controller.StockController;
-
+import com.server.quant_bot.korea.service.MarketService;
+import com.server.quant_bot.korea.service.StockService;
+import com.server.quant_bot.quant.trend_following.service.TrendFollowing;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,33 +14,31 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(LoginController.class)
-class LoginControllerTest {
+@WebMvcTest(UserTrendFollowController.class)
+class UserTrendFollowControllerTest {
+
 
     @Autowired
     private MockMvc mvc;
 
     @MockBean
-    UserService userService;
-
+    private TrendFollowing trendFollowing;
+    
     @Test
-    @DisplayName("로그인이 성공해야 한다.")
-    @WithMockUser(username = "userId", roles = "ADMIN")
-    void loginSuccess() throws Exception {
-
+    @DisplayName("보안이 되는지 확인해야한다")
+    @WithMockUser(username = "failUser", roles = "USER")
+    void checkAuthTest() throws Exception {
         final String REQUEST_JASON = "{\"userId\":\"userId\", \"password\": \"password\"}";
 
         mvc.perform(
-
-                MockMvcRequestBuilders
-                        .post( "/api/v1/login" )
-                        .contentType( MediaType.APPLICATION_JSON )
-                        .content( REQUEST_JASON )
-                        .with( csrf() )
-
+                MockMvcRequestBuilders.get("/api/v1/auth/trend-follow/삼성전자")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
+    
     }
+
 }

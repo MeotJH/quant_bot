@@ -3,7 +3,7 @@ package com.server.quant_bot.korea.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.server.quant_bot.comm.exception.ResourceNotFoundException;
+import com.server.quant_bot.comm.exception.ResourceCommException;
 import com.server.quant_bot.korea.dto.PublicDataStockDto;
 import com.server.quant_bot.korea.entity.Stock;
 import com.server.quant_bot.korea.mapping.StockMapping;
@@ -16,14 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.sql.rowset.serial.SerialException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -148,7 +146,7 @@ public class PublicDataStockService implements StockService{
     private void defineDataExist(List<PublicDataStockDto> dtos) {
 
         if(dtos.isEmpty()){
-            throw new ResourceNotFoundException("결과값이 없습니다.");
+            throw new ResourceCommException("결과값이 없습니다.");
         }
     }
 

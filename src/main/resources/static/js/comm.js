@@ -130,7 +130,16 @@ const changeLoginTagBaseOnStatus = () => {
 }
 
 const logout = () =>{
-    console.info("logout")
     window.localStorage.removeItem("Authorization");
     changeLoginTagBaseOnStatus();
+}
+
+const goAuthPage = (url) =>{
+    const token = localStorage.getItem("Authorization");
+    if(token){
+        location.href = url;
+    }else{
+        alert("서비스를 이용하기 위해 로그인을 해주세요");
+        location.href = "/view/login";
+    }
 }

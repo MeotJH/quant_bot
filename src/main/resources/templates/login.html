@@ -63,8 +63,9 @@
                     if(resultData){
                         //setTokens
                         localStorage.setItem("Authorization",resultData.accessToken);
-                        document.cookie = 'refreshToken='+resultData.refreshToken;
-                        location.href = "/";
+                        document.cookie = 'RefreshToken='+resultData.refreshToken+';path=/;';
+                        document.cookie = 'Authorization='+resultData.refreshToken+';path=/;';
+                        location.href = document.referrer; // 로그인 후 이전 url로 돌아가기
                     }
                 },
             }

@@ -36,7 +36,8 @@
                     <h5 class="card-title">{{ isBuy }}</h5>
                     <p class="card-text">75일 추세평균가 : {{ initData.trendFollowPrice }}원</p>
                     <p class="card-text">금일 시장종결가 : {{ initData.baseDateClosePrice }}원</p>
-                    <a href="https://meotlog.tistory.com/69" class="btn btn-primary">추세투자법 더 알아보기</a>
+                    <a href="https://meotlog.tistory.com/69" class="btn btn-primary mx-2">추세투자법 더 알아보기</a>
+                    <span v-on:click="goAuthPage('/auth/user-page')" class="btn btn-primary mx-2">검색한 주식 알림받기</span>
                 </div>
                 <div class="card-footer text-body-secondary">
 
@@ -120,6 +121,10 @@
                     //this.$refs.modalSearchBar.focus();
                     console.info(this.$refs.modalSearchBar,"this.$refs.modalSearchBar")
                     setTimeout( function(){ v.$refs.modalSearchBar.focus();}, 500 );
+                },
+                goAuthPage(url){
+                    goAuthPage(url);
+                    console.info(url,"url")
                 },
                 /**
                  * 이하 모달 function

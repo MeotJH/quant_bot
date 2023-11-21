@@ -23,5 +23,13 @@ public class ViewController {
         return page + ".html";
     }
 
+    @GetMapping("/auth/{page}")
+    public String returnAuthPage(@PathVariable String page){
+        if( page == null || page == ""){
+            page = "index";
+        }
+        return page + ".html";
+    }
+
 
 }

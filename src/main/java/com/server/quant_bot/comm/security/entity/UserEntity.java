@@ -80,7 +80,9 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @Override
     public BaseEntity update(Object BeforeCastedDto) {
         UserDto dto = (UserDto) BeforeCastedDto;
-        return UserMapper.INSTANCE.userDTOToEntity(dto);
+        UserEntity userEntity = UserMapper.INSTANCE.userDTOToEntity(dto);
+        userEntity.roles = dto.roles();
+        return userEntity;
     }
 
 }

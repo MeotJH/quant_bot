@@ -5,6 +5,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,10 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -38,12 +43,19 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
     // Request Header 에서 토큰 정보 추출
     private String resolveToken(HttpServletRequest request) {
-        String cookie = request.getHeader("cookie");
-        log.info("::::::cookie::::::::{}",cookie);
-        String bearerToken = request.getHeader("Authorization");
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
-            return bearerToken.substring(7);
+        List<Cookie> authorization =
+                                        Arrays
+                                            .stream( request.getCookies() )
+                                            .filter( each -> each.getName().equals("Authorization") )
+                                            .collect( Collectors.toList() );
+
+        Cookie cookie = authorization.size() == 1 ? authorization.get(0) : null;
+        if(cookie == null){
+            return null;
         }
-        return null;
+
+        String bearerToken = cookie.getValue();
+        log.info("::::::cookie.Authorization::::::::{}",bearerToken);
+        return bearerToken;
     }
 }

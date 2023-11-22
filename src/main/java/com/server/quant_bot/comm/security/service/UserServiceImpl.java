@@ -11,6 +11,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @Transactional(rollbackFor = Exception.class)
 @RequiredArgsConstructor
@@ -39,8 +42,14 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserEntity initUser() {
         UserEntity entity = new UserEntity();
+
+        List<String> roles = new ArrayList<>();
+        roles.add("USER");
+
         entity = (UserEntity) entity.update(
-                new UserDto("userId", "{bcrypt}$2a$10$ngsfScZHJl4UvZEpfMZQJ.8kC8qcPJcJCYkJcf1x2T6/vWV42ocqi")
+                new UserDto("userId"
+                         , "{bcrypt}$2a$10$ngsfScZHJl4UvZEpfMZQJ.8kC8qcPJcJCYkJcf1x2T6/vWV42ocqi"
+                        ,  roles)
         );
         return userRepository.save(entity);
     }

@@ -1,3 +1,6 @@
+const accessTokenName = "Authorization";
+const refreshTokenName = "RefreshToken";
+
 //fetch함수 wraping 함수
 const quantFetch = function (url,data = {
     /**
@@ -13,8 +16,6 @@ const quantFetch = function (url,data = {
         data.headers = {"Content-Type": "application/json"}
     }
 
-    console.info(data,"data");
-
     return new Promise(function(resolve, reject) {
         try {
             fetch(url,{
@@ -22,17 +23,17 @@ const quantFetch = function (url,data = {
                 headers: data.headers,
                 body: JSON.stringify(data.body)
             })
-                .then(response => {
-                    console.info(response,"response")
+                .then(async response => {
                     if (!response.ok) {
-                        return response.json();
-                        throw new Error('Network response was not ok');
+                        //TODO 로그인 실패 프론트 만들기 JSON.parse(resultData);
+                        const body = JSON.parse(await response.json());
+                        resolve(body)
+                        throw new Error( `${response.url}  ${response.status}  ${body.message}` );
                     }
                     return response.json();
                 })
                 .then(data => {
                     if(data.error){
-                        console.error(data)
                         alert(data.message)
                         throw new Error('Network response was not ok');
                     }
@@ -118,7 +119,7 @@ const splitIntoChunk = (array, chunk) => {
 const changeLoginTagBaseOnStatus = () => {
     const tag = document.getElementById("login-tag");
     const localStorage = window.localStorage;
-    const token = localStorage.getItem("Authorization");
+    const token = getCookie("Authorization");
     let loginStatus = "login";
     tag.getElementsByClassName("nav-link")[0].setAttribute("href","/view/"+loginStatus);
     if(token){
@@ -130,16 +131,38 @@ const changeLoginTagBaseOnStatus = () => {
 }
 
 const logout = () =>{
-    window.localStorage.removeItem("Authorization");
+
+    deleteCookie(accessTokenName);
+    deleteCookie(refreshTokenName);
     changeLoginTagBaseOnStatus();
+
 }
 
 const goAuthPage = (url) =>{
-    const token = localStorage.getItem("Authorization");
+    const token = getCookie(accessTokenName);
     if(token){
         location.href = url;
     }else{
         alert("서비스를 이용하기 위해 로그인을 해주세요");
         location.href = "/view/login";
     }
+}
+
+function getCookie(cookieName) {
+    const name = cookieName + "=";
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const cookieArray = decodedCookie.split(';');
+
+    for (let i = 0; i < cookieArray.length; i++) {
+        let cookie = cookieArray[i].trim();
+        if (cookie.indexOf(name) === 0) {
+            return cookie.substring(name.length, cookie.length);
+        }
+    }
+
+    return null;
+}
+
+function deleteCookie(cookieName) {
+    document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }

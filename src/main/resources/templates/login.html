@@ -22,6 +22,7 @@
                     <label for="password" class="form-label">Password</label>
                     <input v-model="userOne.password" type="password" class="form-control" id="password" v-on:keypress.enter="login">
                 </div>
+                <span v-show="loginMessage !== '' ">{{loginMessage}}</span>
             </div>
             <div class="card-footer">
                 <div class="d-grid gap-2">
@@ -43,7 +44,8 @@
                     userOne:{
                         userId: "",
                         password: "",
-                    }
+                    },
+                    loginMessage: "",
                 }
             },
             computed:{
@@ -51,23 +53,29 @@
             methods: {
                 async login() {
                     const v = this;
-                    const localStorage = window.localStorage;
-                    const resultData = await quantFetch("/api/v1/login",{
-                                                method: "POST",
-                                                body:{
-                                                        userId: v.userOne.userId,
-                                                        password: v.userOne.password
-                                                     }
-                                               })
+                        const resultData = await quantFetch("/api/v1/login",{
+                            method: "POST",
+                            body:{
+                                userId: v.userOne.userId,
+                                password: v.userOne.password
+                            }
+                        })
 
-                    if(resultData){
-                        //setTokens
-                        localStorage.setItem("Authorization",resultData.accessToken);
-                        document.cookie = 'RefreshToken='+resultData.refreshToken+';path=/;';
-                        document.cookie = 'Authorization='+resultData.accessToken+';path=/;';
-                        location.href = document.referrer; // 로그인 후 이전 url로 돌아가기
-                    }
+
+                    resultData.grantType ? v.setTokens(resultData) : v.doFailProcess(resultData);
+
                 },
+                setTokens(result){
+                    document.cookie =  `${accessTokenName}=${result.accessToken};path=/;`;
+                    document.cookie = `${refreshTokenName}=${result.refreshToken};path=/;`;
+                    this.goBeforePage();
+                },
+                doFailProcess(result){
+                    this.loginMessage = result.message;
+                },
+                goBeforePage(){
+                    location.href = document.referrer;
+                }
             }
         }).mount('#app');
     </script>

@@ -1,6 +1,8 @@
 package com.server.quant_bot.comm.security.config;
 
 import com.server.quant_bot.comm.security.filter.JwtAuthenticationFilter;
+import com.server.quant_bot.comm.security.handler.CustomAccessDeniedHandler;
+import com.server.quant_bot.comm.security.handler.CustomAuthenticationEntryPoint;
 import com.server.quant_bot.comm.security.service.CustomUserDetailsService;
 import com.server.quant_bot.comm.security.service.JwtTokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,6 +39,8 @@ public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final CustomUserDetailsService userDetailsService;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -73,7 +77,11 @@ public class SecurityConfig {
                                     .authenticated()
                 )
                 //  JwtAuthenticationFilter 이걸 UsernamePasswordAuthenticationFilter 이거 전에 실행할거야
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling( httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer
+                                                            .accessDeniedHandler(customAccessDeniedHandler)
+                                                            .authenticationEntryPoint(customAuthenticationEntryPoint)
+                );
 
         return http.build();
     }

@@ -106,7 +106,6 @@
                     const v = this;
                     v.keyword = e.target.value
                     v.searchByKeyword(this.keyword)
-
                 },
                 async searchByKeyword(keyword){
                     const v = this;
@@ -118,13 +117,10 @@
                 },
                 clickSearchBar(){
                     const v = this;
-                    //this.$refs.modalSearchBar.focus();
-                    console.info(this.$refs.modalSearchBar,"this.$refs.modalSearchBar")
                     setTimeout( function(){ v.$refs.modalSearchBar.focus();}, 500 );
                 },
                 goAuthPage(url){
                     goAuthPage(url);
-                    console.info(url,"url")
                 },
                 /**
                  * 이하 모달 function
@@ -142,7 +138,6 @@
                 },
                 processModalByClick(stock,index){
                     const v = this;
-                    console.info(stock,index,"stock,modal");
                     v.stock = v.stocks[index].stockName;
                     v.getData();
                     myModal.hide();

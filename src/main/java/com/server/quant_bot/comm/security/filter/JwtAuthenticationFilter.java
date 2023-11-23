@@ -17,6 +17,7 @@ import org.springframework.web.filter.GenericFilterBean;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -43,6 +44,11 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
     // Request Header 에서 토큰 정보 추출
     private String resolveToken(HttpServletRequest request) {
+
+        if( request.getCookies() == null){
+            return null;
+        }
+
         List<Cookie> authorization =
                                         Arrays
                                             .stream( request.getCookies() )
@@ -57,5 +63,12 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         String bearerToken = cookie.getValue();
         log.info("::::::cookie.Authorization::::::::{}",bearerToken);
         return bearerToken;
+        // bearer추가 하면 어카지?
+//        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
+//            return bearerToken.substring(7);
+//        }
+//
+//        //return null 대신 뭐 없나.
+//        return null;
     }
 }

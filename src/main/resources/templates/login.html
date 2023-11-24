@@ -66,8 +66,8 @@
 
                 },
                 setTokens(result){
-                    document.cookie =  `${accessTokenName}=${result.accessToken};path=/;`;
-                    document.cookie = `${refreshTokenName}=${result.refreshToken};path=/;`;
+                    document.cookie =  `${accessTokenName}=Bearer ${result.accessToken};path=/;`;
+                    document.cookie = `${refreshTokenName}=Bearer ${result.refreshToken};path=/;`;
                     this.goBeforePage();
                 },
                 doFailProcess(result){

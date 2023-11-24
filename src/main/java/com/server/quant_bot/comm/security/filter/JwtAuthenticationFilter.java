@@ -62,13 +62,13 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
         String bearerToken = cookie.getValue();
         log.info("::::::cookie.Authorization::::::::{}",bearerToken);
-        return bearerToken;
+        //return bearerToken;
         // bearer추가 하면 어카지?
-//        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
-//            return bearerToken.substring(7);
-//        }
-//
-//        //return null 대신 뭐 없나.
-//        return null;
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
+            return bearerToken.substring(7);
+        }
+
+        //return null 대신 뭐 없나.
+        return null;
     }
 }

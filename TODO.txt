@@ -13,4 +13,4 @@ TODO 4. 퀀트알림 주는 카카오톡 알림API
         4.2 카카오톡 알림API 연동
 TODO 5. 광고달기
 TODO 6. 에러 해결하기 HeaderWriterFilter  & https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8-%EC%8B%9C%ED%81%90%EB%A6%AC%ED%8B%B0#curriculum 시큐리티 무료 인강
-TODO 7. jwt.secret 넣은 파일 필요하다.
+TODO 7. jwt.secret 넣은 파일 필요하다. // csv파일 역시 필요하다.

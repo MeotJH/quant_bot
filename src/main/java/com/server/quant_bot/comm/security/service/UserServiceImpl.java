@@ -4,6 +4,8 @@ import com.server.quant_bot.comm.security.dto.TokenInfo;
 import com.server.quant_bot.comm.security.dto.UserDto;
 import com.server.quant_bot.comm.security.entity.UserEntity;
 import com.server.quant_bot.comm.security.repository.UserRepository;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -24,7 +26,7 @@ public class UserServiceImpl implements UserService{
     private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
-    public TokenInfo login(String userId, String password) {
+    public TokenInfo login(String userId, String password, HttpServletResponse response) {
         // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
         // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userId, password);
@@ -35,6 +37,9 @@ public class UserServiceImpl implements UserService{
 
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
         TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
+
+        // 4. refreshToken을 http_only로 cookie에 세팅
+        setRefreshTokenToCookieHttpOnly(response,tokenInfo);
 
         return tokenInfo;
     }
@@ -53,4 +58,14 @@ public class UserServiceImpl implements UserService{
         );
         return userRepository.save(entity);
     }
+
+    private void setRefreshTokenToCookieHttpOnly(HttpServletResponse response, TokenInfo tokenInfo){
+        Cookie cookie = new Cookie("RefreshToken",tokenInfo.getRefreshToken());
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+    }
+
+
 }

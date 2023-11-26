@@ -67,7 +67,7 @@
                 },
                 setTokens(result){
                     document.cookie =  encodeURI(`${accessTokenName}=Bearer ${result.accessToken};path=/;`);//`${accessTokenName}=Bearer ${result.accessToken};path=/;`;
-                    document.cookie = encodeURI(`${refreshTokenName}=Bearer ${result.refreshToken};path=/;`);//`${refreshTokenName}=Bearer ${result.refreshToken};path=/;`;
+                    //document.cookie = encodeURI(`${refreshTokenName}=Bearer ${result.refreshToken};path=/;`);//`${refreshTokenName}=Bearer ${result.refreshToken};path=/;`;
                     this.goBeforePage();
                 },
                 doFailProcess(result){

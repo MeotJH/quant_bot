@@ -15,6 +15,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
@@ -44,7 +46,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     }
 
     // Request Header 에서 토큰 정보 추출
-    private String resolveToken(HttpServletRequest request) {
+    private String resolveToken(HttpServletRequest request) throws UnsupportedEncodingException {
         Enumeration<String> headerNames = request.getHeaderNames();
 
         headerNames.asIterator().forEachRemaining( each ->{
@@ -68,10 +70,9 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             return null;
         }
 
-        String bearerToken = cookie.getValue();
+        //front 에서 던질때 encode한걸 던지고있다.
+        String bearerToken = URLDecoder.decode(cookie.getValue(), "UTF-8");
         log.info("::::::cookie.Authorization::::::::{}",bearerToken);
-        //return bearerToken;
-        // bearer추가 하면 어카지?
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
             return bearerToken.substring(7);
         }

@@ -7,23 +7,25 @@ import com.server.quant_bot.quant.trend_following.dto.TrendFollowDto;
 import com.server.quant_bot.quant.trend_following.dto.TrendFollowListDto;
 import com.server.quant_bot.quant.trend_following.dto.TrendFollowRecord;
 import com.server.quant_bot.quant.trend_following.dto.TrendFollowRecordForList;
+import com.server.quant_bot.quant.trend_following.entity.TrendFollow;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PublicDataTrendFollowingService implements TrendFollowing{
+public class PublicDataTrendFollowingService implements TrendFollowing {
 
     private final StockService stockService;
+    private final AuthTrendFollowing authTrendFollowing;
     private final int TREND_FOLLOIWNG_DEFAULT_DAY = 75;
     private final int TREND_FOLLOIWNGS_DEFAULT_DAY = 150;
 
@@ -60,6 +62,11 @@ public class PublicDataTrendFollowingService implements TrendFollowing{
     @Override
     public List<String> getStocksByKeyword(String keyword) {
         return TrendFollowing.super.getStocksByKeyword(keyword);
+    }
+
+    @Override
+    public Optional<TrendFollow> save(TrendFollowDto dto) {
+        return authTrendFollowing.save(dto);
     }
 
     private String getDoubleToMoney(Double target){

@@ -10,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 
 @SpringBootTest
@@ -31,9 +30,9 @@ class PublicDataTrendFollowingServiceTest {
 
         //then
         if( Double.parseDouble(date.getTrendFollowPrice()) < Double.parseDouble(date.getBaseDateClosePrice())){
-            Assertions.assertEquals(date.isBuy(),true);
+            Assertions.assertEquals(date.getIsBuy(),true);
         }else{
-            Assertions.assertEquals(date.isBuy(),false);
+            Assertions.assertEquals(date.getIsBuy(),false);
         }
     }
 

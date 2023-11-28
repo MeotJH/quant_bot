@@ -47,13 +47,6 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
     // Request Header 에서 토큰 정보 추출
     private String resolveToken(HttpServletRequest request) throws UnsupportedEncodingException {
-        Enumeration<String> headerNames = request.getHeaderNames();
-
-        headerNames.asIterator().forEachRemaining( each ->{
-            log.info("::::::each :{}",each);
-        });
-        String cookie1 = request.getHeader("cookie");
-        log.info("::::::this is cookie :::::{}",cookie1);
 
         if( request.getCookies() == null){
             return null;

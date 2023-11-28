@@ -12,5 +12,7 @@ TODO 4. 퀀트알림 주는 카카오톡 알림API
                   Jwt 라도 위 2 가지만 되면, xss, csrf 공격에 대해 보안이 가능해집니다. 여기서 cookie secure 를 true 로 설정하면 스니핑 공격까지 막을 수 있습니다. 다만, 구현 난이도가 상당합니다.
         4.2 카카오톡 알림API 연동
 TODO 5. 광고달기
+TODO 6. 회원가입 기능 만들기
 TODO 7. jwt.secret 넣은 파일 필요하다. // csv파일 역시 필요하다.
-TODO 8. httpOnly로 토큰 바꿔야 할까?
+TODO 8. 유저 투자 페이지 만들기
+TODO 9. AOP로 controller로 들어오는 variable들 로그찍기

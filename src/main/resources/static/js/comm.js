@@ -138,6 +138,11 @@ const logout = () =>{
 
 }
 
+const isAuth = () => {
+    const token = getCookie(accessTokenName);
+    return token ?  true : false;
+}
+
 const goAuthPage = (url) =>{
     const token = getCookie(accessTokenName);
     if(token){

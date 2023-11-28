@@ -5,11 +5,60 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/default}"
->
+      xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <th:block layout:fragment="content">
   <!-- Begin Page Content -->
-  <div class="container-fluid" id="app">
-    <h1>유저페이지</h1>
+  <div id="app">
+
+    <div v-if="viewWidth > 1600" >
+      <h3 class="text-center pt-5">추세 추종 투자법</h3>
+      <hr class="hr" />
+
+      <div class="row py-5 px-5 justify-content-evenly" >
+        <div class="card col w-50 p-3 mx-2" >
+          <div class="card-body">
+            <h5 class="card-title text-center">card</h5>
+            <div class="text-center">
+              <a href="#" class="btn btn-primary text-center" target='_blank' >알림 On</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div v-else>
+      <h3 class="text-center pt-5">추세 추종 투자법</h3>
+      <hr class="hr" />
+
+      <div class="row py-5 px-5 justify-content-evenly" >
+        <div class="card col w-50 p-3 mx-2">
+          <div class="card-body">
+            <h5 class="card-title text-center">삼성전자</h5>
+            <ul class="list-group list-group-horizontal p-1">
+              <li class="list-group-item">내가 저장한 상태</li>
+              <li class="list-group-item">A second item</li>
+            </ul>
+            <ul class="list-group list-group-horizontal p-1">
+              <li class="list-group-item">금일 상태</li>
+              <li class="list-group-item">A second item</li>
+            </ul>
+            <ul class="list-group list-group-horizontal p-1">
+              <li class="list-group-item">오늘 추세평균가</li>
+              <li class="list-group-item">A second item</li>
+            </ul>
+            <ul class="list-group list-group-horizontal p-1">
+              <li class="list-group-item">최신 종가</li>
+              <li class="list-group-item">A second item</li>
+            </ul>
+            <div class="text-center">
+              <a href="#" class="btn btn-primary text-center" target='_blank' >알림 On</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
   <script>
     const { createApp, ref } = Vue;

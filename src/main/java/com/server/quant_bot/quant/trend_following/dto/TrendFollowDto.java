@@ -1,14 +1,17 @@
 package com.server.quant_bot.quant.trend_following.dto;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
+@ToString
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class TrendFollowDto {
 
+    private String stock;
     private String trendFollowPrice;
     private String baseDateClosePrice;
-    private boolean isBuy;
+    private Boolean isBuy;
 
 }

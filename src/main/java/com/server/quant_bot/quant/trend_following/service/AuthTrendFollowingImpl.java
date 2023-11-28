@@ -1,6 +1,7 @@
 package com.server.quant_bot.quant.trend_following.service;
 
 import com.server.quant_bot.comm.entity.BaseEntity;
+import com.server.quant_bot.korea.service.StockService;
 import com.server.quant_bot.quant.trend_following.dto.TrendFollowDto;
 import com.server.quant_bot.quant.trend_following.entity.TrendFollow;
 import com.server.quant_bot.quant.trend_following.repository.TrendFollowRepository;

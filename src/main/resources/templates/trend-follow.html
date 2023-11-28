@@ -12,7 +12,7 @@
         <div class="input-group mb-3 mx-auto p-5" >
             <input
                     ref="searchInput"
-                    v-model="stock"
+                    v-model="stock.name"
                     v-on:keypress.enter="getData"
                     v-on:click="clickSearchBar"
                     type="text"
@@ -30,7 +30,7 @@
 
             <div class="card text-center">
                 <div class="card-header">
-                    {{ stock }}
+                    {{ stock.name }}
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">{{ isBuy }}</h5>
@@ -70,7 +70,10 @@
                         baseDateClosePrice: 0,
                         isBuy: false,
                     },
-                    stock: "",
+                    stock: {
+                        name: "",
+                        code: "",
+                    },
                     keyword: "",
                     stocks:[],
                 }
@@ -88,18 +91,18 @@
             methods: {
                 async getData() {
                     const v = this;
-                    if( v.stock === ""){
+                    if( v.stock.name === ""){
                         return;
                     }
-                    v.initData = await quantFetch("/api/v1/trend-follow/"+ v.stock) ;
+                    v.initData = await quantFetch("/api/v1/trend-follow/"+ v.stock.name) ;
                     await v.createChart();
                 },
                 async createChart(){
                     const v = this;
-                    if( v.stock === ""){
+                    if( v.stock.name === ""){
                         return;
                     }
-                    const stockData = await quantFetch("/api/v1/trend-follow/"+ v.stock + "/list") ;
+                    const stockData = await quantFetch("/api/v1/trend-follow/"+ v.stock.name + "/list") ;
                     callChart("myChart",stockData);
                 },
                 changeKeyword(e){
@@ -120,16 +123,20 @@
                 },
                 async saveTrendFollow(url){
                     const v = this;
-                    Object.assign(v.initData,{stock: v.stock})
+                    Object.assign(v.initData,{stock: v.stock.code})
                     const resultData = await quantFetch("/auth/v1/trend-follow",{
                         method: "POST",
                         body:v.initData
                     })
                     //goAuthPage(url);
                 },
+
                 /**
-                 * 이하 모달 function
+====================================================================================================
+===================================이하 모달 function=================================================
+====================================================================================================
                  */
+
                 closeModal(){
                     const v = this;
                     v.stocks = [];
@@ -137,13 +144,14 @@
                 },
                 processModal(){
                     const v = this;
-                    v.stock = v.keyword;
+                    v.stock.name = v.keyword;
                     v.getData();
                     myModal.hide();
                 },
                 processModalByClick(stock,index){
                     const v = this;
-                    v.stock = v.stocks[index].stockName;
+                    v.stock.name = v.stocks[index].stockName;
+                    v.stock.code = v.stocks[index].stockCode;
                     v.getData();
                     myModal.hide();
                 }

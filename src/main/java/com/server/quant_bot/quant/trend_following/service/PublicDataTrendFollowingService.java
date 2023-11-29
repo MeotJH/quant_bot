@@ -28,7 +28,6 @@ public class PublicDataTrendFollowingService implements TrendFollowing {
     private final AuthTrendFollowing authTrendFollowing;
     private final int TREND_FOLLOIWNG_DEFAULT_DAY = 75;
     private final int TREND_FOLLOIWNGS_DEFAULT_DAY = 150;
-
     private final String DATE_TYPE_PATTERN = "yyyyMMdd";
     @Override
     public TrendFollowDto getOneday(String ticker, String baseDt) {
@@ -67,6 +66,11 @@ public class PublicDataTrendFollowingService implements TrendFollowing {
     @Override
     public Optional<TrendFollow> save(TrendFollowDto dto) {
         return authTrendFollowing.save(dto);
+    }
+
+    @Override
+    public List<TrendFollowDto> findTrendDtoByUserId() {
+        return authTrendFollowing.findTrendDtoByUserId();
     }
 
     private String getDoubleToMoney(Double target){

@@ -1,6 +1,7 @@
 package com.server.quant_bot.quant.trend_following.entity;
 
 import com.server.quant_bot.comm.entity.BaseEntity;
+import com.server.quant_bot.comm.security.util.SecurityUtil;
 import com.server.quant_bot.quant.trend_following.dto.TrendFollowDto;
 import com.server.quant_bot.quant.trend_following.mapper.TrendFollowMapper;
 import jakarta.persistence.*;
@@ -24,6 +25,10 @@ public class TrendFollow extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Comment("유저 ID")
+    @Column(updatable = false, nullable = false)
+    private String userId;
+
     @Comment("주식코드")
     @Column(updatable = false, nullable = false)
     private String stock;
@@ -41,6 +46,12 @@ public class TrendFollow extends BaseEntity {
     @Override
     public TrendFollow update(Object BeforeCastedDto) {
         TrendFollowDto dto = (TrendFollowDto) BeforeCastedDto;
-        return TrendFollowMapper.INSTANCE.DtoToEntity(dto);
+        TrendFollow trendFollow = TrendFollowMapper.INSTANCE.DtoToEntity(dto);
+        trendFollow.userId = SecurityUtil.getUser().getUsername();
+        return trendFollow;
+    }
+
+    public TrendFollowDto toDto(){
+        return TrendFollowMapper.INSTANCE.EntityToDto(this);
     }
 }

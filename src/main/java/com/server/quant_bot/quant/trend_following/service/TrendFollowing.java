@@ -14,6 +14,8 @@ public interface TrendFollowing {
     default TrendFollowListDto getDaysByBaseDt(String ticker, String baseDt){return null;}
 
     default List<String> getStocksByKeyword(String keyword){return null;}
-
+    //TODO entity return 하면 안됨 수정하자
     default Optional<TrendFollow> save(TrendFollowDto dto) {return Optional.ofNullable(null);}
+
+    default List<TrendFollowDto> findTrendDtoByUserId(){return null;}
 }

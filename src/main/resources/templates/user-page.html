@@ -67,6 +67,7 @@
       },
       mounted() {
         const v = this;
+        v.getTrendFollows();
       },
       data() {
         return{
@@ -75,9 +76,9 @@
       computed:{
       },
       methods: {
-        sampleFunc() {
-          const v = this;
-        },
+        async getTrendFollows(){
+          await quantFetch("/auth/v1/trend-follow")
+        }
       }
     }).mount('#app');
   </script>

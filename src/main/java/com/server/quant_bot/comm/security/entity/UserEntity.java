@@ -31,7 +31,7 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Comment("아이디")
+    @Comment("유저의 ID")
     @Column(updatable = false, unique = true, nullable = false)
     private String userId;
 

@@ -88,8 +88,8 @@ public class PublicDataStockService implements StockService{
     }
 
     @Override
-    public Optional<Stock> findStockByStockName(String stockName) {
-        return stockRepository.findByStockName(stockName);
+    public Optional<Stock> findStockByStockCode(String stockCode) {
+        return stockRepository.findByStockCode(stockCode);
     }
 
     @Override

@@ -14,6 +14,7 @@ public interface EntityLikeToResponseMapper {
     @Mapping(source="stock", target="stock.stockName", ignore = true)
     TrendFollowEntityLikeDto DtoToEntityLike(TrendFollowDto dto);
 
-    @Mapping(source="stock.stockName", target="stock")
+    @Mapping(source="stock.stockCode", target="stock")
+    @Mapping(source="stock.stockName", target="stockName")
     TrendFollowDto EntityLikeToDto(TrendFollowEntityLikeDto entityLikeDto);
 }

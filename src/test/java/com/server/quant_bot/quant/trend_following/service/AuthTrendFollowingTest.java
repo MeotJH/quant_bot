@@ -36,7 +36,7 @@ class AuthTrendFollowingImplTest {
         //given
         TrendFollowDto dto = TrendFollowDto
                                 .builder()
-                                    .stock("JYP Ent.")
+                                    .stock("035900")
                                     .isBuy(false)
                                     .baseDateClosePrice("104,972.34")
                                     .trendFollowPrice("97,100")
@@ -46,7 +46,7 @@ class AuthTrendFollowingImplTest {
 
         //then
         Assertions.assertThat(saved.isPresent()).isTrue();
-        Assertions.assertThat(saved.get().getStock().getStockName()).isEqualTo(dto.getStock());
+        Assertions.assertThat(saved.get().getStock().getStockCode()).isEqualTo(dto.getStock());
         Assertions.assertThat(saved.get().getIsBuy()).isEqualTo(dto.getIsBuy());
         Assertions.assertThat(saved.get().getBaseDateClosePrice()).isEqualTo(dto.getBaseDateClosePrice());
         Assertions.assertThat(saved.get().getTrendFollowPrice()).isEqualTo(dto.getTrendFollowPrice());
@@ -60,7 +60,7 @@ class AuthTrendFollowingImplTest {
         //given
         TrendFollowDto dto = TrendFollowDto
                 .builder()
-                .stock("JYP Ent.")
+                .stock("035900")
                 .isBuy(false)
                 .baseDateClosePrice("104,972.34")
                 .trendFollowPrice("97,100")

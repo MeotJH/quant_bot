@@ -11,7 +11,8 @@ import lombok.*;
 @AllArgsConstructor
 public class TrendFollowDto {
 
-    private String stock;
+    private String stock; // 코드 들어옴
+    private String stockName;
     private String trendFollowPrice;
     private String baseDateClosePrice;
     private Boolean isBuy;

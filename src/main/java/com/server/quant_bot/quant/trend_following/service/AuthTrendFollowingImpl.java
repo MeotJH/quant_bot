@@ -73,11 +73,11 @@ public class AuthTrendFollowingImpl implements AuthTrendFollowing{
         );
     }
 
-    private Optional<Stock> findStockByStockCode(String stockName){
-        if(stockName == null){
+    private Optional<Stock> findStockByStockCode(String stockCode){
+        if(stockCode == null){
             throw new ResourceCommException("stock이 존재하지 않습니다");
         }
-        return stockService.findStockByStockName(stockName);
+        return stockService.findStockByStockCode(stockCode);
     }
 
     private Optional<UserEntity> findUserBySecurity() {

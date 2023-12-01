@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface StockRepository extends JpaRepository<Stock, Long> {
 
-    Optional<Stock> findByStockName(String stockCode);
+    Optional<Stock> findByStockCode(String stockCode);
 
     List<StockMapping> findStocksByStockNameLike(String keyword);
 }

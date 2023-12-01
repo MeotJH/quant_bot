@@ -16,7 +16,7 @@ public interface StockService {
 
     default List<Stock> CSVToDB(){ return null; }
 
-    default Optional<Stock> findStockByStockName(String stockCode) {return Optional.ofNullable(null);}
+    default Optional<Stock> findStockByStockCode(String stockCode) {return Optional.ofNullable(null);}
 
     default List<StockMapping> getStocksByStockLike(String keyword){ return null;}
 }

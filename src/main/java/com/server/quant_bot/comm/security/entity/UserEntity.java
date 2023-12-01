@@ -3,6 +3,7 @@ package com.server.quant_bot.comm.security.entity;
 import com.server.quant_bot.comm.entity.BaseEntity;
 import com.server.quant_bot.comm.security.dto.UserDto;
 import com.server.quant_bot.comm.security.mapper.UserMapper;
+import com.server.quant_bot.quant.trend_following.entity.TrendFollow;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,6 +43,10 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
     private List<String> roles = new ArrayList<>();
+
+    @Comment("유저의 추세이동테이블 ID")
+    @OneToMany(mappedBy = "user")
+    private List<TrendFollow> trendFollows = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

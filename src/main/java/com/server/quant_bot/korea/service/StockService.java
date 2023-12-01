@@ -6,6 +6,7 @@ import com.server.quant_bot.korea.mapping.StockMapping;
 import com.server.quant_bot.korea.repository.StockRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface StockService {
 
@@ -14,6 +15,8 @@ public interface StockService {
     default List<PublicDataStockDto> getAllByAfterBeginDate(String ticker,String beginDt){return null;}
 
     default List<Stock> CSVToDB(){ return null; }
+
+    default Optional<Stock> findStockByStockName(String stockCode) {return Optional.ofNullable(null);}
 
     default List<StockMapping> getStocksByStockLike(String keyword){ return null;}
 }

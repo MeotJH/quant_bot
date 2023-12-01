@@ -1,5 +1,7 @@
 package com.server.quant_bot.quant.trend_following.service;
 
+import com.server.quant_bot.comm.security.service.UserService;
+import com.server.quant_bot.korea.entity.Stock;
 import com.server.quant_bot.quant.trend_following.dto.TrendFollowDto;
 import com.server.quant_bot.quant.trend_following.entity.TrendFollow;
 import lombok.extern.slf4j.Slf4j;
@@ -18,12 +20,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @SpringBootTest
-@WithMockUser
+@WithMockUser(username = "userId")
 @Transactional(rollbackFor = Exception.class)
 class AuthTrendFollowingImplTest {
 
     @Autowired
     AuthTrendFollowing authTrendFollowing;
+
+    @Autowired
+    UserService userService;
     
     @Test
     @DisplayName("유저를 저장한 후 저장된 값과 저장했던 값이 같아야 한다.")
@@ -41,7 +46,7 @@ class AuthTrendFollowingImplTest {
 
         //then
         Assertions.assertThat(saved.isPresent()).isTrue();
-        Assertions.assertThat(saved.get().getStock()).isEqualTo(dto.getStock());
+        Assertions.assertThat(saved.get().getStock().getStockName()).isEqualTo(dto.getStock());
         Assertions.assertThat(saved.get().getIsBuy()).isEqualTo(dto.getIsBuy());
         Assertions.assertThat(saved.get().getBaseDateClosePrice()).isEqualTo(dto.getBaseDateClosePrice());
         Assertions.assertThat(saved.get().getTrendFollowPrice()).isEqualTo(dto.getTrendFollowPrice());
@@ -61,11 +66,12 @@ class AuthTrendFollowingImplTest {
                 .trendFollowPrice("97,100")
                 .build();
         Optional<TrendFollow> save = authTrendFollowing.save(dto);
-        save.ifPresent( saved -> log.info(":::this is saved userId = {}" , saved.getUserId() ) );
+        save.ifPresent( saved -> log.info(":::this is saved userId = {}" , saved.getUser() ) );
 
         //when
         List<TrendFollowDto> trendDtoByUserId = authTrendFollowing.findTrendDtoByUserId();
         TrendFollowDto trendFollowDto = trendDtoByUserId.get(0);
+        String stock = trendFollowDto.getStock();
 
         //then
         Assertions.assertThat(trendFollowDto.getIsBuy()).isEqualTo(dto.getIsBuy());

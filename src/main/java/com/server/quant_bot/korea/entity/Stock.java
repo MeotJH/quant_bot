@@ -1,10 +1,13 @@
 package com.server.quant_bot.korea.entity;
 
 import com.server.quant_bot.comm.entity.BaseEntity;
+import com.server.quant_bot.quant.trend_following.entity.TrendFollow;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.Comment;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -28,6 +31,9 @@ public class Stock extends BaseEntity {
     @Comment("포함된 시장")
     @Column
     private String market;
+
+    @OneToMany(mappedBy = "stock")
+    private List<TrendFollow> trendFollows = new ArrayList<TrendFollow>();
 
 
 

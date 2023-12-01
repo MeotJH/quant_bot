@@ -1,9 +1,11 @@
 package com.server.quant_bot.quant.trend_following.entity;
 
 import com.server.quant_bot.comm.entity.BaseEntity;
-import com.server.quant_bot.comm.security.util.SecurityUtil;
+import com.server.quant_bot.comm.security.entity.UserEntity;
+import com.server.quant_bot.korea.entity.Stock;
 import com.server.quant_bot.quant.trend_following.dto.TrendFollowDto;
-import com.server.quant_bot.quant.trend_following.mapper.TrendFollowMapper;
+import com.server.quant_bot.quant.trend_following.dto.TrendFollowEntityLikeDto;
+import com.server.quant_bot.quant.trend_following.mapper.TrendFollowEnntityLikeMapper;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,13 +27,15 @@ public class TrendFollow extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @ManyToOne
     @Comment("유저 ID")
-    @Column(updatable = false, nullable = false)
-    private String userId;
+    @JoinColumn(name="USER_ID" ,updatable = false, nullable = false)
+    private UserEntity user;
 
+    @ManyToOne
     @Comment("주식코드")
-    @Column(updatable = false, nullable = false)
-    private String stock;
+    @JoinColumn(name = "STOCK_ID", nullable = false)
+    private Stock stock;
 
     @Comment("추세이동선 검색시 값")
     private String trendFollowPrice;
@@ -45,13 +49,11 @@ public class TrendFollow extends BaseEntity {
 
     @Override
     public TrendFollow update(Object BeforeCastedDto) {
-        TrendFollowDto dto = (TrendFollowDto) BeforeCastedDto;
-        TrendFollow trendFollow = TrendFollowMapper.INSTANCE.DtoToEntity(dto);
-        trendFollow.userId = SecurityUtil.getUser().getUsername();
-        return trendFollow;
+        TrendFollowEntityLikeDto dto = (TrendFollowEntityLikeDto) BeforeCastedDto;
+        return TrendFollowEnntityLikeMapper.INSTANCE.DtoToEntity(dto);
     }
 
-    public TrendFollowDto toDto(){
-        return TrendFollowMapper.INSTANCE.EntityToDto(this);
+    public TrendFollowEntityLikeDto toDto(){
+        return TrendFollowEnntityLikeMapper.INSTANCE.EntityToDto(this);
     }
 }

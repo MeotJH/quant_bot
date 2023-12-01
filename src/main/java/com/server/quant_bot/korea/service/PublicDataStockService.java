@@ -23,6 +23,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -84,6 +85,11 @@ public class PublicDataStockService implements StockService{
             e.printStackTrace();
         }
         return stocks;
+    }
+
+    @Override
+    public Optional<Stock> findStockByStockName(String stockName) {
+        return stockRepository.findByStockName(stockName);
     }
 
     @Override

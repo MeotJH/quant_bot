@@ -10,7 +10,7 @@ import java.util.Optional;
 @Service
 public interface AuthTrendFollowing {
 
-    default Optional<TrendFollow> save(TrendFollowDto dto){ return Optional.ofNullable(null); }
+    default Optional<TrendFollowDto> save(TrendFollowDto dto){ return Optional.ofNullable(null); }
 
     default List<TrendFollowDto> findTrendDtoByUserId(){return null;}
 

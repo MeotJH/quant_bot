@@ -9,6 +9,7 @@ import com.server.quant_bot.quant.trend_following.dto.TrendFollowDto;
 import com.server.quant_bot.quant.trend_following.dto.TrendFollowEntityLikeDto;
 import com.server.quant_bot.quant.trend_following.entity.TrendFollow;
 import com.server.quant_bot.quant.trend_following.mapper.EntityLikeToResponseMapper;
+import com.server.quant_bot.quant.trend_following.mapper.TrendFollowEnntityLikeMapper;
 import com.server.quant_bot.quant.trend_following.repository.TrendFollowRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ public class AuthTrendFollowingImpl implements AuthTrendFollowing{
     private final StockService stockService;
 
     @Override
-    public Optional<TrendFollow> save(TrendFollowDto requestDto) {
+    public Optional<TrendFollowDto> save(TrendFollowDto requestDto) {
 
         Optional<TrendFollowEntityLikeDto> dto = transformRequestDtoToEntityLikeDto(requestDto);
 
@@ -38,8 +39,9 @@ public class AuthTrendFollowingImpl implements AuthTrendFollowing{
                 ,() ->{throw new ResourceCommException(" 데이터에 문제가 발생했습니다. ");}
         );
 
+        TrendFollow save = trendFollowRepository.save(entity.get());
         return Optional.ofNullable(
-                trendFollowRepository.save(entity.get())
+                EntityLikeToResponseMapper.INSTANCE.EntityLikeToDto(save.toDto())
         );
     }
 

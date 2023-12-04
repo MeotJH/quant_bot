@@ -3,10 +3,7 @@ package com.server.quant_bot.quant.trend_following.service;
 import com.server.quant_bot.comm.utill.DateUtill;
 import com.server.quant_bot.korea.dto.PublicDataStockDto;
 import com.server.quant_bot.korea.service.StockService;
-import com.server.quant_bot.quant.trend_following.dto.TrendFollowDto;
-import com.server.quant_bot.quant.trend_following.dto.TrendFollowListDto;
-import com.server.quant_bot.quant.trend_following.dto.TrendFollowRecord;
-import com.server.quant_bot.quant.trend_following.dto.TrendFollowRecordForList;
+import com.server.quant_bot.quant.trend_following.dto.*;
 import com.server.quant_bot.quant.trend_following.entity.TrendFollow;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -64,13 +61,36 @@ public class PublicDataTrendFollowingService implements TrendFollowing {
     }
 
     @Override
-    public Optional<TrendFollow> save(TrendFollowDto dto) {
+    public Optional<TrendFollowDto> save(TrendFollowDto dto) {
         return authTrendFollowing.save(dto);
     }
 
     @Override
-    public List<TrendFollowDto> findTrendDtoByUserId() {
-        return authTrendFollowing.findTrendDtoByUserId();
+    public List<TrendFollowUserPageDto> findTrendDtoByUserId() {
+        List<TrendFollowDto> trendDtoByUserId = authTrendFollowing.findTrendDtoByUserId();
+        List<TrendFollowUserPageDto> responseDtos = new ArrayList<>();
+
+        trendDtoByUserId.forEach( savedDay -> {
+
+            TrendFollowDto today = getOneday(savedDay.getStockName(), DateUtill.getToday());
+            responseDtos.add(
+
+                    new TrendFollowUserPageDto(
+                            savedDay.getStock()
+                            ,savedDay.getStockName()
+                            , today.getBaseDateClosePrice()
+                            , savedDay.getBaseDateClosePrice()
+                            , today.getTrendFollowPrice()
+                            , savedDay.getTrendFollowPrice()
+                            , today.getIsBuy()
+                            , savedDay.getIsBuy()
+                    )
+
+            );
+
+        });
+
+        return responseDtos;
     }
 
     private String getDoubleToMoney(Double target){

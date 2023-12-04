@@ -42,11 +42,11 @@ class AuthTrendFollowingImplTest {
                                     .trendFollowPrice("97,100")
                                 .build();
         //when
-        Optional<TrendFollow> saved = authTrendFollowing.save(dto);
+        Optional<TrendFollowDto> saved = authTrendFollowing.save(dto);
 
         //then
         Assertions.assertThat(saved.isPresent()).isTrue();
-        Assertions.assertThat(saved.get().getStock().getStockCode()).isEqualTo(dto.getStock());
+        Assertions.assertThat(saved.get().getStock()).isEqualTo(dto.getStock());
         Assertions.assertThat(saved.get().getIsBuy()).isEqualTo(dto.getIsBuy());
         Assertions.assertThat(saved.get().getBaseDateClosePrice()).isEqualTo(dto.getBaseDateClosePrice());
         Assertions.assertThat(saved.get().getTrendFollowPrice()).isEqualTo(dto.getTrendFollowPrice());
@@ -65,13 +65,11 @@ class AuthTrendFollowingImplTest {
                 .baseDateClosePrice("104,972.34")
                 .trendFollowPrice("97,100")
                 .build();
-        Optional<TrendFollow> save = authTrendFollowing.save(dto);
-        save.ifPresent( saved -> log.info(":::this is saved userId = {}" , saved.getUser() ) );
+        authTrendFollowing.save(dto);
 
         //when
         List<TrendFollowDto> trendDtoByUserId = authTrendFollowing.findTrendDtoByUserId();
         TrendFollowDto trendFollowDto = trendDtoByUserId.get(0);
-        String stock = trendFollowDto.getStock();
 
         //then
         Assertions.assertThat(trendFollowDto.getIsBuy()).isEqualTo(dto.getIsBuy());

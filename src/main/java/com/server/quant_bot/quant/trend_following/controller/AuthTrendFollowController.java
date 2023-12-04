@@ -1,6 +1,7 @@
 package com.server.quant_bot.quant.trend_following.controller;
 
 import com.server.quant_bot.quant.trend_following.dto.TrendFollowDto;
+import com.server.quant_bot.quant.trend_following.dto.TrendFollowUserPageDto;
 import com.server.quant_bot.quant.trend_following.service.TrendFollowing;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class AuthTrendFollowController {
     private final TrendFollowing trendFollowing;
 
     @GetMapping
-    public List<TrendFollowDto> findTrendFollowsByUser(){
+    public List<TrendFollowUserPageDto> findTrendFollowsByUser(){
         return trendFollowing.findTrendDtoByUserId();
     }
 

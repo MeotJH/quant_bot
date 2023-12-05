@@ -27,12 +27,12 @@ public class TrendFollow extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @Comment("유저 ID")
     @JoinColumn(name="USER_ID" ,updatable = false, nullable = false)
     private UserEntity user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @Comment("주식코드")
     @JoinColumn(name = "STOCK_ID", nullable = false)
     private Stock stock;

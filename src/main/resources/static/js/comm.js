@@ -25,11 +25,17 @@ const quantFetch = function (url,data = {
             })
                 .then(async response => {
                     if (!response.ok) {
-                        //TODO 로그인 실패 프론트 만들기 JSON.parse(resultData);
-                        const body = JSON.parse(await response.json());
-                        resolve(body)
-                        throw new Error( `${response.url}  ${response.status}  ${body.message}` );
+                        console.info(response,"in method response")
+                        if(response instanceof Object){
+                            resolve(response.json());
+                        }else{
+                            //TODO 로그인 실패 프론트 만들기 JSON.parse(resultData);
+                            const body = JSON.parse(await response.json());
+                            resolve(body)
+                            throw new Error( `${response.url}  ${response.status}  ${body.message}` );
+                        }
                     }
+
                     return response.json();
                 })
                 .then(data => {
@@ -40,6 +46,7 @@ const quantFetch = function (url,data = {
                     resolve(data);
                 })
                 .catch(error => {
+
                     console.error('Request failed:', error);
                 });
         } catch (error) {

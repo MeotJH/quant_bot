@@ -30,19 +30,35 @@ public class AuthTrendFollowingImpl implements AuthTrendFollowing{
 
     @Override
     public Optional<TrendFollowDto> save(TrendFollowDto requestDto) {
+        
+        isDuplicate(requestDto);
 
         Optional<TrendFollowEntityLikeDto> dto = transformRequestDtoToEntityLikeDto(requestDto);
 
-        AtomicReference<TrendFollow> entity = new AtomicReference<TrendFollow>();
+        AtomicReference<TrendFollow> reference = new AtomicReference<>();
         dto.ifPresentOrElse(
-                present -> entity.set(new TrendFollow().update(present))
+                present -> reference.set(new TrendFollow().update(present))
                 ,() ->{throw new ResourceCommException(" 데이터에 문제가 발생했습니다. ");}
         );
 
-        TrendFollow save = trendFollowRepository.save(entity.get());
+        TrendFollow save = trendFollowRepository.save(reference.get());
         return Optional.ofNullable(
                 EntityLikeToResponseMapper.INSTANCE.EntityLikeToDto(save.toDto())
         );
+    }
+
+    private void isDuplicate(TrendFollowDto requestDto) {
+        Boolean isExist = Boolean.FALSE;
+        Optional<UserEntity> userByLoginId = userService.findUserByLoginId();
+        Optional<Stock> stockByStockCode = stockService.findStockByStockCode(requestDto.getStock());
+
+        if(userByLoginId.isPresent() && stockByStockCode.isPresent()){
+            isExist = trendFollowRepository.existsByStockAndIsBuyAndUser(stockByStockCode.get(), requestDto.getIsBuy(), userByLoginId.get());
+        }
+
+        if(isExist == true){
+            throw new ResourceCommException("중복된 데이터가 있습니다.");
+        }
     }
 
     @Override

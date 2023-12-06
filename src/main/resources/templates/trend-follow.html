@@ -128,6 +128,13 @@
                         method: "POST",
                         body:v.initData
                     })
+                    console.info(resultData,"resultData");
+                    if(resultData.stock){
+                        //TODO 공통 알림 모듈 만들기
+                        alert("저장되었습니다.");
+                    }else{
+                        alert(resultData.message);
+                    }
                     //goAuthPage(url);
                 },
 

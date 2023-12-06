@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,8 +29,8 @@ public class AuthTrendFollowController {
     }
 
     @PostMapping
-    public void saveTrendFollow(@RequestBody TrendFollowDto dto){
+    public TrendFollowDto saveTrendFollow(@RequestBody TrendFollowDto dto){
         log.info("data is :: {}",dto.toString());
-        trendFollowing.save(dto);
+        return trendFollowing.save(dto).get();
     }
 }

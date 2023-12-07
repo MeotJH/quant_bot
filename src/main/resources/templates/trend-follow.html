@@ -76,6 +76,7 @@
                     },
                     keyword: "",
                     stocks:[],
+                    chart: {},
                 }
             },
             computed:{
@@ -99,11 +100,18 @@
                 },
                 async createChart(){
                     const v = this;
+                    v.destroyIfExist();
                     if( v.stock.name === ""){
                         return;
                     }
                     const stockData = await quantFetch("/api/v1/trend-follow/"+ v.stock.name + "/list") ;
-                    callChart("myChart",stockData);
+                    v.chart = callChart("myChart",stockData);
+                },
+                destroyIfExist(){
+                    const v = this;
+                    if(!isEmptyObject(v.chart)){
+                        v.chart.destroy();
+                    }
                 },
                 changeKeyword(e){
                     const v = this;

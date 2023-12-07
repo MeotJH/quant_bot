@@ -58,7 +58,7 @@ const quantFetch = function (url,data = {
 
 //차트js comm으로 만들 로직
 const callChart = function (id,stockData){
-    new Chart(document.getElementById(id), {
+    return new Chart(document.getElementById(id), {
         type: 'line',
         data: {
             labels: stockData.baseDt.reverse(),
@@ -177,4 +177,8 @@ function getCookie(cookieName) {
 
 function deleteCookie(cookieName) {
     document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+}
+
+const isEmptyObject = (param) => {
+    return Object.keys(param).length === 0 && param.constructor === Object;
 }

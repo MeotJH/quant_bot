@@ -1,5 +1,6 @@
 package com.server.quant_bot.quant.trend_following.service;
 
+import com.server.quant_bot.comm.exception.ResourceCommException;
 import com.server.quant_bot.comm.security.service.UserService;
 import com.server.quant_bot.korea.entity.Stock;
 import com.server.quant_bot.quant.trend_following.dto.TrendFollowDto;
@@ -76,6 +77,26 @@ class AuthTrendFollowingImplTest {
         Assertions.assertThat(trendFollowDto.getTrendFollowPrice()).isEqualTo(dto.getTrendFollowPrice());
         Assertions.assertThat(trendFollowDto.getBaseDateClosePrice()).isEqualTo(dto.getBaseDateClosePrice());
         Assertions.assertThat(trendFollowDto.getStock()).isEqualTo(dto.getStock());
+
+    }
+
+    @Test
+    @DisplayName("동일한 데이터를 저장하면 에러가 난다.")
+    void saveDuplicateTest() {
+        //given
+        TrendFollowDto dto = TrendFollowDto
+                .builder()
+                .stock("035900")
+                .isBuy(false)
+                .baseDateClosePrice("104,972.34")
+                .trendFollowPrice("97,100")
+                .build();
+        //when
+        authTrendFollowing.save(dto);
+
+
+        //then
+        assertThrows(ResourceCommException.class, () -> authTrendFollowing.save(dto));
 
     }
 }

@@ -62,6 +62,11 @@
             },
             mounted() {
                 const v = this;
+                quantToast({
+                    title:"타이틀"
+                    ,body: "바디"
+                    ,time: "시간"
+                })
             },
             data() {
                 return{
@@ -137,9 +142,9 @@
                         body:v.initData
                     })
                     if(resultData.stock){
-                        appendAlert('저장되었습니다', 'success');
+                        quantAlert('저장되었습니다', 'success');
                     }else{
-                        appendAlert(resultData.message, 'danger');
+                        quantAlert(resultData.message, 'danger');
                     }
                 },
 

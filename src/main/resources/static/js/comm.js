@@ -184,7 +184,7 @@ const isEmptyObject = (param) => {
 }
 
 const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
-const appendAlert = (message, type) => {
+const quantAlert = (message, type) => {
     const wrapper = document.createElement('div')
     wrapper.innerHTML = [
         `<div class="alert alert-${type} alert-dismissible mx-2 my-2 show fade " role="alert" >`,
@@ -194,6 +194,44 @@ const appendAlert = (message, type) => {
     ].join('')
     alertPlaceholder.append(wrapper);
 }
+
+const toastLiveExample = document.getElementById('liveToast')
+const quantToast = (toastObj) =>{
+    console.info(toastObj)
+    const {body,title,time} = toastObj;
+
+    if(!body || !title || !time ){
+        throw new Error("quantToast값 비었음 {},{},{}",body,title,time)
+    }
+
+    const wrapper = document.createElement('div')
+    wrapper.innerHTML =
+        `<div class="toast-header">
+            <strong class="me-auto">${title}</strong>
+            <small>${time} mins ago</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            ${body}
+        </div>`;
+
+    /**
+     * `<div class="toast-header">
+     *             <img src="..." class="rounded me-2" alt="...">
+     *             <strong class="me-auto">${title}</strong>
+     *             <small>${time} mins ago</small>
+     *             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+     *         </div>
+     *         <div class="toast-body">
+     *             ${body}
+     *         </div>`;
+     */
+
+    toastLiveExample.append(wrapper);
+    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+    toastBootstrap.show();
+}
+
 
 
 

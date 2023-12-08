@@ -33,32 +33,40 @@
 
       <div class="row py-5 px-5 justify-content-evenly" v-for="trendFollows in splitedTrendFollows">
         <div class="card col w-50 p-3 mx-2" v-for="trendFollow in trendFollows">
-          <div class="card-body">
+          <div class="card-body flex-fill" >
             <h5 class="card-title text-center">{{ trendFollow.stockName }}</h5>
-            <ul class="list-group list-group-horizontal p-1">
-              <li class="list-group-item">내가 저장한 상태</li>
-              <li class="list-group-item">{{ trendFollow.savedIsBuy }}</li>
-            </ul>
-            <ul class="list-group list-group-horizontal p-1">
-              <li class="list-group-item">금일 상태</li>
-              <li class="list-group-item">{{ trendFollow.isBuy }}</li>
-            </ul>
-            <ul class="list-group list-group-horizontal p-1">
-              <li class="list-group-item">오늘 추세평균가</li>
-              <li class="list-group-item">{{ trendFollow.trendFollowPrice }}</li>
-            </ul>
-            <ul class="list-group list-group-horizontal p-1">
-              <li class="list-group-item">저장한 추세평균가</li>
-              <li class="list-group-item">{{ trendFollow.savedTrendFollowPrice }}</li>
-            </ul>
-            <ul class="list-group list-group-horizontal p-1">
-              <li class="list-group-item">최신 종가</li>
-              <li class="list-group-item">{{ trendFollow.closePrice }}</li>
-            </ul>
-            <ul class="list-group list-group-horizontal p-1">
-              <li class="list-group-item">저장한 종가</li>
-              <li class="list-group-item">{{ trendFollow.savedClosePrice }}</li>
-            </ul>
+            <div class="d-flex justify-content-evenly">
+              <div class="list-group m-2">
+                <div href="#" class="list-group-item" aria-current="true">
+                  <h5 class="mb-1">내가 저장한 상태</h5>
+                  <h5 class="mb-1 text-center">{{ trendFollow.savedIsBuy }}</h5>
+                </div>
+                <div href="#" class="list-group-item">
+                  <h5 class="mb-1">저장한 추세평균가</h5>
+                  <h5 class="mb-1 text-center">₩ {{ trendFollow.savedTrendFollowPrice }}</h5>
+                </div>
+                <div href="#" class="list-group-item">
+                  <h5 class="mb-1">저장한 종가</h5>
+                  <h5 class="mb-1 text-center">₩ {{ trendFollow.savedClosePrice }}</h5>
+                </div>
+              </div>
+              <div class="list-group m-2">
+                <div href="#" class="list-group-item">
+                  <h5 class="mb-1">금일 상태</h5>
+                  <h5 class="mb-1 text-center">{{ trendFollow.isBuy }}</h5>
+                </div>
+                <div href="#" class="list-group-item">
+                  <h5 class="mb-1">저장한 추세평균가</h5>
+                  <h5 class="mb-1 text-center">₩ {{ trendFollow.savedTrendFollowPrice }}</h5>
+                </div>
+                <div href="#" class="list-group-item">
+                  <h5 class="mb-1">최신 종가</h5>
+                  <h5 class="mb-1 text-center">₩ {{ trendFollow.closePrice }}</h5>
+                </div>
+              </div>
+            </div>
+
+
             <div class="text-center">
               <a href="#" class="btn btn-primary text-center" target='_blank' >알림 On</a>
             </div>

@@ -16,6 +16,3 @@ TODO 6. 회원가입 기능 만들기 => 집가서 할거
 TODO 8. 유저 투자 페이지 만들기
 TODO 9. AOP로 controller로 들어오는 variable들 로그찍기
 TODO 10. 3시에 장 끝나면 배치 돌려서 모든종목 추세평균, 금일종가 DB에 쌓는 기능 -> 속도 문제 해결될듯함
-TODO 11. 공통 알림 모듈 만들기
-TODO 12. 두번 검색시 나오는 에러
-        chart.js:19 Uncaught (in promise) Error: Canvas is already in use. Chart with ID '0' must be destroyed before the canvas with ID 'myChart' can be reused.

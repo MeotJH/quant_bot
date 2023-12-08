@@ -136,14 +136,11 @@
                         method: "POST",
                         body:v.initData
                     })
-                    console.info(resultData,"resultData");
                     if(resultData.stock){
-                        //TODO 공통 알림 모듈 만들기
-                        alert("저장되었습니다.");
+                        appendAlert('저장되었습니다', 'success');
                     }else{
-                        alert(resultData.message);
+                        appendAlert(resultData.message, 'danger');
                     }
-                    //goAuthPage(url);
                 },
 
                 /**

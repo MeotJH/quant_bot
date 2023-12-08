@@ -182,3 +182,19 @@ function deleteCookie(cookieName) {
 const isEmptyObject = (param) => {
     return Object.keys(param).length === 0 && param.constructor === Object;
 }
+
+const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
+const appendAlert = (message, type) => {
+    const wrapper = document.createElement('div')
+    wrapper.innerHTML = [
+        `<div class="alert alert-${type} alert-dismissible mx-2 my-2 show fade " role="alert" >`,
+        `   <div>${message}</div>`,
+        '   <button type="button" class="btn-close custom-alert-btn" data-bs-dismiss="alert" aria-label="Close"></button>',
+        '</div>'
+    ].join('')
+    alertPlaceholder.append(wrapper);
+}
+
+
+
+

@@ -2,6 +2,7 @@ package com.server.quant_bot.quant.trend_following.service;
 
 import com.server.quant_bot.comm.utill.DateUtill;
 import com.server.quant_bot.korea.dto.PublicDataStockDto;
+import com.server.quant_bot.korea.entity.Stock;
 import com.server.quant_bot.korea.service.StockService;
 import com.server.quant_bot.quant.trend_following.dto.*;
 import com.server.quant_bot.quant.trend_following.entity.TrendFollow;
@@ -91,6 +92,11 @@ public class PublicDataTrendFollowingService implements TrendFollowing {
         });
 
         return responseDtos;
+    }
+
+    @Override
+    public Optional<TrendFollow> findByStock(Stock stock) {
+        return authTrendFollowing.findByStock(stock);
     }
 
     private String getDoubleToMoney(Double target){

@@ -79,6 +79,11 @@ public class AuthTrendFollowingImpl implements AuthTrendFollowing{
         return dtos;
     }
 
+    @Override
+    public Optional<TrendFollow> findByStock(Stock stock) {
+        return trendFollowRepository.findByStockAndUser(stock,findUserBySecurity().get());
+    }
+
     private Optional<TrendFollowEntityLikeDto> transformRequestDtoToEntityLikeDto(TrendFollowDto requestDto) {
         return Optional.ofNullable(
                 new TrendFollowEntityLikeDto(

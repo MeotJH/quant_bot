@@ -16,4 +16,6 @@ public interface TrendFollowRepository extends JpaRepository<TrendFollow, UUID>{
 
     Boolean existsByStockAndIsBuyAndUser(Stock stock, boolean isBuy, UserEntity user);
 
+    Optional<TrendFollow> findByStockAndUser(Stock stock,UserEntity user);
+
 }

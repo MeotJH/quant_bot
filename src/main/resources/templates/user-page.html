@@ -5,7 +5,7 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/default}"
-      xmlns:v-bind="http://www.w3.org/1999/xhtml">
+      xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <th:block layout:fragment="content">
   <!-- Begin Page Content -->
   <div id="app">
@@ -31,8 +31,8 @@
       <h3 class="text-center pt-5">추세 추종 투자법</h3>
       <hr class="hr" />
 
-      <div class="row py-5 px-5 justify-content-evenly" v-for="trendFollows in splitedTrendFollows">
-        <div class="card col w-50 p-3 mx-2" v-for="trendFollow in trendFollows">
+      <div class="row py-5 px-5 justify-content-evenly" v-for="(trendFollows, loopOneIdx) in splitedTrendFollows">
+        <div class="card col w-50 p-3 mx-2" v-for="(trendFollow, loopTwoIdx) in trendFollows">
           <div class="card-body flex-fill" >
             <h5 class="card-title text-center">{{ trendFollow.stockName }}</h5>
             <div class="d-flex justify-content-evenly">
@@ -68,8 +68,11 @@
 
 
             <div class="text-center">
-              <span class="btn btn-primary text-center" target='_blank' >알림 On</span>
-              <span class="btn btn-light text-center" target='_blank' >알림 Off</span>
+              <span v-on:click="doNoti(trendFollow,loopOneIdx,loopTwoIdx)"
+                    v-bind:class="getBtnColorByNoti(trendFollow.notification)"
+                    class="btn btn-primary text-center"
+                    target='_blank' >
+                {{ getBtnTextByNoti(trendFollow.notification) }}</span>
             </div>
           </div>
         </div>
@@ -90,6 +93,7 @@
         return{
           trendFollows: [],
           splitedTrendFollows:{},
+          btnColor : 'btn-light'
         }
       },
       computed:{
@@ -98,7 +102,40 @@
         async getTrendFollows(){
           const v = this;
           v.trendFollows = await quantFetch("/auth/v1/trend-follow");
+          console.info(v.trendFollows,"v.trendFollows")
           v.splitedTrendFollows = splitIntoChunk(v.trendFollows, 2);
+        },
+        /**
+         *
+         * @param trendFollow 반복분 내에 있는 객체
+         * @param loopOneIdx 첫번쨰 반복문 인덱스
+         * @param loopTwoIdx 두번째 반복문 인덱스
+         * @returns {Promise<void>}
+         */
+        async doNoti(trendFollow,loopOneIdx,loopTwoIdx){
+          const v = this;
+          let notification = "on";
+          if(trendFollow.notification){
+            notification = "off";
+          }
+
+          await quantFetch("/auth/v1/notification/"+notification,{
+            method: "POST",
+            body:{
+              stock: trendFollow.stock,
+            }
+          });
+
+          //알림 on으로 바꾼 후 알림 및 재 렌더링을 위한 변수세팅
+          quantAlert('알림적용완료', 'success');
+          v.splitedTrendFollows[loopOneIdx][loopTwoIdx].notification = !trendFollow.notification;
+
+        },
+        getBtnColorByNoti(notification){
+          return notification ? "btn-primary" : "btn-light";
+        },
+        getBtnTextByNoti(notification){
+          return notification ? "알림 On" : "알림 Off"
         }
       }
     }).mount('#app');

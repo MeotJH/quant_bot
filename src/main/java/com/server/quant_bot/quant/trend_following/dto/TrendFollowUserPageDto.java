@@ -20,5 +20,6 @@ public record TrendFollowUserPageDto(
         ,String savedTrendFollowPrice
         ,Boolean isBuy
         ,Boolean savedIsBuy
+        ,Boolean notification
 ) {
 }

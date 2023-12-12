@@ -59,6 +59,11 @@ public class TrendFollow extends BaseEntity {
         return TrendFollowEnntityLikeMapper.INSTANCE.DtoToEntity(dto);
     }
 
+    public void addNoti(Notification notification){
+        this.notification = notification;
+    }
+
+
     public TrendFollowEntityLikeDto toDto(){
         return TrendFollowEnntityLikeMapper.INSTANCE.EntityToDto(this);
     }

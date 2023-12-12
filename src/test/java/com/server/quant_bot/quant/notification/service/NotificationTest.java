@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @Slf4j
 @SpringBootTest
-@WithMockUser(username = "userId")
+@WithMockUser(username = "testId")
 @Transactional(rollbackFor = Exception.class)
 class NotificationTest {
 
@@ -58,6 +58,32 @@ class NotificationTest {
         //then
         Assertions.assertThat(trendFollowPrice).isEqualTo(saved.get().getTrendFollowPrice());
         Assertions.assertThat(on.getNotification()).isEqualTo(true);
+
+    }
+
+    @Test
+    @DisplayName("알림 꺼짐이 디비에 저장되어야 한다")
+    void offTest() {
+        //given
+        String stockCd = "035900";
+        TrendFollowDto dto = TrendFollowDto
+                .builder()
+                .stock(stockCd)
+                .isBuy(false)
+                .baseDateClosePrice("104,972.34")
+                .trendFollowPrice("97,100")
+                .build();
+        Optional<TrendFollowDto> saved = trendFollowing.save(dto);
+        NotiReqDto notiReqDto = new NotiReqDto(stockCd);
+
+        //when
+        Notification off = notificationService.off(notiReqDto);
+        String trendFollowPrice = off.getTrendFollow().getTrendFollowPrice();
+
+
+        //then
+        Assertions.assertThat(trendFollowPrice).isEqualTo(saved.get().getTrendFollowPrice());
+        Assertions.assertThat(off.getNotification()).isEqualTo(false);
 
     }
 }

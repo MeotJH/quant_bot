@@ -1,6 +1,7 @@
 package com.server.quant_bot.quant.notification.controller;
 
 import com.server.quant_bot.quant.notification.dto.NotiReqDto;
+import com.server.quant_bot.quant.notification.entity.Notification;
 import com.server.quant_bot.quant.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,12 +17,12 @@ public class NotificationController {
     private final NotificationService notificationService;
 
     @PostMapping("/on")
-    public void onNotification(@RequestBody NotiReqDto notiReqDto){
-        notificationService.on(notiReqDto);
+    public Boolean onNotification(@RequestBody NotiReqDto notiReqDto){
+        return notificationService.on(notiReqDto) != null ? true : false;
     }
 
     @PostMapping("/off")
-    public void offNotification(@RequestBody NotiReqDto notiReqDto){
-        notificationService.off(notiReqDto);
+    public Boolean offNotification(@RequestBody NotiReqDto notiReqDto){
+        return notificationService.off(notiReqDto) != null ? true : false;
     }
 }

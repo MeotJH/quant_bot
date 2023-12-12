@@ -85,6 +85,7 @@ public class PublicDataTrendFollowingService implements TrendFollowing {
                             , savedDay.getTrendFollowPrice()
                             , today.getIsBuy()
                             , savedDay.getIsBuy()
+                            , savedDay.getNotification()
                     )
 
             );

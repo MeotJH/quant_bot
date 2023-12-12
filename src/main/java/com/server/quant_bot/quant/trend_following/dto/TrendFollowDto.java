@@ -16,5 +16,6 @@ public class TrendFollowDto {
     private String trendFollowPrice;
     private String baseDateClosePrice;
     private Boolean isBuy;
+    private Boolean notification;
 
 }

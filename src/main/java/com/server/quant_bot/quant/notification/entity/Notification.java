@@ -6,6 +6,7 @@ import com.server.quant_bot.quant.notification.dto.NotificationMapperDto;
 import com.server.quant_bot.quant.trend_following.entity.TrendFollow;
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
 import java.util.UUID;
@@ -20,8 +21,12 @@ public class Notification extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Comment("알림 여부")
-    private Boolean notification;
+    @Comment("알림 수신 YN")
+    private Boolean approval;
+
+    @Comment("알림 상태")
+    @ColumnDefault("false")
+    private Boolean status;
 
     @OneToOne(mappedBy = "notification")
     @Comment("추세투자")
@@ -32,7 +37,7 @@ public class Notification extends BaseEntity {
     @Override
     public BaseEntity update(Object beforeDto) {
         NotificationMapperDto dto = (NotificationMapperDto) beforeDto;
-        notification = dto.notification();
+        approval = dto.approval();
         trendFollow = dto.trendFollow();
         return this;
     }

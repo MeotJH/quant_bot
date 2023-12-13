@@ -34,9 +34,11 @@ class PublicDataTrendFollowingServiceTest {
 
         //when
         TrendFollowDto date = trendFollowing.getOneday(samsung, nowDate);
+        Double trendFollow = Double.parseDouble(date.getTrendFollowPrice().replaceAll(",", ""));
+        Double baseDateClosePrice = Double.parseDouble(date.getBaseDateClosePrice().replaceAll(",", ""));
 
         //then
-        if( Double.parseDouble(date.getTrendFollowPrice()) < Double.parseDouble(date.getBaseDateClosePrice())){
+        if( trendFollow < baseDateClosePrice ){
             Assertions.assertEquals(date.getIsBuy(),true);
         }else{
             Assertions.assertEquals(date.getIsBuy(),false);

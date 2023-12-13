@@ -32,7 +32,7 @@ public class PublicDataTrendFollowingService implements TrendFollowing {
         String beginDateStr = getTrendFollowStartDate(baseDt);
         List<PublicDataStockDto> allByAfterBeginDate = stockService.getAllByAfterBeginDate(ticker, beginDateStr);
 
-        TrendFollowRecord result = getResultOne(allByAfterBeginDate);
+        TrendFollowRecord result = calculateTrendFollowOne(allByAfterBeginDate);
 
         log.info(result.trendFollowPrice() + " ::: TrendFollowPrice");
         log.info(result.baseDateClosePrice() + " ::: TodayClosePrice");
@@ -52,7 +52,7 @@ public class PublicDataTrendFollowingService implements TrendFollowing {
         String beginDateStr = getTrendFollowsStartDate(baseDt);
         List<PublicDataStockDto> allByAfterBeginDate = stockService.getAllByAfterBeginDate(ticker, beginDateStr);
 
-        List<TrendFollowRecordForList> results = getResultList(allByAfterBeginDate);
+        List<TrendFollowRecordForList> results = calculateTrendFollows(allByAfterBeginDate);
         return toTrendFollowDtos(results);
     }
 
@@ -121,7 +121,7 @@ public class PublicDataTrendFollowingService implements TrendFollowing {
         return dto;
     }
 
-    private TrendFollowRecord getResultOne(List<PublicDataStockDto> allByAfterBeginDate) {
+    private TrendFollowRecord calculateTrendFollowOne(List<PublicDataStockDto> allByAfterBeginDate) {
         double temp = 0.0;
         for (PublicDataStockDto each: allByAfterBeginDate) {
             temp = temp + Double.parseDouble(each.getClpr());
@@ -132,7 +132,8 @@ public class PublicDataTrendFollowingService implements TrendFollowing {
         return new TrendFollowRecord(trendFollowPrice, baseDateClosePrice);
     }
 
-    private List<TrendFollowRecordForList> getResultList(List<PublicDataStockDto> allByAfterBeginDate) {
+    //TODO ㄹㅇ75개 데이터로 계산하게 바꾸자
+    private List<TrendFollowRecordForList> calculateTrendFollows(List<PublicDataStockDto> allByAfterBeginDate) {
 
         //메소드로 나누자
         double temp = 0.0;
@@ -144,7 +145,7 @@ public class PublicDataTrendFollowingService implements TrendFollowing {
         for (PublicDataStockDto each: allByAfterBeginDate) {
             if( each.getBasDt().equals(parseWeekendDate) ){
                 break;
-            }
+            }// TODO 토,일 말고도 추석 등 이어서 휴장인날 어떻게 할지 고민해야 한다.
             temp = temp + Double.parseDouble(each.getClpr());
             index++;
 

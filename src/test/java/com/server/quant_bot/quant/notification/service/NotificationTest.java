@@ -57,7 +57,7 @@ class NotificationTest {
 
         //then
         Assertions.assertThat(trendFollowPrice).isEqualTo(saved.get().getTrendFollowPrice());
-        Assertions.assertThat(on.getNotification()).isEqualTo(true);
+        Assertions.assertThat(on.getApproval()).isEqualTo(true);
 
     }
 
@@ -83,7 +83,7 @@ class NotificationTest {
 
         //then
         Assertions.assertThat(trendFollowPrice).isEqualTo(saved.get().getTrendFollowPrice());
-        Assertions.assertThat(off.getNotification()).isEqualTo(false);
+        Assertions.assertThat(off.getApproval()).isEqualTo(false);
 
     }
 }

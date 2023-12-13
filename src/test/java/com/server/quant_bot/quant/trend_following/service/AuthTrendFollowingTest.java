@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @SpringBootTest
-@WithMockUser(username = "userId")
+@WithMockUser(username = "testId")
 @Transactional(rollbackFor = Exception.class)
 class AuthTrendFollowingImplTest {
 

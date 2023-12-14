@@ -12,11 +12,11 @@ public interface EntityLikeToResponseMapper {
     EntityLikeToResponseMapper INSTANCE = Mappers.getMapper(EntityLikeToResponseMapper.class);
 
     @Mapping(source="stock", target="stock.stockName", ignore = true)
-    @Mapping(source="notification", target="notification.notification", ignore = true)
+    @Mapping(source="approval", target="notification.approval", ignore = true)
     TrendFollowEntityLikeDto DtoToEntityLike(TrendFollowDto dto);
 
     @Mapping(source="stock.stockCode", target="stock")
     @Mapping(source="stock.stockName", target="stockName")
-    @Mapping(source = "notification.notification", target="notification")
+    @Mapping(source = "notification.approval", target="approval")
     TrendFollowDto EntityLikeToDto(TrendFollowEntityLikeDto entityLikeDto);
 }

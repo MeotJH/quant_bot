@@ -41,4 +41,9 @@ public class Notification extends BaseEntity {
         trendFollow = dto.trendFollow();
         return this;
     }
+
+    public Notification addStatus(Boolean status){
+        this.status = status;
+        return this;
+    }
 }

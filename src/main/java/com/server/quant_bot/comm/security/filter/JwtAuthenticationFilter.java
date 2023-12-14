@@ -43,6 +43,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         chain.doFilter(request, response);
+
+        //TODO ExpiredJwtException try-catch만들어서 만료되었으면 프론트에서 알림주는 기능 만들기
     }
 
     // Request Header 에서 토큰 정보 추출

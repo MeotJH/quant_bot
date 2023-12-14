@@ -69,10 +69,10 @@
 
             <div class="text-center">
               <span v-on:click="doNoti(trendFollow,loopOneIdx,loopTwoIdx)"
-                    v-bind:class="getBtnColorByNoti(trendFollow.notification)"
+                    v-bind:class="getBtnColorByNoti(trendFollow.approval)"
                     class="btn btn-primary text-center"
                     target='_blank' >
-                {{ getBtnTextByNoti(trendFollow.notification) }}</span>
+                {{ getBtnTextByNoti(trendFollow.approval) }}</span>
             </div>
           </div>
         </div>
@@ -102,7 +102,6 @@
         async getTrendFollows(){
           const v = this;
           v.trendFollows = await quantFetch("/auth/v1/trend-follow");
-          console.info(v.trendFollows,"v.trendFollows")
           v.splitedTrendFollows = splitIntoChunk(v.trendFollows, 2);
         },
         /**
@@ -115,7 +114,7 @@
         async doNoti(trendFollow,loopOneIdx,loopTwoIdx){
           const v = this;
           let notification = "on";
-          if(trendFollow.notification){
+          if(trendFollow.approval){
             notification = "off";
           }
 
@@ -128,14 +127,14 @@
 
           //알림 on으로 바꾼 후 알림 및 재 렌더링을 위한 변수세팅
           quantAlert('알림적용완료', 'success');
-          v.splitedTrendFollows[loopOneIdx][loopTwoIdx].notification = !trendFollow.notification;
+          v.splitedTrendFollows[loopOneIdx][loopTwoIdx].approval = !trendFollow.approval;
 
         },
-        getBtnColorByNoti(notification){
-          return notification ? "btn-primary" : "btn-light";
+        getBtnColorByNoti(approval){
+          return approval ? "btn-primary" : "btn-light";
         },
-        getBtnTextByNoti(notification){
-          return notification ? "알림 On" : "알림 Off"
+        getBtnTextByNoti(approval){
+          return approval ? "알림 On" : "알림 Off"
         }
       }
     }).mount('#app');

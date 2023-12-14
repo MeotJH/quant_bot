@@ -12,6 +12,11 @@ import java.util.UUID;
 
 @Repository
 public interface TrendFollowRepository extends JpaRepository<TrendFollow, UUID>{
+
+    List<TrendFollow> findAll();
+
+    Optional<TrendFollow> findById(UUID id);
+
     List<TrendFollow> findAllByUser(UserEntity user);
 
     Boolean existsByStockAndIsBuyAndUser(Stock stock, boolean isBuy, UserEntity user);

@@ -57,17 +57,25 @@ public class TrendFollowBatchImpl implements TrendFollowBatch{
     private List<TrendFollowBatchDto> createCompares (List<TrendFollow> trendFollowAll){
         List<TrendFollowBatchDto> dtos = new ArrayList<>();
         trendFollowAll.forEach( each -> {
-            TrendFollowDto today = trendFollowing.getOneday(each.getStock().getStockName(), DateUtill.getToday());
-            TrendFollowBatchDto dto = new TrendFollowBatchDto(
-                                              each.getId()
-                                            , each.getIsBuy()
-                                            , today.getIsBuy()
-                                            );
-            dtos.add(dto);
-            doLog(each,today);
+            //알림이 True라면
+            if(isNotificationApproval(each)){
+                TrendFollowDto today = trendFollowing.getOneday(each.getStock().getStockName(), DateUtill.getToday());
+                TrendFollowBatchDto dto = new TrendFollowBatchDto(
+                        each.getId()
+                        , each.getIsBuy()
+                        , today.getIsBuy()
+                );
+                dtos.add(dto);
+                doLog(each,today);
+            }
+
         });
 
         return dtos;
+    }
+
+    private Boolean isNotificationApproval(TrendFollow entity){
+        return entity.getNotification().getApproval();
     }
 
 

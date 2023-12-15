@@ -1,5 +1,8 @@
 package com.server.quant_bot.batch.trend_following;
 
+import com.server.quant_bot.quant.notification.repository.NotificationRepository;
+import com.server.quant_bot.quant.trend_following.repository.TrendFollowRepository;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +18,14 @@ class TrendFollowBatchImplTest {
     @Autowired
     TrendFollowBatch trendFollowBatch;
 
+    @Autowired
+    NotificationRepository notificationRepository;
+
     @Test
     @DisplayName("추세평균 테스트를 한다.")
     void doJobTest() {
-        //given
-        trendFollowBatch.doJob();
-
         //when
-
+        trendFollowBatch.doJob();
         //then
 
     }

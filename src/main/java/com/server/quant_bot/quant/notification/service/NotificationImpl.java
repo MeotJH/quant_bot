@@ -2,9 +2,12 @@ package com.server.quant_bot.quant.notification.service;
 
 import com.server.quant_bot.comm.entity.BaseEntity;
 import com.server.quant_bot.comm.exception.ResourceCommException;
+import com.server.quant_bot.comm.security.entity.UserEntity;
+import com.server.quant_bot.comm.security.service.UserService;
 import com.server.quant_bot.korea.entity.Stock;
 import com.server.quant_bot.korea.service.StockService;
 import com.server.quant_bot.quant.notification.dto.NotiReqDto;
+import com.server.quant_bot.quant.notification.dto.NotiResponseDto;
 import com.server.quant_bot.quant.notification.dto.NotificationMapperDto;
 import com.server.quant_bot.quant.notification.entity.Notification;
 import com.server.quant_bot.quant.notification.repository.NotificationRepository;
@@ -15,6 +18,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -30,6 +36,7 @@ public class NotificationImpl implements NotificationService {
 
     private final TrendFollowRepository trendFollowRepository;
     private final NotificationRepository notificationRepository;
+    private final UserService userService;
 
     @Override
     public Notification on(NotiReqDto notiReqDto) {
@@ -39,6 +46,39 @@ public class NotificationImpl implements NotificationService {
     @Override
     public Notification off(NotiReqDto notiReqDto) {
         return process(notiReqDto,NOTI_OFF);
+    }
+
+    @Override
+    public List<NotiResponseDto> doNotify() {
+        Optional<UserEntity> userOpt = userService.findUserByLoginId();
+        if(!userOpt.isPresent()){
+            new ResourceCommException("유저가 존재하지 않습니다.");
+        }
+
+        //값이 없으면 빈값을 리턴한다.
+        List<TrendFollow> allByUser = trendFollowRepository.findAllByUser(userOpt.get());
+        List<NotiResponseDto> notiResponses = new ArrayList<>();
+        if(allByUser.isEmpty()){
+            return notiResponses;
+        }
+
+        for (TrendFollow each: allByUser) {
+            //notify status
+            Boolean status = each.getNotification().getStatus();
+            if(status.equals(true)){
+                Stock stock = each.getStock();
+                notiResponses.add(
+                        new NotiResponseDto(
+                            stock.getStockCode()
+                            , stock.getStockName()
+                            , each.getNotification().getUpdateDate()
+                        )
+                );
+            }
+
+        }
+
+        return notiResponses;
     }
 
     private Notification process(NotiReqDto notiReqDto, Boolean notiStatus) {

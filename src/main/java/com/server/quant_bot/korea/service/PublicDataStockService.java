@@ -42,6 +42,7 @@ public class PublicDataStockService implements StockService{
     private final RestTemplate restTemplate;
     private final StockRepository stockRepository;
 
+    //TODO 이거 지금 name으로 검색하는것 같은데 code로 새로운 임플 만들기
     @Override
     public List<PublicDataStockDto>  get(String ticker) {
         ResponseEntity<String> response = restTemplate.exchange(

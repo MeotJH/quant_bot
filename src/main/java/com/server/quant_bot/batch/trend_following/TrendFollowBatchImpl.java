@@ -14,6 +14,7 @@ import com.server.quant_bot.quant.trend_following.repository.TrendFollowReposito
 import com.server.quant_bot.quant.trend_following.service.TrendFollowing;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Transactional(rollbackFor = Exception.class)
 @RequiredArgsConstructor
 @Component
@@ -32,8 +34,7 @@ public class TrendFollowBatchImpl implements TrendFollowBatch{
     private final TrendFollowing trendFollowing;
 
 
-    //@Scheduled(cron = "0 0 16 * * *") // Schedule to run every day at 16:00
-    @Transactional(rollbackFor = Exception.class)
+    @Scheduled(cron = "0 0 16 * * *") // Schedule to run every day at 16:00
     @Override
     public void doJob() {
         /**
@@ -50,7 +51,6 @@ public class TrendFollowBatchImpl implements TrendFollowBatch{
     }
 
     private List<TrendFollow> findTrendFollowAll(){
-        List<TrendFollow> all = trendFollowRepository.findAll();
         return trendFollowRepository.findAll();
     }
 
@@ -64,15 +64,18 @@ public class TrendFollowBatchImpl implements TrendFollowBatch{
                                             , today.getIsBuy()
                                             );
             dtos.add(dto);
+            doLog(each,today);
         });
 
         return dtos;
     }
 
+
     private void setNotifySignal(List<TrendFollowBatchDto> compares){
         compares.forEach( each -> {
             Boolean status = each.savedIsBuy().equals( each.todayIsBuy() ) ? false : true ;
             saveStatus(each,status);
+            doLog(each,status);
         });
 
     }
@@ -87,14 +90,12 @@ public class TrendFollowBatchImpl implements TrendFollowBatch{
 
     }
 
-    /**
-     *
-     * @param today
-     * @return 오늘 구매해야 하는지 여부
-     */
-    private Boolean isBuyToday(TrendFollowDto today){
-        Double trendFollowPrice = Double.valueOf( today.getTrendFollowPrice().replaceAll(",","") );
-        Double baseDateClosePrice = Double.valueOf( today.getBaseDateClosePrice().replaceAll(",","") );
-        return trendFollowPrice >= baseDateClosePrice ? true : false;
+    private void doLog(TrendFollow saved, TrendFollowDto today){
+        log.info("PK: {} TrendFollow's saved TrendFollow :{} , saved ClosingPrice :{} ,saved isBuy :{} ,",saved.getId(),saved.getTrendFollowPrice(),saved.getBaseDateClosePrice(),saved.getIsBuy());
+        log.info("PK: {} TrendFollow's today TrendFollow :{} , today ClosingPrice :{} ,today isBuy :{} ,",saved.getId(),today.getTrendFollowPrice(),today.getBaseDateClosePrice(),today.getIsBuy());
+    }
+
+    private void doLog(TrendFollowBatchDto dto,Boolean status){
+        log.info("PK: {} TrendFollow's Notification Status is {}", dto.trendFollowId() ,status);
     }
 }

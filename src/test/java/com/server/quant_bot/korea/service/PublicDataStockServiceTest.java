@@ -37,7 +37,7 @@ class PublicDataStockServiceTest {
 
     @Test
     @DisplayName("테이블에 CSV데이터를 넣어야한다.")
-    //@Transactional
+    @Transactional(rollbackFor = Exception.class)
     void CSVToDB() {
         //given
         //when

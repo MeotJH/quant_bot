@@ -23,6 +23,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -41,6 +42,7 @@ public class PublicDataStockService implements StockService{
     private final RestTemplate restTemplate;
     private final StockRepository stockRepository;
 
+    //TODO 이거 지금 name으로 검색하는것 같은데 code로 새로운 임플 만들기
     @Override
     public List<PublicDataStockDto>  get(String ticker) {
         ResponseEntity<String> response = restTemplate.exchange(
@@ -84,6 +86,11 @@ public class PublicDataStockService implements StockService{
             e.printStackTrace();
         }
         return stocks;
+    }
+
+    @Override
+    public Optional<Stock> findStockByStockCode(String stockCode) {
+        return stockRepository.findByStockCode(stockCode);
     }
 
     @Override

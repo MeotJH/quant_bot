@@ -25,11 +25,17 @@ const quantFetch = function (url,data = {
             })
                 .then(async response => {
                     if (!response.ok) {
-                        //TODO 로그인 실패 프론트 만들기 JSON.parse(resultData);
-                        const body = JSON.parse(await response.json());
-                        resolve(body)
-                        throw new Error( `${response.url}  ${response.status}  ${body.message}` );
+                        console.info(response,"in method response")
+                        if(response instanceof Object){
+                            resolve(response.json());
+                        }else{
+                            //TODO 로그인 실패 프론트 만들기 JSON.parse(resultData);
+                            const body = JSON.parse(await response.json());
+                            resolve(body)
+                            throw new Error( `${response.url}  ${response.status}  ${body.message}` );
+                        }
                     }
+
                     return response.json();
                 })
                 .then(data => {
@@ -40,6 +46,7 @@ const quantFetch = function (url,data = {
                     resolve(data);
                 })
                 .catch(error => {
+
                     console.error('Request failed:', error);
                 });
         } catch (error) {
@@ -51,7 +58,7 @@ const quantFetch = function (url,data = {
 
 //차트js comm으로 만들 로직
 const callChart = function (id,stockData){
-    new Chart(document.getElementById(id), {
+    return new Chart(document.getElementById(id), {
         type: 'line',
         data: {
             labels: stockData.baseDt.reverse(),
@@ -138,6 +145,11 @@ const logout = () =>{
 
 }
 
+const isAuth = () => {
+    const token = getCookie(accessTokenName);
+    return token ?  true : false;
+}
+
 const goAuthPage = (url) =>{
     const token = getCookie(accessTokenName);
     if(token){
@@ -166,3 +178,61 @@ function getCookie(cookieName) {
 function deleteCookie(cookieName) {
     document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }
+
+const isEmptyObject = (param) => {
+    return Object.keys(param).length === 0 && param.constructor === Object;
+}
+
+const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
+const quantAlert = (message, type) => {
+    const wrapper = document.createElement('div')
+    wrapper.innerHTML = [
+        `<div class="alert alert-${type} alert-dismissible mx-2 my-2 show fade " role="alert" >`,
+        `   <div>${message}</div>`,
+        '   <button type="button" class="btn-close custom-alert-btn" data-bs-dismiss="alert" aria-label="Close"></button>',
+        '</div>'
+    ].join('')
+    alertPlaceholder.append(wrapper);
+}
+
+const toastLiveExample = document.getElementById('liveToast')
+const quantToast = (toastObj) =>{
+    console.info(toastObj)
+    const {body,title,time} = toastObj;
+
+    if(!body || !title || !time ){
+        throw new Error("quantToast값 비었음 {},{},{}",body,title,time)
+    }
+
+    const wrapper = document.createElement('div')
+    wrapper.innerHTML =
+        `<div class="toast-header">
+            <strong class="me-auto">${title}</strong>
+            <small>${time} mins ago</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            ${body}
+        </div>`;
+
+    /**
+     * `<div class="toast-header">
+     *             <img src="..." class="rounded me-2" alt="...">
+     *             <strong class="me-auto">${title}</strong>
+     *             <small>${time} mins ago</small>
+     *             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+     *         </div>
+     *         <div class="toast-body">
+     *             ${body}
+     *         </div>`;
+     */
+
+    toastLiveExample.append(wrapper);
+    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+    toastBootstrap.show();
+}
+
+
+
+
+

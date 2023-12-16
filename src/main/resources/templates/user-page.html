@@ -5,11 +5,80 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/default}"
->
+      xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <th:block layout:fragment="content">
   <!-- Begin Page Content -->
-  <div class="container-fluid" id="app">
-    <h1>유저페이지</h1>
+  <div id="app">
+
+    <div v-if="viewWidth > 1600" >
+      <h3 class="text-center pt-5">추세 추종 투자법</h3>
+      <hr class="hr" />
+
+      <div class="row py-5 px-5 justify-content-evenly" >
+        <div class="card col w-50 p-3 mx-2" >
+          <div class="card-body">
+            <h5 class="card-title text-center">card</h5>
+            <div class="text-center">
+              <a href="#" class="btn btn-primary text-center" target='_blank' >알림 On</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div v-else>
+      <h3 class="text-center pt-5">추세 추종 투자법</h3>
+      <hr class="hr" />
+
+      <div class="row py-5 px-5 justify-content-evenly" v-for="(trendFollows, loopOneIdx) in splitedTrendFollows">
+        <div class="card col w-50 p-3 mx-2" v-for="(trendFollow, loopTwoIdx) in trendFollows">
+          <div class="card-body flex-fill" >
+            <h5 class="card-title text-center">{{ trendFollow.stockName }}</h5>
+            <div class="d-flex justify-content-evenly">
+              <div class="list-group m-2">
+                <div href="#" class="list-group-item" aria-current="true">
+                  <h5 class="mb-1">저장한 상태</h5>
+                  <h5 class="mb-1 text-center">{{ trendFollow.savedIsBuy }}</h5>
+                </div>
+                <div href="#" class="list-group-item">
+                  <h5 class="mb-1">저장한 추세평균가</h5>
+                  <h5 class="mb-1 text-center">₩ {{ trendFollow.savedTrendFollowPrice }}</h5>
+                </div>
+                <div href="#" class="list-group-item">
+                  <h5 class="mb-1">저장한 종가</h5>
+                  <h5 class="mb-1 text-center">₩ {{ trendFollow.savedClosePrice }}</h5>
+                </div>
+              </div>
+              <div class="list-group m-2">
+                <div href="#" class="list-group-item">
+                  <h5 class="mb-1">최신 상태</h5>
+                  <h5 class="mb-1 text-center">{{ trendFollow.isBuy }}</h5>
+                </div>
+                <div href="#" class="list-group-item">
+                  <h5 class="mb-1">최신 추세평균가</h5>
+                  <h5 class="mb-1 text-center">₩ {{ trendFollow.trendFollowPrice }}</h5>
+                </div>
+                <div href="#" class="list-group-item">
+                  <h5 class="mb-1">최신 종가</h5>
+                  <h5 class="mb-1 text-center">₩ {{ trendFollow.closePrice }}</h5>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="text-center">
+              <span v-on:click="doNoti(trendFollow,loopOneIdx,loopTwoIdx)"
+                    v-bind:class="getBtnColorByNoti(trendFollow.approval)"
+                    class="btn btn-primary text-center"
+                    target='_blank' >
+                {{ getBtnTextByNoti(trendFollow.approval) }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
   <script>
     const { createApp, ref } = Vue;
@@ -18,17 +87,55 @@
       },
       mounted() {
         const v = this;
+        v.getTrendFollows();
       },
       data() {
         return{
+          trendFollows: [],
+          splitedTrendFollows:{},
+          btnColor : 'btn-light'
         }
       },
       computed:{
       },
       methods: {
-        sampleFunc() {
+        async getTrendFollows(){
           const v = this;
+          v.trendFollows = await quantFetch("/auth/v1/trend-follow");
+          v.splitedTrendFollows = splitIntoChunk(v.trendFollows, 2);
         },
+        /**
+         *
+         * @param trendFollow 반복분 내에 있는 객체
+         * @param loopOneIdx 첫번쨰 반복문 인덱스
+         * @param loopTwoIdx 두번째 반복문 인덱스
+         * @returns {Promise<void>}
+         */
+        async doNoti(trendFollow,loopOneIdx,loopTwoIdx){
+          const v = this;
+          let notification = "on";
+          if(trendFollow.approval){
+            notification = "off";
+          }
+
+          await quantFetch("/auth/v1/notification/"+notification,{
+            method: "POST",
+            body:{
+              stock: trendFollow.stock,
+            }
+          });
+
+          //알림 on으로 바꾼 후 알림 및 재 렌더링을 위한 변수세팅
+          quantAlert('알림적용완료', 'success');
+          v.splitedTrendFollows[loopOneIdx][loopTwoIdx].approval = !trendFollow.approval;
+
+        },
+        getBtnColorByNoti(approval){
+          return approval ? "btn-primary" : "btn-light";
+        },
+        getBtnTextByNoti(approval){
+          return approval ? "알림 On" : "알림 Off"
+        }
       }
     }).mount('#app');
   </script>

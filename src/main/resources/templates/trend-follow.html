@@ -12,7 +12,7 @@
         <div class="input-group mb-3 mx-auto p-5" >
             <input
                     ref="searchInput"
-                    v-model="stock"
+                    v-model="stock.name"
                     v-on:keypress.enter="getData"
                     v-on:click="clickSearchBar"
                     type="text"
@@ -30,14 +30,14 @@
 
             <div class="card text-center">
                 <div class="card-header">
-                    {{ stock }}
+                    {{ stock.name }}
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">{{ isBuy }}</h5>
                     <p class="card-text">75일 추세평균가 : {{ initData.trendFollowPrice }}원</p>
                     <p class="card-text">금일 시장종결가 : {{ initData.baseDateClosePrice }}원</p>
                     <a href="https://meotlog.tistory.com/69" class="btn btn-primary mx-2">추세투자법 더 알아보기</a>
-                    <span v-on:click="goAuthPage('/auth/user-page')" class="btn btn-primary mx-2">검색한 주식 알림받기</span>
+                    <span v-on:click="saveTrendFollow()" class="btn btn-primary mx-2">추세 저장하기</span>
                 </div>
                 <div class="card-footer text-body-secondary">
 
@@ -48,7 +48,7 @@
         <div>
             <canvas id="myChart"></canvas>
         </div>
-        <th:block th:replace="~{/comm/modal.html :: fragment-modal('trend-follow','modal-xl')}"/>
+        <th:block th:replace="~{ comm/modal.html :: fragment-modal('trend-follow','modal-xl')}"/>
     </div>
     <script >
         const { createApp, ref } = Vue;
@@ -62,22 +62,31 @@
             },
             mounted() {
                 const v = this;
+                quantToast({
+                    title:"타이틀"
+                    ,body: "바디"
+                    ,time: "시간"
+                })
             },
             data() {
                 return{
                     initData : {
                         trendFollowPrice: 0,
                         baseDateClosePrice: 0,
-                        buy: false,
+                        isBuy: false,
                     },
-                    stock: "",
+                    stock: {
+                        name: "",
+                        code: "",
+                    },
                     keyword: "",
                     stocks:[],
+                    chart: {},
                 }
             },
             computed:{
                 isBuy(){
-                    return this.initData.buy === true ? "매수" : "매도"
+                    return this.initData.isBuy === true ? "매수" : "매도"
                 }
             },
             watch:{
@@ -88,19 +97,26 @@
             methods: {
                 async getData() {
                     const v = this;
-                    if( v.stock === ""){
+                    if( v.stock.name === ""){
                         return;
                     }
-                    v.initData = await quantFetch("/api/v1/trend-follow/"+ v.stock) ;
+                    v.initData = await quantFetch("/api/v1/trend-follow/"+ v.stock.name) ;
                     await v.createChart();
                 },
                 async createChart(){
                     const v = this;
-                    if( v.stock === ""){
+                    v.destroyIfExist();
+                    if( v.stock.name === ""){
                         return;
                     }
-                    const stockData = await quantFetch("/api/v1/trend-follow/"+ v.stock + "/list") ;
-                    callChart("myChart",stockData);
+                    const stockData = await quantFetch("/api/v1/trend-follow/"+ v.stock.name + "/list") ;
+                    v.chart = callChart("myChart",stockData);
+                },
+                destroyIfExist(){
+                    const v = this;
+                    if(!isEmptyObject(v.chart)){
+                        v.chart.destroy();
+                    }
                 },
                 changeKeyword(e){
                     const v = this;
@@ -113,18 +129,31 @@
                         return;
                     }
                     v.stocks = await quantFetch("/api/v1/korea/stocks/"+ keyword);
-                    console.info(v.stocks,"stocks")
                 },
                 clickSearchBar(){
                     const v = this;
                     setTimeout( function(){ v.$refs.modalSearchBar.focus();}, 500 );
                 },
-                goAuthPage(url){
-                    goAuthPage(url);
+                async saveTrendFollow(url){
+                    const v = this;
+                    Object.assign(v.initData,{stock: v.stock.code})
+                    const resultData = await quantFetch("/auth/v1/trend-follow",{
+                        method: "POST",
+                        body:v.initData
+                    })
+                    if(resultData.stock){
+                        quantAlert('저장되었습니다', 'success');
+                    }else{
+                        quantAlert(resultData.message, 'danger');
+                    }
                 },
+
                 /**
-                 * 이하 모달 function
+====================================================================================================
+===================================이하 모달 function=================================================
+====================================================================================================
                  */
+
                 closeModal(){
                     const v = this;
                     v.stocks = [];
@@ -132,13 +161,14 @@
                 },
                 processModal(){
                     const v = this;
-                    v.stock = v.keyword;
+                    v.stock.name = v.keyword;
                     v.getData();
                     myModal.hide();
                 },
                 processModalByClick(stock,index){
                     const v = this;
-                    v.stock = v.stocks[index].stockName;
+                    v.stock.name = v.stocks[index].stockName;
+                    v.stock.code = v.stocks[index].stockCode;
                     v.getData();
                     myModal.hide();
                 }

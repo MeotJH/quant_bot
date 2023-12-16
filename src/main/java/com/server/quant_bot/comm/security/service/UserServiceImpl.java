@@ -10,11 +10,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -43,7 +46,6 @@ public class UserServiceImpl implements UserService{
 
         return tokenInfo;
     }
-
     @Override
     public UserEntity initUser() {
         UserEntity entity = new UserEntity();
@@ -58,6 +60,14 @@ public class UserServiceImpl implements UserService{
         );
         return userRepository.save(entity);
     }
+
+    @Override
+    public Optional<UserEntity> findUserByLoginId() {
+        UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<UserEntity> byUserId = userRepository.findByUserId( principal.getUsername() );
+        return byUserId;
+    }
+
 
     private void setRefreshTokenToCookieHttpOnly(HttpServletResponse response, TokenInfo tokenInfo){
         Cookie cookie = new Cookie("RefreshToken",tokenInfo.getRefreshToken());

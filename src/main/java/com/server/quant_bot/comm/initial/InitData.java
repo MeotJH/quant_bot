@@ -18,11 +18,12 @@ public class InitData {
      */
     @PostConstruct
     private void init(){
+        //TODO jpa 설정 -> auto면 실행시키기
         //코스피 및 코스닥 정보 init
-        stockService.CSVToDB();
+        //stockService.CSVToDB();
 
         //유저 1명 세팅 TODO ADMIN으로 권한주기
-        userService.initUser();
+        //userService.initUser();
     }
 
 }

@@ -1,8 +1,5 @@
 package com.server.quant_bot.quant.trend_following.controller;
 
-import com.server.quant_bot.korea.controller.StockController;
-import com.server.quant_bot.korea.service.MarketService;
-import com.server.quant_bot.korea.service.StockService;
 import com.server.quant_bot.quant.trend_following.service.TrendFollowing;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +11,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserTrendFollowController.class)

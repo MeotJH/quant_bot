@@ -38,13 +38,13 @@
 
             <div class="row py-5 px-5 justify-content-evenly" v-if="isMarketDataSet">
                 <div class="card col w-50 p-3 mx-2"  >
-                    <h5>코스닥</h5>
-                    <h5 v-bind:style="{ color: marketTextColor.kosdaq }" >{{ splitKospi }}</h5>
+                    <h5>코스피</h5>
+                    <h5 v-bind:style="{ color: marketTextColor.kospi }" >{{ splitKospi }}</h5>
                     <img class="card-img-top p-2 mx-auto"  :src="marketDto.maps.img[0]" style="height: 25rem; width: 30rem;">
                 </div>
                 <div class="card col w-50 p-3 mx-2"  >
                     <h5>코스닥</h5>
-                    <h5 v-bind:style="{ color: marketTextColor.kospi }">{{ splitKosdaq }}</h5>
+                    <h5 v-bind:style="{ color: marketTextColor.kosdaq }">{{ splitKosdaq }}</h5>
                     <img class="card-img-top p-2 mx-auto"  :src="marketDto.maps.img[1]" style="height: 25rem; width: 30rem;">
                 </div>
             </div>
@@ -76,15 +76,15 @@
             <div v-if=" isMarketDataSet ">
                 <div class="row py-5 px-5 justify-content-evenly" >
                     <div class="card col w-50 p-3 mx-2"  >
-                        <h5>코스닥</h5>
-                        <h5 class="text-danger">{{ splitKospi }}</h5>
+                        <h5>코스피</h5>
+                        <h5 v-bind:style="{ color: marketTextColor.kospi }" >{{ splitKospi }}</h5>
                         <img :src="marketDto.maps.img[0]">
                     </div>
                 </div>
                 <div class="row py-5 px-5 justify-content-evenly" >
                     <div class="card col w-50 p-3 mx-2"  >
-                        <h5>코스피</h5>
-                        <h5 class="text-danger">{{ splitKosdaq }}</h5>
+                        <h5>코스닥</h5>
+                        <h5 v-bind:style="{ color: marketTextColor.kosdaq }" >{{ splitKosdaq }}</h5>
                         <img :src="marketDto.maps.img[1]">
                     </div>
                 </div>
@@ -182,6 +182,7 @@
                     this.viewWidth = window.innerWidth;
                 },
                 selectColorByWord(word){
+                    console.info(word,"word")
                     return word.includes("상승") ? 'red' : 'blue';
                 }
             }

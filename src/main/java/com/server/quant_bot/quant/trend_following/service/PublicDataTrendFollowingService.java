@@ -2,38 +2,37 @@ package com.server.quant_bot.quant.trend_following.service;
 
 import com.server.quant_bot.comm.utill.DateUtill;
 import com.server.quant_bot.korea.dto.PublicDataStockDto;
+import com.server.quant_bot.korea.entity.Stock;
 import com.server.quant_bot.korea.service.StockService;
-import com.server.quant_bot.quant.trend_following.dto.TrendFollowDto;
-import com.server.quant_bot.quant.trend_following.dto.TrendFollowListDto;
-import com.server.quant_bot.quant.trend_following.dto.TrendFollowRecord;
-import com.server.quant_bot.quant.trend_following.dto.TrendFollowRecordForList;
+import com.server.quant_bot.quant.trend_following.dto.*;
+import com.server.quant_bot.quant.trend_following.entity.TrendFollow;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PublicDataTrendFollowingService implements TrendFollowing{
+public class PublicDataTrendFollowingService implements TrendFollowing {
 
     private final StockService stockService;
+    private final AuthTrendFollowing authTrendFollowing;
     private final int TREND_FOLLOIWNG_DEFAULT_DAY = 75;
     private final int TREND_FOLLOIWNGS_DEFAULT_DAY = 150;
-
     private final String DATE_TYPE_PATTERN = "yyyyMMdd";
     @Override
     public TrendFollowDto getOneday(String ticker, String baseDt) {
         String beginDateStr = getTrendFollowStartDate(baseDt);
         List<PublicDataStockDto> allByAfterBeginDate = stockService.getAllByAfterBeginDate(ticker, beginDateStr);
 
-        TrendFollowRecord result = getResultOne(allByAfterBeginDate);
+        TrendFollowRecord result = calculateTrendFollowOne(allByAfterBeginDate);
 
         log.info(result.trendFollowPrice() + " ::: TrendFollowPrice");
         log.info(result.baseDateClosePrice() + " ::: TodayClosePrice");
@@ -53,13 +52,52 @@ public class PublicDataTrendFollowingService implements TrendFollowing{
         String beginDateStr = getTrendFollowsStartDate(baseDt);
         List<PublicDataStockDto> allByAfterBeginDate = stockService.getAllByAfterBeginDate(ticker, beginDateStr);
 
-        List<TrendFollowRecordForList> results = getResultList(allByAfterBeginDate);
+        List<TrendFollowRecordForList> results = calculateTrendFollows(allByAfterBeginDate);
         return toTrendFollowDtos(results);
     }
 
     @Override
     public List<String> getStocksByKeyword(String keyword) {
         return TrendFollowing.super.getStocksByKeyword(keyword);
+    }
+
+    @Override
+    public Optional<TrendFollowDto> save(TrendFollowDto dto) {
+        return authTrendFollowing.save(dto);
+    }
+
+    @Override
+    public List<TrendFollowUserPageDto> findTrendDtoByUserId() {
+        List<TrendFollowDto> trendDtoByUserId = authTrendFollowing.findTrendDtoByUserId();
+        List<TrendFollowUserPageDto> responseDtos = new ArrayList<>();
+
+        trendDtoByUserId.forEach( savedDay -> {
+
+            TrendFollowDto today = getOneday(savedDay.getStockName(), DateUtill.getToday());
+            responseDtos.add(
+
+                    new TrendFollowUserPageDto(
+                            savedDay.getStock()
+                            ,savedDay.getStockName()
+                            , today.getBaseDateClosePrice()
+                            , savedDay.getBaseDateClosePrice()
+                            , today.getTrendFollowPrice()
+                            , savedDay.getTrendFollowPrice()
+                            , today.getIsBuy()
+                            , savedDay.getIsBuy()
+                            , savedDay.getApproval()
+                    )
+
+            );
+
+        });
+
+        return responseDtos;
+    }
+
+    @Override
+    public Optional<TrendFollow> findByStock(Stock stock) {
+        return authTrendFollowing.findByStock(stock);
     }
 
     private String getDoubleToMoney(Double target){
@@ -83,7 +121,7 @@ public class PublicDataTrendFollowingService implements TrendFollowing{
         return dto;
     }
 
-    private TrendFollowRecord getResultOne(List<PublicDataStockDto> allByAfterBeginDate) {
+    private TrendFollowRecord calculateTrendFollowOne(List<PublicDataStockDto> allByAfterBeginDate) {
         double temp = 0.0;
         for (PublicDataStockDto each: allByAfterBeginDate) {
             temp = temp + Double.parseDouble(each.getClpr());
@@ -94,7 +132,8 @@ public class PublicDataTrendFollowingService implements TrendFollowing{
         return new TrendFollowRecord(trendFollowPrice, baseDateClosePrice);
     }
 
-    private List<TrendFollowRecordForList> getResultList(List<PublicDataStockDto> allByAfterBeginDate) {
+    //TODO ㄹㅇ75개 데이터로 계산하게 바꾸자
+    private List<TrendFollowRecordForList> calculateTrendFollows(List<PublicDataStockDto> allByAfterBeginDate) {
 
         //메소드로 나누자
         double temp = 0.0;
@@ -106,7 +145,7 @@ public class PublicDataTrendFollowingService implements TrendFollowing{
         for (PublicDataStockDto each: allByAfterBeginDate) {
             if( each.getBasDt().equals(parseWeekendDate) ){
                 break;
-            }
+            }// TODO 토,일 말고도 추석 등 이어서 휴장인날 어떻게 할지 고민해야 한다.
             temp = temp + Double.parseDouble(each.getClpr());
             index++;
 

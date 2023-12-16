@@ -17,14 +17,15 @@ public class ViewController {
 
     @GetMapping("/view/{page}")
     public String returnOtherPage(@PathVariable String page){
-        if( page == null || page == ""){
-            page = "index";
-        }
-        return page + ".html";
+        return getPage(page);
     }
 
     @GetMapping("/auth/{page}")
     public String returnAuthPage(@PathVariable String page){
+        return getPage(page);
+    }
+
+    private String getPage(String page){
         if( page == null || page == ""){
             page = "index";
         }

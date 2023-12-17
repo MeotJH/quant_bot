@@ -24,6 +24,7 @@ public class InitData {
 
         //유저 1명 세팅 TODO ADMIN으로 권한주기
         //userService.initUser();
+        //test
     }
 
 }

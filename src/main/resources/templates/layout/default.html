@@ -99,6 +99,20 @@
 <script>
     window.onload = function() {
         changeLoginTagBaseOnStatus();
+
+        quantToast({
+            title:"[추세투자법 알림]"
+            ,body: `주식 : 삼성전자
+                    <br />
+                    저장한 추세투자 상태 : <span class="text-primary">매도</span>
+                    <br />
+                    금일종가 : 76,000원
+                    <br />
+                    평균이동선의 가격: 77,000원
+                    <br />
+                    <strong>추세투자 상태 :<span class="text-danger"> 매수</span></strong>`
+            ,time: "시간"
+        });
     };
 
 </script>

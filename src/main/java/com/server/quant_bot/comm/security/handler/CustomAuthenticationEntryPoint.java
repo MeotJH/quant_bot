@@ -1,8 +1,9 @@
 package com.server.quant_bot.comm.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.server.quant_bot.comm.exception.ResourceCommException;
+import com.server.quant_bot.comm.security.enums.Auth;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,15 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE+ ";charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(objectMapper.writeValueAsString("{ \"message\":\"" + authException.getMessage() + "\"}" ));
+        deleteAuthorization(response);
+
         //TODO 에러 페이지 만들기
-        //response.sendRedirect("/");
+    }
+
+    private static void deleteAuthorization(HttpServletResponse response) {
+        Cookie authorization = new Cookie(Auth.AUTHORIZATION.getValue(), "");
+        authorization.setMaxAge(0);
+        authorization.setPath("/");
+        response.addCookie(authorization);
     }
 }

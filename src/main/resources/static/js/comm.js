@@ -195,8 +195,15 @@ const quantAlert = (message, type) => {
     alertPlaceholder.append(wrapper);
 }
 
+const generateUniqueKey = () => {
+    const timestamp = new Date().getTime();
+    const random = Math.floor(Math.random() * 1000000);
+    return `${timestamp}${random}`;
+}
+
 const toastLiveContainer = document.getElementById('toastContainer')
 const quantToast = (toastObj) =>{
+    const uniqueKey = 'key' + generateUniqueKey();
     console.info(toastObj)
     const {body,title,time} = toastObj;
 
@@ -209,8 +216,7 @@ const quantToast = (toastObj) =>{
     wrapper.innerHTML =
         `
         <div
-        
-        id="toast${time}"
+        id="${uniqueKey}"
         class="toast"
         role="alert"
         aria-live="assertive"
@@ -240,7 +246,7 @@ const quantToast = (toastObj) =>{
      */
 
     toastLiveContainer.append(wrapper);
-    const element = toastLiveContainer.querySelector(`#toast${time}`);
+    const element = toastLiveContainer.querySelector(`#${uniqueKey}`);
     const toastBootstrap = bootstrap.Toast.getOrCreateInstance(element)
     toastBootstrap.show();
 }

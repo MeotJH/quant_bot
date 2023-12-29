@@ -195,10 +195,11 @@ const quantAlert = (message, type) => {
     alertPlaceholder.append(wrapper);
 }
 
-const toastLiveExample = document.getElementById('liveToast')
+const toastLiveContainer = document.getElementById('toastContainer')
 const quantToast = (toastObj) =>{
     console.info(toastObj)
     const {body,title,time} = toastObj;
+
 
     if(!body || !title || !time ){
         throw new Error("quantToast값 비었음 {},{},{}",body,title,time)
@@ -206,13 +207,24 @@ const quantToast = (toastObj) =>{
 
     const wrapper = document.createElement('div')
     wrapper.innerHTML =
-        `<div class="toast-header">
-            <strong class="me-auto">${title}</strong>
-            <small>${time} mins ago</small>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body">
-            ${body}
+        `
+        <div
+        
+        id="toast${time}"
+        class="toast"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+        data-bs-autohide="false"
+        >
+            <div class="toast-header">
+                <strong class="me-auto">${title}</strong>
+                <small>${time} mins ago</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                ${body}
+            </div>
         </div>`;
 
     /**
@@ -227,8 +239,9 @@ const quantToast = (toastObj) =>{
      *         </div>`;
      */
 
-    toastLiveExample.append(wrapper);
-    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+    toastLiveContainer.append(wrapper);
+    const element = toastLiveContainer.querySelector(`#toast${time}`);
+    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(element)
     toastBootstrap.show();
 }
 

@@ -1,14 +1,11 @@
 package com.server.quant_bot.quant.notification.service;
 
-import com.server.quant_bot.comm.entity.BaseEntity;
 import com.server.quant_bot.comm.exception.ResourceCommException;
 import com.server.quant_bot.comm.security.entity.UserEntity;
 import com.server.quant_bot.comm.security.service.UserService;
 import com.server.quant_bot.korea.entity.Stock;
 import com.server.quant_bot.korea.service.StockService;
-import com.server.quant_bot.quant.notification.dto.NotiReqDto;
-import com.server.quant_bot.quant.notification.dto.NotiResponseDto;
-import com.server.quant_bot.quant.notification.dto.NotificationMapperDto;
+import com.server.quant_bot.quant.notification.dto.*;
 import com.server.quant_bot.quant.notification.entity.Notification;
 import com.server.quant_bot.quant.notification.repository.NotificationRepository;
 import com.server.quant_bot.quant.trend_following.entity.TrendFollow;
@@ -19,9 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +32,39 @@ public class NotificationImpl implements NotificationService {
     private final TrendFollowRepository trendFollowRepository;
     private final NotificationRepository notificationRepository;
     private final UserService userService;
+
+    @Override
+    public List<NotificationViewDto> findByUser() {
+        Optional<UserEntity> userByLoginId = userService.findUserByLoginId();
+        List<NotificationViewDto> dtos = new ArrayList<>();
+        if( userByLoginId.isPresent() ){
+            UserEntity userEntity = userByLoginId.get();
+            Iterator<TrendFollow> iterator = userEntity.getTrendFollows().iterator();
+            while(iterator.hasNext()){
+                TrendFollow trendFollow = iterator.next();
+                Notification notification = trendFollow.getNotification();
+
+                if(notification.getApproval()){
+                    dtos.add(
+                            new NotificationViewDto(
+                                    trendFollow.getClass().getName()
+
+                                    , new NotificationBodyDto(
+                                        trendFollow.getStock().getStockName()
+                                        , trendFollow.getIsBuy()
+                                        , "todayEnd"
+                                        , "todayTrendFollowPrice"
+                                        , false
+                                    )
+
+                                    , notification.getUpdateDate()
+                            )
+                    );
+                }
+            }
+        }
+        return dtos;
+    }
 
     @Override
     public Notification on(NotiReqDto notiReqDto) {

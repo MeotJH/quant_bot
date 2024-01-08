@@ -1,6 +1,10 @@
 const accessTokenName = "Authorization";
 const refreshTokenName = "RefreshToken";
 
+const isLogin = () =>{
+    return  getCookie(accessTokenName) ? true : false
+}
+
 //fetch함수 wraping 함수
 const quantFetch = function (url,data = {
     /**
@@ -25,6 +29,10 @@ const quantFetch = function (url,data = {
             })
                 .then(async response => {
                     if (!response.ok) {
+                        if(response.status == 401 || response.status == 403){
+                            quantAlert('권한이 없습니다.', 'danger');
+                            resolve(response);
+                        }
                         console.info(response,"in method response")
                         if(response instanceof Object){
                             resolve(response.json());
@@ -35,18 +43,18 @@ const quantFetch = function (url,data = {
                             throw new Error( `${response.url}  ${response.status}  ${body.message}` );
                         }
                     }
-
                     return response.json();
                 })
                 .then(data => {
+                    console.info(data,'data')
                     if(data.error){
                         alert(data.message)
                         throw new Error('Network response was not ok');
                     }
+                    console.info(data,'data')
                     resolve(data);
                 })
                 .catch(error => {
-
                     console.error('Request failed:', error);
                 });
         } catch (error) {
@@ -185,6 +193,9 @@ const isEmptyObject = (param) => {
 
 const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
 const quantAlert = (message, type) => {
+    if(!type){
+        type = 'success';
+    }
     const wrapper = document.createElement('div')
     wrapper.innerHTML = [
         `<div class="alert alert-${type} alert-dismissible mx-2 my-2 show fade " role="alert" >`,

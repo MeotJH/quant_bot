@@ -97,23 +97,25 @@
 <!-- Core theme JS-->
 <script src="/js/scripts.js"></script>
 <script>
-    window.onload = function() {
+    window.onload = async function() {
         changeLoginTagBaseOnStatus();
 
-        quantToast({
-            title:"[추세투자법 알림]"
-            ,body: `주식 : 삼성전자
-                    <br />
-                    저장한 추세투자 상태 : <span class="text-primary">매도</span>
-                    <br />
-                    금일종가 : 76,000원
-                    <br />
-                    평균이동선의 가격: 77,000원
-                    <br />
-                    <strong>추세투자 상태 :<span class="text-danger"> 매수</span></strong>`
-            ,time: "1"
-        });
-
+        console.info(isLogin(),"isLogin?")
+        if( isLogin() ){
+            console.log("before result")
+            const result = await quantFetch("/auth/v1/notifications");
+            /**
+             * result = []
+             * each = {
+             *     title: string,
+             *     body: string,
+             *     time: string,
+             * }
+             */
+            console.log(result,"result")
+            result.length > 0 ? result.forEach( each => quantToast(each)) : null;
+        }
+        console.log('ss')
         quantToast({
             title:"[추세투자법 알림]"
             ,body: `주식 : 삼성전자

@@ -6,6 +6,7 @@ import com.server.quant_bot.korea.entity.Stock;
 import com.server.quant_bot.korea.repository.StockRepository;
 import com.server.quant_bot.quant.notification.dto.NotiReqDto;
 import com.server.quant_bot.quant.notification.dto.NotiResponseDto;
+import com.server.quant_bot.quant.notification.dto.NotificationViewDto;
 import com.server.quant_bot.quant.notification.entity.Notification;
 import com.server.quant_bot.quant.notification.repository.NotificationRepository;
 import com.server.quant_bot.quant.trend_following.dto.TrendFollowDto;
@@ -48,6 +49,21 @@ class NotificationTest {
 
     @Autowired
     TrendFollowing trendFollowing;
+
+    @Test
+    @WithMockUser(username = "userId")
+    @DisplayName("유저의 알림정보를 가져와야 한다.")
+    void findByUserTest() {
+        //given
+        List<NotificationViewDto> byUser = notificationService.findByUser();
+
+        //when
+
+
+        //then
+        Assertions.assertThat(byUser.size()).isGreaterThan(0);
+
+    }
 
     @Test
     @DisplayName("알림 켜짐이 디비에 저장되어야 한다")

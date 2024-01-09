@@ -35,35 +35,16 @@ public class NotificationImpl implements NotificationService {
 
     @Override
     public List<NotificationViewDto> findByUser() {
+        List<NotificationViewDto> list = new ArrayList<>();
         Optional<UserEntity> userByLoginId = userService.findUserByLoginId();
-        List<NotificationViewDto> dtos = new ArrayList<>();
+
+        //유저가 존재하면 로직 서비스 로직 실행
         if( userByLoginId.isPresent() ){
             UserEntity userEntity = userByLoginId.get();
-            Iterator<TrendFollow> iterator = userEntity.getTrendFollows().iterator();
-            while(iterator.hasNext()){
-                TrendFollow trendFollow = iterator.next();
-                Notification notification = trendFollow.getNotification();
-
-                if(notification.getApproval()){
-                    dtos.add(
-                            new NotificationViewDto(
-                                    trendFollow.getClass().getName()
-
-                                    , new NotificationBodyDto(
-                                        trendFollow.getStock().getStockName()
-                                        , trendFollow.getIsBuy()
-                                        , "todayEnd"
-                                        , "todayTrendFollowPrice"
-                                        , false
-                                    )
-
-                                    , notification.getUpdateDate()
-                            )
-                    );
-                }
-            }
+            //trendFollow + 다른 퀀트들도 넣어줄 수 있음을 염두해서 개발한 소스
+            list = fetchTrendFollow(userEntity);
         }
-        return dtos;
+        return list;
     }
 
     @Override
@@ -127,5 +108,33 @@ public class NotificationImpl implements NotificationService {
         Notification save = notificationRepository.save(notification);
         trendFollowRepository.save(trendFollow);
         return save;
+    }
+
+    private List<NotificationViewDto> fetchTrendFollow(UserEntity userEntity) {
+        List<NotificationViewDto> list = new ArrayList<>();
+        Iterator<TrendFollow> iterator = userEntity.getTrendFollows().iterator();
+        while(iterator.hasNext()){
+            TrendFollow trendFollow = iterator.next();
+            Notification notification = trendFollow.getNotification();
+
+            if(notification.getApproval()){
+                list.add(
+                        new NotificationViewDto(
+                                trendFollow.getClass().getName()
+
+                                , new NotificationBodyDto(
+                                      trendFollow.getStock().getStockName()
+                                    , trendFollow.getIsBuy()
+                                    , "todayEnd"
+                                    , "todayTrendFollowPrice"
+                                    , false
+                                    )
+
+                                , notification.getUpdateDate()
+                        )
+                );
+            }
+        }
+        return list;
     }
 }

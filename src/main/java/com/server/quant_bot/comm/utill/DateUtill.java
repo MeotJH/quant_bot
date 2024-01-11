@@ -59,4 +59,9 @@ public class DateUtill {
         LocalDate date = LocalDate.parse(yyyyMMdd, DateTimeFormatter.ofPattern("yyyyMMdd"));
         return date.minusDays(minus).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
     }
+
+    public static String localDateTimeToString(LocalDateTime time, String format){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
+        return time.format(formatter);
+    }
 }

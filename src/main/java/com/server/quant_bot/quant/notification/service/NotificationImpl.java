@@ -3,11 +3,14 @@ package com.server.quant_bot.quant.notification.service;
 import com.server.quant_bot.comm.exception.ResourceCommException;
 import com.server.quant_bot.comm.security.entity.UserEntity;
 import com.server.quant_bot.comm.security.service.UserService;
+import com.server.quant_bot.comm.utill.DateUtill;
 import com.server.quant_bot.korea.entity.Stock;
 import com.server.quant_bot.korea.service.StockService;
+import com.server.quant_bot.quant.enums.QuantType;
 import com.server.quant_bot.quant.notification.dto.*;
 import com.server.quant_bot.quant.notification.entity.Notification;
 import com.server.quant_bot.quant.notification.repository.NotificationRepository;
+import com.server.quant_bot.quant.trend_following.dto.TrendFollowDto;
 import com.server.quant_bot.quant.trend_following.entity.TrendFollow;
 import com.server.quant_bot.quant.trend_following.repository.TrendFollowRepository;
 import com.server.quant_bot.quant.trend_following.service.TrendFollowing;
@@ -116,21 +119,21 @@ public class NotificationImpl implements NotificationService {
         while(iterator.hasNext()){
             TrendFollow trendFollow = iterator.next();
             Notification notification = trendFollow.getNotification();
+            TrendFollowDto today = trendFollowing.getOneday(trendFollow.getStock().getStockName(), DateUtill.getToday());
 
             if(notification.getApproval()){
                 list.add(
                         new NotificationViewDto(
-                                trendFollow.getClass().getName()
+                                QuantType.TREND_FOLLOW.getKorean()
 
                                 , new NotificationBodyDto(
                                       trendFollow.getStock().getStockName()
                                     , trendFollow.getIsBuy()
-                                    , "todayEnd"
-                                    , "todayTrendFollowPrice"
-                                    , false
+                                    , today.getBaseDateClosePrice()
+                                    , today.getTrendFollowPrice()
+                                    , today.getIsBuy()
                                     )
-
-                                , notification.getUpdateDate()
+                                , DateUtill.localDateTimeToString(notification.getUpdateDate(), "yyyy-MM-dd HH:mm:ss" )
                         )
                 );
             }

@@ -33,7 +33,6 @@ const quantFetch = function (url,data = {
                             quantAlert('권한이 없습니다.', 'danger');
                             resolve(response);
                         }
-                        console.info(response,"in method response")
                         if(response instanceof Object){
                             resolve(response.json());
                         }else{
@@ -46,12 +45,10 @@ const quantFetch = function (url,data = {
                     return response.json();
                 })
                 .then(data => {
-                    console.info(data,'data')
                     if(data.error){
                         alert(data.message)
                         throw new Error('Network response was not ok');
                     }
-                    console.info(data,'data')
                     resolve(data);
                 })
                 .catch(error => {
@@ -215,7 +212,6 @@ const generateUniqueKey = () => {
 const toastLiveContainer = document.getElementById('toastContainer')
 const quantToast = (toastObj) =>{
     const uniqueKey = 'key' + generateUniqueKey();
-    console.info(toastObj)
     const {body,title,time} = toastObj;
 
 
@@ -228,7 +224,7 @@ const quantToast = (toastObj) =>{
         `
         <div
         id="${uniqueKey}"
-        class="toast"
+        class="toast m-2"
         role="alert"
         aria-live="assertive"
         aria-atomic="true"
@@ -243,18 +239,6 @@ const quantToast = (toastObj) =>{
                 ${body}
             </div>
         </div>`;
-
-    /**
-     * `<div class="toast-header">
-     *             <img src="..." class="rounded me-2" alt="...">
-     *             <strong class="me-auto">${title}</strong>
-     *             <small>${time} mins ago</small>
-     *             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-     *         </div>
-     *         <div class="toast-body">
-     *             ${body}
-     *         </div>`;
-     */
 
     toastLiveContainer.append(wrapper);
     const element = toastLiveContainer.querySelector(`#${uniqueKey}`);

@@ -1,0 +1,408 @@
+<!--resources/templates/thymeleafEx.html-->
+
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default}"
+      xmlns:v-on="http://www.w3.org/1999/xhtml">
+<th:block layout:fragment="content">
+    <!-- Begin Page Content -->
+    <div class="container-fluid" id="app">
+        <div class="accordion m-4" id="accordionExample">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        은퇴자금 계산기
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <div class="d-flex justify-content-center mb-3">얼마를 가지고 있어야 은퇴할 수 있을까? 인플레이션을 고려해 계산해드립니다.</div>
+                        <div class="mb-3">
+                            <label for="money" class="form-label">은퇴 후 연 지출액</label>
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    id="money"
+                                    placeholder="ex ) 30,000,000"
+                                    v-on:keyup="parseMoney( retire.money ,'retire.money' )"
+                                    v-model="retire.money">
+                        </div>
+                        <div class="mb-3">
+                            <label for="percent" class="form-label">은퇴 후 기대 연 투자수익</label>
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    id="percent"
+                                    placeholder="ex ) 5~7%"
+                                    v-model="retire.percent">
+                        </div>
+                        <div class="mb-3">
+                            <label for="inflation" class="form-label">물가상승률</label>
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    id="inflation"
+                                    placeholder="ex ) 2~3%"
+                                    v-model="retire.inflation">
+                        </div>
+                        <div class="mb-3">
+                            <label for="retire" class="form-label">은퇴까지 남은 연수</label>
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    id="retire"
+                                    placeholder=" ex) 30년"
+                                    v-model="retire.year"
+                                    v-on:keypress.enter="getRetireFinance()">
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <button
+                                    type="button"
+                                    class="btn btn-primary m-2"
+                                    v-on:click="getRetireFinance()"
+                                    v-on:keypress.enter="getRetireFinance()">
+                                Calculation
+                            </button>
+                        </div>
+                        <div v-show=" retire.result !== null ">
+                            <div class="d-flex justify-content-center" >
+                                <div class="card m-4" style="width: 40rem;">
+                                    <div class="card-body">
+                                        <h2 class="m-4 text-center">
+                                            {{ retire.result }}
+                                        </h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        적립식 복리 계산기
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <h3>월세</h3>
+                        <div class="mb-3">
+                            <label for="money" class="form-label">대출금액</label>
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    placeholder="ex ) 30,000,000"
+
+                                    v-model="retire.money">
+                        </div>
+                        <div class="mb-3">
+                            <label for="money" class="form-label">대출금리</label>
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    placeholder="ex ) 30,000,000"
+
+                                    v-model="retire.money">
+                        </div>
+                        <div class="mb-3">
+                            <label for="money" class="form-label">월세금액</label>
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    placeholder="ex ) 30,000,000"
+
+                                    v-model="retire.money">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        전세 vs 월세 가성비 계산기
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div class="accordion-body d-flex justify-content-evenly">
+                        <div class="m-4 flex-1">
+                            <h3 class="mt-4 ms-4">월세</h3>
+                            <div class="mb-3">
+                                <label for="money" class="form-label m-2 text-secondary">대출금액</label>
+                                <input
+                                        type="text"
+                                        class="form-control"
+                                        placeholder="ex ) 10,000,000"
+                                        v-on:keyup="parseMoney( rent.month.loan ,'rent.month.loan' )"
+                                        v-model="rent.month.loan">
+                            </div>
+                            <div class="mb-3">
+                                <label for="money" class="form-label m-2 text-secondary">대출금리</label>
+                                <input
+                                        type="text"
+                                        class="form-control"
+                                        placeholder="ex ) 3~7%"
+                                        v-model="rent.month.interestRate">
+                            </div>
+                            <div class="mb-3">
+                                <label for="money" class="form-label m-2 text-secondary">월세금액</label>
+                                <input
+                                        type="text"
+                                        class="form-control"
+                                        placeholder="ex ) 700,000"
+                                        v-on:keyup="parseMoney( rent.month.pay ,'rent.month.pay' )"
+                                        v-model="rent.month.pay">
+                            </div>
+                            <h3 class="mt-4 ms-4">전세</h3>
+                            <div class="mb-3">
+                                <label for="money" class="form-label m-2 text-secondary">대출금액</label>
+                                <input
+                                        type="text"
+                                        class="form-control"
+                                        placeholder="ex ) 100,000,000"
+                                        v-on:keyup="parseMoney( rent.year.loan ,'rent.year.loan' )"
+                                        v-model="rent.year.loan">
+                            </div>
+                            <div class="mb-3">
+                                <label for="money" class="form-label m-2 text-secondary">대출금리</label>
+                                <input
+                                        type="text"
+                                        class="form-control"
+                                        placeholder="ex ) 3~7%"
+                                        v-model="rent.year.interestRate">
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <button
+                                        type="button"
+                                        class="btn btn-primary m-2"
+                                        v-on:click="compareEfficiency()"
+                                        v-on:keypress.enter="getRetireFinance()">
+                                        Calculation
+                                </button>
+                            </div>
+                            <div
+                                    class="align-items-center flex-2 m-4"
+                                    v-if="viewWidth <= 700 && false">
+                                <div>
+                                    <div class="fs-2 m-2 ">
+                                        계산결과
+                                    </div>
+                                    <div class="fs-4 m-2">
+                                        월세가 더 유리합니다.
+                                        매월 26,667원씩, 총 640,000원을 절약하실 수 있습니다.
+                                    </div>
+                                </div>
+                                <table class="table h-75 m-4">
+                                    <thead>
+                                    <tr>
+                                        <th class="fs-4" colspan="4">전월세 비교</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="align-middle text-secondary">
+                                    <tr>
+                                        <th class="text-center fs-5" scope="row" rowspan="3">월세</th>
+                                        <td colspan="2">매월 월세</td>
+                                        <td>@mdo</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">매월 이자</td>
+                                        <td>@fat</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"> 총 비용</td>
+                                        <td>@fat</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-center fs-5" scope="row" rowspan="2">전세</th>
+                                        <td colspan="2">매월 이자</td>
+                                        <td>@twitter</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">총 비용</td>
+                                        <td>@twitter</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div
+                                class="align-items-center flex-2 m-4"
+                                v-if="viewWidth > 700">
+                            <div>
+                                <div class="fs-2 m-2 ">
+                                    계산결과
+                                </div>
+                                <div class="fs-4 m-2">
+                                    월세가 더 유리합니다.
+                                    매월 26,667원씩, 총 640,000원을 절약하실 수 있습니다.
+                                </div>
+                            </div>
+                            <table class="table h-75 m-4">
+                                <thead>
+                                    <tr>
+                                        <th class="fs-4" colspan="4">전월세 비교</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="align-middle text-secondary">
+                                <tr>
+                                    <th class="text-center fs-5 w-25" rowspan="3">월세</th>
+                                    <td colspan="2">매월 월세</td>
+                                    <td>{{ rent.month.perPay }}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">매월 이자</td>
+                                    <td>{{ rent.month.perLoan }}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"> 총 비용</td>
+                                    <td>{{ rent.month.total }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-center fs-5 w-25" rowspan="2">전세</th>
+                                    <td colspan="2">매월 이자</td>
+                                    <td>{{ rent.year.perLoan }}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">총 비용</td>
+                                    <td>{{ rent.year.total }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const MONEY = {
+            RETIRE: 'RETIRE'
+        }
+        const { createApp, ref } = Vue;
+        createApp({
+            setup() {
+            },
+            mounted() {
+                const v = this;
+                window.addEventListener('resize', v.handleResize);
+            },
+            data() {
+                return{
+                    // MONEY: {
+                    //     RETIRE: this.retire.money
+                    // }
+                    viewWidth: window.innerWidth
+                    //은퇴자금 계산기 variable//
+                    //은퇴자금 계산기 variable//
+                    ,retire : {
+                        money: null,
+                        percent: null,
+                        inflation: null,
+                        year: null,
+                        result: null
+                    }
+                    //은퇴자금 계산기 variable end//
+                    //은퇴자금 계산기 variable end//
+
+                    //전세 vs 월세 가성비 계산기//
+                    //전세 vs 월세 가성비 계산기//
+                    ,rent:{
+                        month:{
+                            loan:null,
+                            interestRate: null,
+                            pay: null,
+                            perPay: null,
+                            perLoan: null,
+                            total: null,
+                        },
+                        year:{
+                            loan:null,
+                            interestRate: null,
+                            perLoan: null,
+                            total: null,
+                        }
+                    //전세 vs 월세 가성비 계산기//
+                    //전세 vs 월세 가성비 계산기//
+                    }
+                }
+            },
+            computed:{
+            },
+            methods: {
+                // 화면 공통 function //
+                // 화면 공통 function //
+                handleResize(event) {
+                    this.viewWidth = window.innerWidth;
+                }
+                ,parseMoney(value,variableName) {
+                    const v = this;
+                    if(value === ""){
+                        return
+                    }
+                    const afterNum = parseInt(value.replaceAll(',', ''));
+                    if(variableName){
+                        const split = variableName.split('.');
+                        v.setDepthVar(split,afterNum.toLocaleString());
+                    }else{
+                        return
+                    }
+                }
+                ,setDepthVar(split, value) {
+                    let obj = this;
+
+                    for (let i = 0; i < split.length - 1; i++) {
+                        obj = obj[split[i]];
+                    }
+                    obj[split[split.length - 1]] = value;
+                }
+                // 화면 공통 function End //
+                // 화면 공통 function End //
+
+                //은퇴자금 계산기 function//
+                //은퇴자금 계산기 function//
+                ,getRetireFinance() {
+                    const v = this;
+                    const money =  parseInt(v.retire.money.replaceAll(',', '')) ;
+                    const percent = v.retire.percent.match(/\d+/g)/100;
+                    const inflation = v.retire.inflation.match(/\d+/g)/100;
+                    const year = v.retire.year.match(/\d+/g);
+                    //const result = document.getElementById('calculation-result');
+
+                    if( percent <= inflation){
+                        return quantAlert('연 투자수익이 물가상승률 보다 커야합니다.', 'danger');
+                    }
+                    v.retire.result = Math.round((money * ( Math.pow(( 1 + inflation), year) ) / ( percent - inflation ))).toLocaleString() + "원";
+                }
+                //은퇴자금 계산기 function//
+                //은퇴자금 계산기 function//
+                ,compareEfficiency() {
+                    const v = this;
+                    const month = v.rent.month;
+                    const year = v.rent.year;
+                    const oneYear = 12;
+                    const monthInterest = month.loan * (month.interestRate/100) / 100;
+                    const yearInterest = year.loan * (year.interestRate/100) / 100;
+
+                    v.rent.month.perLoan = Math.round( monthInterest / oneYear );
+                    v.rent.month.perPay = month.pay;
+                    v.rent.month.total = parseInt(month.loan) + monthInterest + ( month.pay * oneYear );
+                    v.rent.year.perLoan = Math.round( yearInterest / oneYear );
+                    v.rent.year.total = parseInt(year.loan) + yearInterest;
+                }
+            }
+        }).mount('#app');
+    </script>
+    <style>
+        .flex-1 {
+            flex: 1;
+        }
+
+        .flex-2 {
+            flex: 2;
+        }
+    </style>
+</th:block>
+
+</html>

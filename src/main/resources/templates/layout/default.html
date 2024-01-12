@@ -42,9 +42,9 @@
         <div class="sidebar-heading border-bottom bg-light">Quant-Bot</div>
         <div class="list-group list-group-flush">
             <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/">Main</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/view/calculator">금융공학 계산기</a>
             <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/view/trend-follow">추세추종 투자법</a>
             <!-- 기능 추가 아직 안했으니 닫아 놓기-->
-            <!--            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Shortcuts</a>-->
             <!--            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Overview</a>-->
             <!--            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Events</a>-->
             <!--            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Profile</a>-->
@@ -100,36 +100,45 @@
     window.onload = async function() {
         changeLoginTagBaseOnStatus();
 
-        console.info(isLogin(),"isLogin?")
         if( isLogin() ){
-            console.log("before result")
             const result = await quantFetch("/auth/v1/notifications");
-            /**
-             * result = []
-             * each = {
-             *     title: string,
-             *     body: string,
-             *     time: string,
-             * }
-             */
-            console.log(result,"result")
-            result.length > 0 ? result.forEach( each => quantToast(each)) : null;
+
+            result.length > 0 ?
+                parseForToast(result)
+                    .forEach( each =>
+
+                        quantToast({
+                        title: each.title,
+                        body: each.body,
+                        time: each.time
+                        })
+
+                    )
+                : null;
         }
-        console.log('ss')
-        quantToast({
-            title:"[추세투자법 알림]"
-            ,body: `주식 : 삼성전자
-                    <br />
-                    저장한 추세투자 상태 : <span class="text-primary">매도</span>
-                    <br />
-                    금일종가 : 76,000원
-                    <br />
-                    평균이동선의 가격: 77,000원
-                    <br />
-                    <strong>추세투자 상태 :<span class="text-danger"> 매수</span></strong>`
-            ,time: "2"
-        });
+
     };
+
+    const parseForToast = (list) =>{
+        const result = new Array();
+        list.forEach( each => {
+            result.push({
+                title : each.title,
+                body : `주식 : ${each.body.stockName}
+                    <br />
+                    저장한 추세투자 상태 : <span class="text-primary">${each.body.savedIsBuy}</span>
+                    <br />
+                    금일종가 : ${each.body.todayEnd}원
+                    <br />
+                    평균이동선의 가격: ${each.body.todayTrendFollowPrice}원
+                    <br />
+                    <strong>추세투자 상태 :<span class="text-danger"> ${each.body.todayIsBuy}</span></strong>`,
+                time : each.time
+            })
+        })
+
+        return result;
+    }
 
 </script>
 </body>

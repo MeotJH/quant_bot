@@ -95,7 +95,6 @@
                                     type="text"
                                     class="form-control"
                                     placeholder="ex ) 30,000,000"
-
                                     v-model="retire.money">
                         </div>
                         <div class="mb-3">
@@ -104,7 +103,6 @@
                                     type="text"
                                     class="form-control"
                                     placeholder="ex ) 30,000,000"
-
                                     v-model="retire.money">
                         </div>
                         <div class="mb-3">
@@ -184,14 +182,14 @@
                             </div>
                             <div
                                     class="align-items-center flex-2 m-4"
-                                    v-if="viewWidth <= 700 && false">
+                                    v-if="viewWidth <= 700 && total != 0 ">
                                 <div>
                                     <div class="fs-2 m-2 ">
                                         계산결과
                                     </div>
                                     <div class="fs-4 m-2">
-                                        월세가 더 유리합니다.
-                                        매월 26,667원씩, 총 640,000원을 절약하실 수 있습니다.
+                                        {{ type }}가 더 유리합니다.
+                                        매월 {{ perMonth }}원씩, 연간 총 {{ total }}원을 절약하실 수 있습니다.
                                     </div>
                                 </div>
                                 <table class="table h-75 m-4">
@@ -202,26 +200,26 @@
                                     </thead>
                                     <tbody class="align-middle text-secondary">
                                     <tr>
-                                        <th class="text-center fs-5" scope="row" rowspan="3">월세</th>
+                                        <th class="text-center fs-5 w-25" rowspan="3">월세</th>
                                         <td colspan="2">매월 월세</td>
-                                        <td>@mdo</td>
+                                        <td>{{ rent.month.perPay }}</td>
                                     </tr>
                                     <tr>
                                         <td colspan="2">매월 이자</td>
-                                        <td>@fat</td>
+                                        <td>{{ rent.month.perLoan }}</td>
                                     </tr>
                                     <tr>
                                         <td colspan="2"> 총 비용</td>
-                                        <td>@fat</td>
+                                        <td>{{ rent.month.total }}</td>
                                     </tr>
                                     <tr>
-                                        <th class="text-center fs-5" scope="row" rowspan="2">전세</th>
+                                        <th class="text-center fs-5 w-25" rowspan="2">전세</th>
                                         <td colspan="2">매월 이자</td>
-                                        <td>@twitter</td>
+                                        <td>{{ rent.year.perLoan }}</td>
                                     </tr>
                                     <tr>
                                         <td colspan="2">총 비용</td>
-                                        <td>@twitter</td>
+                                        <td>{{ rent.year.total }}</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -229,14 +227,14 @@
                         </div>
                         <div
                                 class="align-items-center flex-2 m-4"
-                                v-if="viewWidth > 700">
+                                v-if="viewWidth > 700 && total != 0">
                             <div>
                                 <div class="fs-2 m-2 ">
                                     계산결과
                                 </div>
                                 <div class="fs-4 m-2">
-                                    월세가 더 유리합니다.
-                                    매월 26,667원씩, 총 640,000원을 절약하실 수 있습니다.
+                                    {{ type }}가 더 유리합니다.
+                                    매월 {{ perMonth }}원씩, 연간 총 {{ total }}원을 절약하실 수 있습니다.
                                 </div>
                             </div>
                             <table class="table h-75 m-4">
@@ -329,6 +327,18 @@
                 }
             },
             computed:{
+                type: function(){
+                    const v = this;
+                    return v.rent.month.total > v.rent.year.total ? "전세" : "월세";
+                }
+                ,total: function(){
+                    const v = this;
+                    return v.getTotal();
+                }
+                ,perMonth: function(){
+                    const v = this;
+                    return Math.round(v.toInt(v.getTotal())/12).toLocaleString();
+                }
             },
             methods: {
                 // 화면 공통 function //
@@ -382,15 +392,34 @@
                     const month = v.rent.month;
                     const year = v.rent.year;
                     const oneYear = 12;
-                    const monthInterest = month.loan * (month.interestRate/100) / 100;
-                    const yearInterest = year.loan * (year.interestRate/100) / 100;
+                    const monthInterest = v.toInt(month.loan) * (month.interestRate/100);
+                    const yearInterest = v.toInt(year.loan) * (year.interestRate/100);
 
-                    v.rent.month.perLoan = Math.round( monthInterest / oneYear );
-                    v.rent.month.perPay = month.pay;
-                    v.rent.month.total = parseInt(month.loan) + monthInterest + ( month.pay * oneYear );
-                    v.rent.year.perLoan = Math.round( yearInterest / oneYear );
-                    v.rent.year.total = parseInt(year.loan) + yearInterest;
+                    console.info(yearInterest,"yearInterest",v.toInt(year.loan), yearInterest);
+                    console.info(v.toInt(month.loan) * (month.interestRate/100) / 100, v.toInt(month.loan),month.interestRate);
+
+                    v.rent.month.perLoan = (Math.round( monthInterest / oneYear )).toLocaleString() + '원';
+                    v.rent.month.perPay = month.pay + '원';
+                    v.rent.month.total = (monthInterest + ( v.toInt(month.pay) * oneYear )).toLocaleString() + '원';
+                    v.rent.year.perLoan = (Math.round( yearInterest / oneYear )).toLocaleString() + '원';
+                    v.rent.year.total = yearInterest.toLocaleString() + '원';
                 }
+                ,toInt( moneyStr ){
+                    if( !moneyStr ){
+                        return moneyStr
+                    }
+                    return parseInt( moneyStr.replaceAll(',','') );
+                }
+                ,getTotal(){
+                    const v = this;
+                    if(!v.rent.month.total || !v.rent.year.total){
+                        return 0;
+                    }
+                    const monthTotal = v.toInt(v.rent.month.total);
+                    const yearTotal = v.toInt(v.rent.year.total);
+                    return (Math.abs(monthTotal - yearTotal)).toLocaleString();
+                }
+
             }
         }).mount('#app');
     </script>

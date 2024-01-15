@@ -288,9 +288,6 @@
             },
             data() {
                 return{
-                    // MONEY: {
-                    //     RETIRE: this.retire.money
-                    // }
                     viewWidth: window.innerWidth
                     //은퇴자금 계산기 variable//
                     //은퇴자금 계산기 variable//
@@ -329,7 +326,7 @@
             computed:{
                 type: function(){
                     const v = this;
-                    return v.rent.month.total > v.rent.year.total ? "전세" : "월세";
+                    return v.toInt(v.rent.month.total) > v.toInt(v.rent.year.total) ? "전세" : "월세";
                 }
                 ,total: function(){
                     const v = this;
@@ -378,7 +375,6 @@
                     const percent = v.retire.percent.match(/\d+/g)/100;
                     const inflation = v.retire.inflation.match(/\d+/g)/100;
                     const year = v.retire.year.match(/\d+/g);
-                    //const result = document.getElementById('calculation-result');
 
                     if( percent <= inflation){
                         return quantAlert('연 투자수익이 물가상승률 보다 커야합니다.', 'danger');
@@ -394,9 +390,6 @@
                     const oneYear = 12;
                     const monthInterest = v.toInt(month.loan) * (month.interestRate/100);
                     const yearInterest = v.toInt(year.loan) * (year.interestRate/100);
-
-                    console.info(yearInterest,"yearInterest",v.toInt(year.loan), yearInterest);
-                    console.info(v.toInt(month.loan) * (month.interestRate/100) / 100, v.toInt(month.loan),month.interestRate);
 
                     v.rent.month.perLoan = (Math.round( monthInterest / oneYear )).toLocaleString() + '원';
                     v.rent.month.perPay = month.pay + '원';

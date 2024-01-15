@@ -17,7 +17,7 @@
         <div v-if="viewWidth > 1600" >
 
             <div class="row py-5 px-5 justify-content-evenly" v-for="dto in splitNewsDto" v-if="isNewsExist">
-                <div class="card col w-50 p-3 mx-2"  v-for="item in dto">
+                <div class="card col w-100 p-3 mx-2"  v-for="item in dto">
                     <img v-bind:src="item.src" class="card-img-top p-2 mx-auto" style="height: 25rem; width: 30rem;" v-bind:alt="item.alt">
                     <div class="card-body">
                         <h5 class="card-title text-center">{{ item.alt }}</h5>

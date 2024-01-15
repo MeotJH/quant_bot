@@ -199,7 +199,7 @@ const quantAlert = (message, type) => {
         `   <div>${message}</div>`,
         '   <button type="button" class="btn-close custom-alert-btn" data-bs-dismiss="alert" aria-label="Close"></button>',
         '</div>'
-    ].join('')
+    ].join('');
     alertPlaceholder.append(wrapper);
 }
 
@@ -209,8 +209,8 @@ const generateUniqueKey = () => {
     return `${timestamp}${random}`;
 }
 
-const toastLiveContainer = document.getElementById('toastContainer')
 const quantToast = (toastObj) =>{
+    const toastLiveContainer = document.getElementById('toastContainer');
     const uniqueKey = 'key' + generateUniqueKey();
     const {body,title,time} = toastObj;
 

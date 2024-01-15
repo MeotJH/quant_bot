@@ -39,6 +39,7 @@ public class Notification extends BaseEntity {
         NotificationMapperDto dto = (NotificationMapperDto) beforeDto;
         approval = dto.approval();
         trendFollow = dto.trendFollow();
+        status = false;
         return this;
     }
 

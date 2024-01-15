@@ -121,7 +121,7 @@ public class NotificationImpl implements NotificationService {
             Notification notification = trendFollow.getNotification();
             TrendFollowDto today = trendFollowing.getOneday(trendFollow.getStock().getStockName(), DateUtill.getToday());
 
-            if(notification.getApproval()){
+            if(notification.getApproval() && ( notification.getStatus() == true )){
                 list.add(
                         new NotificationViewDto(
                                 QuantType.TREND_FOLLOW.getKorean()

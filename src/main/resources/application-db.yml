@@ -5,6 +5,7 @@ spring:
 
   datasource:
     url: jdbc:h2:tcp://localhost/~/quant_bot
+    #url: jdbc:h2:mem:quant_bot
     driver-class-name: org.h2.Driver
     username: rlawlsgks
     password: rlawlsgks

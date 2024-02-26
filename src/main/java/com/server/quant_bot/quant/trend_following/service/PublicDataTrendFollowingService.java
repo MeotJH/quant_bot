@@ -29,7 +29,7 @@ public class PublicDataTrendFollowingService implements TrendFollowing {
     private final String DATE_TYPE_PATTERN = "yyyyMMdd";
     @Override
     public TrendFollowDto getOneday(String ticker, String baseDt) {
-        String beginDateStr = getTrendFollowStartDate(baseDt);
+        String beginDateStr = getTrendFollowsStartDate(baseDt);
         List<PublicDataStockDto> allByAfterBeginDate = stockService.getAllByAfterBeginDate(ticker, beginDateStr);
 
         TrendFollowRecord result = calculateTrendFollowOne(allByAfterBeginDate);
@@ -52,7 +52,7 @@ public class PublicDataTrendFollowingService implements TrendFollowing {
         String beginDateStr = getTrendFollowsStartDate(baseDt);
         List<PublicDataStockDto> allByAfterBeginDate = stockService.getAllByAfterBeginDate(ticker, beginDateStr);
 
-        List<TrendFollowRecordForList> results = calculateTrendFollows(allByAfterBeginDate);
+        List<TrendFollowRecordForList> results = calculateTrendFollowsV2(allByAfterBeginDate);
         return toTrendFollowDtos(results);
     }
 
@@ -123,48 +123,38 @@ public class PublicDataTrendFollowingService implements TrendFollowing {
 
     private TrendFollowRecord calculateTrendFollowOne(List<PublicDataStockDto> allByAfterBeginDate) {
         double temp = 0.0;
-        for (PublicDataStockDto each: allByAfterBeginDate) {
+        for (int i = 0; i < TREND_FOLLOIWNG_DEFAULT_DAY; i++) {
+            PublicDataStockDto each = allByAfterBeginDate.get(i);
             temp = temp + Double.parseDouble(each.getClpr());
         }
 
-        double trendFollowPrice = temp / allByAfterBeginDate.size();
+        double trendFollowPrice = temp / TREND_FOLLOIWNG_DEFAULT_DAY;
         double baseDateClosePrice = Double.parseDouble(allByAfterBeginDate.get(0).getClpr());
         return new TrendFollowRecord(trendFollowPrice, baseDateClosePrice);
     }
 
-    //TODO ㄹㅇ75개 데이터로 계산하게 바꾸자
-    private List<TrendFollowRecordForList> calculateTrendFollows(List<PublicDataStockDto> allByAfterBeginDate) {
+    private List<TrendFollowRecordForList> calculateTrendFollowsV2(List<PublicDataStockDto> allByAfterBeginDate) {
+        TrendFollowRecord trendFollowRecord = calculateTrendFollowOne(allByAfterBeginDate);
 
-        //메소드로 나누자
-        double temp = 0.0;
-        int index = 0;
-
-        String beginDateStr = getTrendFollowStartDate( allByAfterBeginDate.get(0).getBasDt() );
-        String parseWeekendDate = changeWeekendDate(beginDateStr);
-
-        for (PublicDataStockDto each: allByAfterBeginDate) {
-            if( each.getBasDt().equals(parseWeekendDate) ){
-                break;
-            }// TODO 토,일 말고도 추석 등 이어서 휴장인날 어떻게 할지 고민해야 한다.
-            temp = temp + Double.parseDouble(each.getClpr());
-            index++;
-
-        }
-
-        double trendFollowPriceFirstOne = temp / index;
-        double baseDateClosePriceFirstOne = Double.parseDouble(allByAfterBeginDate.get(0).getClpr());
-        TrendFollowRecordForList trl = new TrendFollowRecordForList(trendFollowPriceFirstOne, baseDateClosePriceFirstOne,allByAfterBeginDate.get(0).getBasDt());
+        TrendFollowRecordForList trl = new TrendFollowRecordForList(
+                                                                            trendFollowRecord.trendFollowPrice()
+                                                                            , trendFollowRecord.baseDateClosePrice()
+                                                                            ,allByAfterBeginDate.get(0).getBasDt()
+                                                                    );
         List<TrendFollowRecordForList> trls = new ArrayList<>();
         trls.add(trl);
 
         //index번을 추가 안한거니까
+        //맨처음
         int j = 0;
+        //75번째
+        int index = TREND_FOLLOIWNG_DEFAULT_DAY;
+        double temp = trendFollowRecord.trendFollowPrice() * TREND_FOLLOIWNG_DEFAULT_DAY;
         for (int i = index; i < allByAfterBeginDate.size(); i++) {
             PublicDataStockDto each = allByAfterBeginDate.get(index);
 
             //구해진 시작일 ~ n일 더한 값에 n일 종가를 더하고 시작일 종가를 뺀값을 더하면 이전 평균일이 나온다.
-            temp = temp + ( Double.parseDouble(each.getClpr()) - Double.parseDouble(allByAfterBeginDate.get(j++).getClpr() ) );
-
+            temp = temp + ( Double.parseDouble(each.getClpr()) - Double.parseDouble(allByAfterBeginDate.get(j).getClpr() ) );
             // 그날 평균이동값과 시작일+1일 종가를 구해서 넣어준다.
             double trendFollowTemp = temp / index;
             trls.add(
@@ -174,8 +164,9 @@ public class PublicDataTrendFollowingService implements TrendFollowing {
                             , allByAfterBeginDate.get(j).getBasDt()
                     )
             );
+            j++;
 
-            if( allByAfterBeginDate.get(j).getBasDt().equals(beginDateStr) ){
+            if( j == TREND_FOLLOIWNG_DEFAULT_DAY - 1 ){
                 break;
             }
 
@@ -183,25 +174,9 @@ public class PublicDataTrendFollowingService implements TrendFollowing {
         return trls;
     }
 
-    private String changeWeekendDate(String beginDateStr) {
-        String dayOfWeek = DateUtill.getDayOfWeek(beginDateStr);
-        if(dayOfWeek.equals("토요일")){
-            return DateUtill.getMinusDay(beginDateStr, 1);
-        } else if (dayOfWeek.equals("일요일")) {
-            return DateUtill.getMinusDay(beginDateStr,2);
-        }else{
-            return beginDateStr;
-        }
-    }
-
-    private String getTrendFollowStartDate(String baseDt) {
-        LocalDate date = LocalDate.parse(baseDt, DateTimeFormatter.ofPattern(DATE_TYPE_PATTERN));
-        return date.minusDays(TREND_FOLLOIWNG_DEFAULT_DAY).format(DateTimeFormatter.ofPattern(DATE_TYPE_PATTERN));
-    }
-
 
     private String getTrendFollowsStartDate(String baseDt) {
         LocalDate date = LocalDate.parse(baseDt, DateTimeFormatter.ofPattern(DATE_TYPE_PATTERN));
-        return date.minusDays(TREND_FOLLOIWNGS_DEFAULT_DAY).format(DateTimeFormatter.ofPattern(DATE_TYPE_PATTERN));
+        return date.minusDays(TREND_FOLLOIWNGS_DEFAULT_DAY+100).format(DateTimeFormatter.ofPattern(DATE_TYPE_PATTERN));
     }
 }

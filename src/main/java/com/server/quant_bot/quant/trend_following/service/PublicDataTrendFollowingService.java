@@ -25,7 +25,7 @@ public class PublicDataTrendFollowingService implements TrendFollowing {
     private final StockService stockService;
     private final AuthTrendFollowing authTrendFollowing;
     private final int TREND_FOLLOIWNG_DEFAULT_DAY = 75;
-    private final int TREND_FOLLOIWNGS_DEFAULT_DAY = 150;
+    private final int TREND_FOLLOIWNGS_DEFAULT_DAY = 250;
     private final String DATE_TYPE_PATTERN = "yyyyMMdd";
     @Override
     public TrendFollowDto getOneday(String ticker, String baseDt) {
@@ -48,7 +48,7 @@ public class PublicDataTrendFollowingService implements TrendFollowing {
     }
 
     @Override
-    public TrendFollowListDto getDaysByBaseDt(String ticker, String baseDt) {
+    public TrendFollowListDto getDays(String ticker, String baseDt) {
         String beginDateStr = getTrendFollowsStartDate(baseDt);
         List<PublicDataStockDto> allByAfterBeginDate = stockService.getAllByAfterBeginDate(ticker, beginDateStr);
 
@@ -135,7 +135,6 @@ public class PublicDataTrendFollowingService implements TrendFollowing {
 
     private List<TrendFollowRecordForList> calculateTrendFollowsV2(List<PublicDataStockDto> allByAfterBeginDate) {
         TrendFollowRecord trendFollowRecord = calculateTrendFollowOne(allByAfterBeginDate);
-
         TrendFollowRecordForList trl = new TrendFollowRecordForList(
                                                                             trendFollowRecord.trendFollowPrice()
                                                                             , trendFollowRecord.baseDateClosePrice()
@@ -150,7 +149,7 @@ public class PublicDataTrendFollowingService implements TrendFollowing {
         //75번째
         int index = TREND_FOLLOIWNG_DEFAULT_DAY;
         double temp = trendFollowRecord.trendFollowPrice() * TREND_FOLLOIWNG_DEFAULT_DAY;
-        for (int i = index; i < allByAfterBeginDate.size(); i++) {
+        for (int i = index; i < allByAfterBeginDate.size(); i++, j++) {
             PublicDataStockDto each = allByAfterBeginDate.get(index);
 
             //구해진 시작일 ~ n일 더한 값에 n일 종가를 더하고 시작일 종가를 뺀값을 더하면 이전 평균일이 나온다.
@@ -164,7 +163,6 @@ public class PublicDataTrendFollowingService implements TrendFollowing {
                             , allByAfterBeginDate.get(j).getBasDt()
                     )
             );
-            j++;
 
             if( j == TREND_FOLLOIWNG_DEFAULT_DAY - 1 ){
                 break;
@@ -177,6 +175,6 @@ public class PublicDataTrendFollowingService implements TrendFollowing {
 
     private String getTrendFollowsStartDate(String baseDt) {
         LocalDate date = LocalDate.parse(baseDt, DateTimeFormatter.ofPattern(DATE_TYPE_PATTERN));
-        return date.minusDays(TREND_FOLLOIWNGS_DEFAULT_DAY+100).format(DateTimeFormatter.ofPattern(DATE_TYPE_PATTERN));
+        return date.minusDays(TREND_FOLLOIWNGS_DEFAULT_DAY).format(DateTimeFormatter.ofPattern(DATE_TYPE_PATTERN));
     }
 }

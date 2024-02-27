@@ -13,9 +13,9 @@ public interface TrendFollowing {
 
     default TrendFollowDto getOneday(String ticker, String baseDt){return null;}
 
-    default TrendFollowListDto getDaysByBaseDt(String ticker, String baseDt){return null;}
+    default TrendFollowListDto getDays(String ticker, String baseDt){return null;}
 
-    default List<String> getStocksByKeyword(String keyword){return null;}
+    default List<String> getStocksByKeyword(String keyword){return null;} // 이건 논리적으로 역할이 안맞는 메소드 같은데..
     //TODO entity return 하면 안됨 수정하자
     default Optional<TrendFollowDto> save(TrendFollowDto dto) {return Optional.ofNullable(null);}
 

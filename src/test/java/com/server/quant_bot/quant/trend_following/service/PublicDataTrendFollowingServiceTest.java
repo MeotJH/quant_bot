@@ -69,7 +69,7 @@ class PublicDataTrendFollowingServiceTest {
         TrendFollowDto daysByBaseDt = trendFollowing.getOneday(samsung, nowDate);
 
         //when
-        TrendFollowListDto dto = trendFollowing.getDaysByBaseDt(samsung, nowDate);
+        TrendFollowListDto dto = trendFollowing.getDays(samsung, nowDate);
 
         //then
         Assertions.assertEquals(daysByBaseDt.getTrendFollowPrice(),dto.getTrendFollowPrices().get(0));

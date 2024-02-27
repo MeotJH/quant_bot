@@ -26,6 +26,6 @@ public class TrendFollowController {
 
     @GetMapping("/{ticker}/list")
     public TrendFollowListDto getStockTrendFollows(@PathVariable String ticker){
-        return trendFollowing.getDaysByBaseDt(ticker, DateUtill.getToday());
+        return trendFollowing.getDays(ticker, DateUtill.getToday());
     }
 }

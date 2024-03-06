@@ -27,6 +27,13 @@ public class PublicDataTrendFollowingService implements TrendFollowing {
     private final int TREND_FOLLOIWNG_DEFAULT_DAY = 75;
     private final int TREND_FOLLOIWNGS_DEFAULT_DAY = 250;
     private final String DATE_TYPE_PATTERN = "yyyyMMdd";
+
+    /**
+     * ticker인 baseDt 날짜의 추세평균이동 값 가져온다.
+     * @param ticker ex) 00239388
+     * @param baseDt ex) yyyyMMdd
+     * @return
+     */
     @Override
     public TrendFollowDto getOneday(String ticker, String baseDt) {
         String beginDateStr = getTrendFollowsStartDate(baseDt);
@@ -47,6 +54,12 @@ public class PublicDataTrendFollowingService implements TrendFollowing {
                 .build();
     }
 
+    /**
+     * 추세평균이동 값들을 리스트로 가져온다.
+     * @param ticker ex) 00282732
+     * @param baseDt ex) yyyyMMdd
+     * @return TrendFollowListDto
+     */
     @Override
     public TrendFollowListDto getDays(String ticker, String baseDt) {
         String beginDateStr = getTrendFollowsStartDate(baseDt);
@@ -77,8 +90,8 @@ public class PublicDataTrendFollowingService implements TrendFollowing {
             responseDtos.add(
 
                     new TrendFollowUserPageDto(
-                            savedDay.getStock()
-                            ,savedDay.getStockName()
+                              savedDay.getStock()
+                            , savedDay.getStockName()
                             , today.getBaseDateClosePrice()
                             , savedDay.getBaseDateClosePrice()
                             , today.getTrendFollowPrice()
@@ -117,7 +130,6 @@ public class PublicDataTrendFollowingService implements TrendFollowing {
             dto.getBaseDt().add(each.baseDt());
 
         }
-
         return dto;
     }
 

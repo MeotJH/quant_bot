@@ -88,32 +88,45 @@
                 </h2>
                 <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
-                        <h3>월세</h3>
+                        <div class="d-flex justify-content-center mb-3">1년에 xx 원씩 적립해 N년을 X%수익률을 가지면 얼마나 벌 수 있을까?</div>
                         <div class="mb-3">
-                            <label for="money" class="form-label">대출금액</label>
+                            <label for="money" class="form-label">기초 자본</label>
                             <input
                                     type="text"
                                     class="form-control"
-                                    placeholder="ex ) 30,000,000"
-                                    v-model="retire.money">
+                                    placeholder="ex ) 100,000,000 "
+                                    v-model="welfare.originalMoney">
                         </div>
                         <div class="mb-3">
-                            <label for="money" class="form-label">대출금리</label>
+                            <label for="money" class="form-label">연 투자액</label>
                             <input
                                     type="text"
                                     class="form-control"
-                                    placeholder="ex ) 30,000,000"
-                                    v-model="retire.money">
+                                    placeholder="ex ) 20,000,000"
+                                    v-model="welfare.yearMoney_g">
                         </div>
                         <div class="mb-3">
-                            <label for="money" class="form-label">월세금액</label>
+                            <label for="money" class="form-label">수익률</label>
                             <input
                                     type="text"
                                     class="form-control"
-                                    placeholder="ex ) 30,000,000"
+                                    placeholder="ex ) 10% "
+                                    v-model="welfare.yearRate">
+                        </div>
+                        <div class="mb-3">
+                            <label for="money" class="form-label">투자기간</label>
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    placeholder="ex ) 10년"
+                                    v-model="welfare.endYearReal"
+                                    v-on:keyup.enter="beforeCal" >
+                        </div>
 
-                                    v-model="retire.money">
-                        </div>
+
+                        <ul class="list-group resultClass" v-for=" item in resultArr ">
+                            <li class="list-group-item" >{{ item.year }} 년째 자산 : {{ item.afterDotResult }}원</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -302,6 +315,19 @@
                     //은퇴자금 계산기 variable end//
                     //은퇴자금 계산기 variable end//
 
+                    //적립식 복리 계산기 variable//
+                    //적립식 복리 계산기 variable//
+                    ,welfare : {
+                        originalMoney: null,
+                        yearMoney_g: null,
+                        yearRate: null,
+                        endYearReal: null
+                    },
+                    result: '',
+                    resultArr: []
+                    //적립식 복리 계산기 end variable//
+                    //적립식 복리 계산기 end variable//
+
                     //전세 vs 월세 가성비 계산기//
                     //전세 vs 월세 가성비 계산기//
                     ,rent:{
@@ -336,6 +362,14 @@
                 ,perMonth: function(){
                     const v = this;
                     return Math.round(v.toInt(v.getTotal())/12).toLocaleString();
+                }
+            },
+            watch: {
+                originalMoney: function (val) {
+                    this.originalMoney =  this.makeMoneyDot(val);
+                },
+                yearMoney_g: function (val) {
+                    this.yearMoney_g =  this.makeMoneyDot(val);
                 }
             },
             methods: {
@@ -381,9 +415,60 @@
                         return quantAlert('연 투자수익이 물가상승률 보다 커야합니다.', 'danger');
                     }
                     v.retire.result = Math.round((money * ( Math.pow(( 1 + inflation), year) ) / ( percent - inflation ))).toLocaleString() + "원";
+                },
+                //은퇴자금 계산기 function end//
+                //은퇴자금 계산기 function end//
+
+
+                // 적립식 복리 계산기 function //
+                // 적립식 복리 계산기 function //
+                calculation:function (pastCal, year, endYear){
+                    let calTarget = 0;
+                    if(year == 0) calTarget = parseInt(this.welfare.originalMoney);
+
+                    calTarget += parseInt(this.welfare.yearMoney_g) ;
+                    const yearMoney = pastCal * (this.welfare.yearRate/100);
+                    const result = parseInt(calTarget + yearMoney + pastCal);
+
+                    year = year + 1;
+
+                    const afterDotResult = this.makeMoneyDot(result);
+
+                    this.insertToArray(afterDotResult, year);
+
+                    if(year == endYear){
+                        return result;
+                    }else{
+                        return this.calculation(parseInt(result), year, endYear);
+                    }
+                },
+                insertToArray(afterDotResult, year){
+                    this.resultArr.push({afterDotResult, year})
+                },
+                beforeCal: function(){
+                    this.resultArr = [];
+                    this.welfare.originalMoney = this.makeMoneyToNum(this.welfare.originalMoney);
+                    this.welfare.yearMoney_g = this.makeMoneyToNum(this.welfare.yearMoney_g);
+                    this.result = this.calculation(0,0,this.welfare.endYearReal);
+                },
+                makeMoneyDot(target){
+                    afterIsNum = this.isNum(target);
+                    const dotFinish = afterIsNum.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    return dotFinish
+                },
+                isNum(target){
+                    target = typeof target == 'number' ? target.toString() : target;
+                    return target;
+                },
+                makeMoneyToNum(target){
+                    const afterData = target.replace(/\D/g, "");
+                    return afterData;
                 }
-                //은퇴자금 계산기 function//
-                //은퇴자금 계산기 function//
+                // 적립식 복리 계산기 END //
+                // 적립식 복리 계산기 END //
+
+                // 전월세 가성비 계산기 function //
+                // 전월세 가성비 계산기 function //
                 ,compareEfficiency() {
                     const v = this;
                     const month = v.rent.month;

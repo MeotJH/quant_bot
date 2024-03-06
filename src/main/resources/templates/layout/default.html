@@ -78,20 +78,12 @@
         <script src="/js/comm.js"></script>
         <!--Content 내용 영역을 참조합니다-->
         <div class="container-fluid min-vh-93 d-flex justify-content-center">
-<!--            <div class="mx-auto">-->
-<!--                <img-->
-<!--                    src="https://tpc.googlesyndication.com/simgad/15936664879691623473?sqp=4sqPyQQ7QjkqNxABHQAAtEIgASgBMAk4A0DwkwlYAWBfcAKAAQGIAQGdAQAAgD-oAQGwAYCt4gS4AV_FAS2ynT4&amp;rs=AOga4qlxzs6J1zIvHpOfFPTscOhToxE5oA"-->
-<!--                    alt=""-->
-<!--                    class="img_ad">-->
-<!--            </div>-->
             <th:block layout:fragment="content"></th:block>
-<!--            <div class="mx-auto"><img-->
-<!--                    src="https://tpc.googlesyndication.com/simgad/15936664879691623473?sqp=4sqPyQQ7QjkqNxABHQAAtEIgASgBMAk4A0DwkwlYAWBfcAKAAQGIAQGdAQAAgD-oAQGwAYCt4gS4AV_FAS2ynT4&amp;rs=AOga4qlxzs6J1zIvHpOfFPTscOhToxE5oA"-->
-<!--                    alt=""-->
-<!--                    class="img_ad">-->
-<!--            </div>-->
         </div>
-
+        <script src="https://ads-partners.coupang.com/g.js"></script>
+        <script>
+            new PartnersCoupang.G({"id":699559,"template":"carousel","trackingCode":"AF8838907","width":"2000","height":"250","tsource":""});
+        </script>
     </div>
 </div>
 <!-- Core theme JS-->
@@ -116,6 +108,8 @@
                     )
                 : null;
         }
+
+        advertisementToast();
 
     };
 

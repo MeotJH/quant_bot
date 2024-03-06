@@ -246,6 +246,35 @@ const quantToast = (toastObj) =>{
     toastBootstrap.show();
 }
 
+const advertisementToast = () =>{
+    const toastLiveContainer = document.getElementById('toastContainer');
+    const uniqueKey = 'key' + generateUniqueKey();
+
+    const wrapper = document.createElement('div')
+    wrapper.innerHTML =
+        `
+        <div
+        id="${uniqueKey}"
+        class="toast m-2"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+        data-bs-autohide="false"
+        >
+            <div class="toast-header">
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body d-flex justify-content-center">
+                <a href="https://link.coupang.com/a/bs7AeG" target="_blank" referrerpolicy="unsafe-url"><img src="https://ads-partners.coupang.com/banners/699574?subId=&traceId=V0-301-879dd1202e5c73b2-I699574&w=200&h=200" alt=""></a>
+            </div>
+        </div>`;
+
+    toastLiveContainer.append(wrapper);
+    const element = toastLiveContainer.querySelector(`#${uniqueKey}`);
+    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(element)
+    toastBootstrap.show();
+}
+
 
 
 

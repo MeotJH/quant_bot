@@ -31,10 +31,10 @@ const quantFetch = function (url,data = {
                     if (!response.ok) {
                         if(response.status == 401 || response.status == 403){
                             quantAlert('권한이 없습니다.', 'danger');
-                            resolve(response);
+                            return response.json();
                         }
                         if(response instanceof Object){
-                            resolve(response.json());
+                            return response.json();
                         }else{
                             //TODO 로그인 실패 프론트 만들기 JSON.parse(resultData);
                             const body = JSON.parse(await response.json());

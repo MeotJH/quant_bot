@@ -28,7 +28,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE+ ";charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
-        //response.getWriter().write(objectMapper.writeValueAsString("{ \"message\":\"" + authException.getMessage() + "\"}" ));
+        response.getWriter().write(objectMapper.writeValueAsString("{ \"message\":\"" + authException.getMessage() + "\"}" ));
         deleteAuthorization(response);
         log.info("Exception::::CustomAuthenticationEntryPoint.commence");
         //TODO 에러 페이지 만들기

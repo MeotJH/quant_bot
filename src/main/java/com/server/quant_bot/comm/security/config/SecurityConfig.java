@@ -66,6 +66,7 @@ public class SecurityConfig {
                         authorizeRequests
                                 .requestMatchers( antMatcher("/css/**")
                                                  ,antMatcher("/js/**")
+                                                 ,antMatcher("/assets/**")
                                                  ,antMatcher("/api/v1/**")
                                                  ,antMatcher("/")
                                                  ,antMatcher("/view/**") )

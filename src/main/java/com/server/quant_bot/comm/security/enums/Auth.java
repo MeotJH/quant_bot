@@ -2,7 +2,9 @@ package com.server.quant_bot.comm.security.enums;
 
 public enum Auth {
 
-    AUTHORIZATION("Authorization");
+    AUTHORIZATION("Authorization"),
+    REFRESH_TOKEN("refreshToken"),
+    TYPE_BEARER("Bearer%20");
 
     private String value;
 

@@ -1,6 +1,7 @@
 package com.server.quant_bot.comm.security.service;
 
 import com.server.quant_bot.comm.security.dto.TokenInfo;
+import com.server.quant_bot.comm.security.enums.Auth;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -33,9 +34,9 @@ public class JwtTokenProvider {
     private final long NOW = (new Date()).getTime();
 
     @Getter
-    private final String accessTokenHeaderName = "Authorization";
+    private final String accessTokenHeaderName = Auth.AUTHORIZATION.getValue();
     @Getter
-    private final String refreshTokenHeaderName = "refreshToken";
+    private final String refreshTokenHeaderName = Auth.REFRESH_TOKEN.getValue();
 
     public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);

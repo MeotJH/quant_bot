@@ -1,5 +1,6 @@
 package com.server.quant_bot.comm.security.service;
 
+import com.server.quant_bot.comm.security.dto.OAuthUserDto;
 import com.server.quant_bot.comm.security.dto.TokenInfo;
 import com.server.quant_bot.comm.security.dto.UserDto;
 import com.server.quant_bot.comm.security.entity.UserEntity;
@@ -59,6 +60,11 @@ public class UserServiceImpl implements UserService{
                         ,  roles)
         );
         return userRepository.save(entity);
+    }
+
+    @Override
+    public UserEntity initUser(OAuthUserDto oAuthUserDto) {
+        return UserService.super.initUser(oAuthUserDto);
     }
 
     @Override

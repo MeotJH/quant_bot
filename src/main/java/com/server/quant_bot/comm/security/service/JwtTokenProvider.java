@@ -4,6 +4,7 @@ import com.server.quant_bot.comm.security.dto.TokenInfo;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,6 +31,11 @@ public class JwtTokenProvider {
     private final Key key;
     private final int ONE_DAY = 86400000; // 24 * 60 * 60 * 1000  24시간60분60초1000밀리초
     private final long NOW = (new Date()).getTime();
+
+    @Getter
+    private final String accessTokenHeaderName = "Authorization";
+    @Getter
+    private final String refreshTokenHeaderName = "refreshToken";
 
     public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);

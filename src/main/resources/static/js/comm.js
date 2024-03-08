@@ -10,9 +10,14 @@ const quantFetch = function (url,data = {
     /**
      * 두번째 파람 값 없을때 default value
      */
+
+    //response.setHeader("Access-Control-Allow-Origin", "*");
+
+
     method: "GET",
     headers: {
         "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*"
     }
 }) {
 
@@ -132,6 +137,7 @@ const changeLoginTagBaseOnStatus = () => {
     const tag = document.getElementById("login-tag");
     const localStorage = window.localStorage;
     const token = getCookie("Authorization");
+    console.info(token,"tokne")
     let loginStatus = "login";
     tag.getElementsByClassName("nav-link")[0].setAttribute("href","/view/"+loginStatus);
     if(token){

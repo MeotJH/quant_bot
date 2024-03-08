@@ -12,6 +12,7 @@
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="/css/styles.css" rel="stylesheet" />
+    <link href="/css/comm.css" rel="stylesheet" />
     <!-- Vue js-->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <!-- chart.js lib cdn -->
@@ -24,17 +25,7 @@
 <!--ALERT 창 공통 마크업-->
 <div id="liveAlertPlaceholder" class="fixed-top"></div>
 <!-- Toast Popup창 공통 마크업 -->
-<div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer">
-<!--    <div-->
-<!--        id="liveToast"-->
-<!--        class="toast"-->
-<!--        role="alert"-->
-<!--        aria-live="assertive"-->
-<!--        aria-atomic="true"-->
-<!--        data-bs-autohide="false"-->
-<!--    >-->
-<!--    </div>-->
-</div>
+<div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer"></div>
 
 <div class="d-flex" id="wrapper">
     <!-- Sidebar-->
@@ -117,6 +108,7 @@
     };
 
     const parseForToast = (list) =>{
+        console.info(list,"list")
         const result = new Array();
         list.forEach( each => {
             result.push({

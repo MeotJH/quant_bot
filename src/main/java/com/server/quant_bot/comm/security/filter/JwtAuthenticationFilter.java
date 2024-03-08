@@ -54,6 +54,9 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             return null;
         }
 
+        String contextPath = request.getContextPath();
+        log.info(contextPath);
+
         List<Cookie> authorization =
                                         Arrays
                                             .stream( request.getCookies() )

@@ -3,33 +3,29 @@ package com.server.quant_bot.comm.security.config;
 import com.server.quant_bot.comm.security.filter.JwtAuthenticationFilter;
 import com.server.quant_bot.comm.security.handler.CustomAccessDeniedHandler;
 import com.server.quant_bot.comm.security.handler.CustomAuthenticationEntryPoint;
+import com.server.quant_bot.comm.security.handler.OAuth2LoginSuccessHandler;
 import com.server.quant_bot.comm.security.service.CustomUserDetailsService;
 import com.server.quant_bot.comm.security.service.JwtTokenProvider;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import com.server.quant_bot.comm.security.service.OAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.access.AccessDeniedException;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
-import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 @Configuration
@@ -41,6 +37,8 @@ public class SecurityConfig {
     private final CustomUserDetailsService userDetailsService;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final OAuth2UserService oAuth2UserService;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -82,6 +80,11 @@ public class SecurityConfig {
                 .exceptionHandling( httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer
                                                             .accessDeniedHandler(customAccessDeniedHandler)
                                                             .authenticationEntryPoint(customAuthenticationEntryPoint)
+                )
+                .oauth2Login( oauth2 -> oauth2
+                        .loginPage("/view/login")
+                        .successHandler(oAuth2LoginSuccessHandler)
+                        .userInfoEndpoint( userInfo -> userInfo.userService(oAuth2UserService) )
                 );
 
         return http.build();

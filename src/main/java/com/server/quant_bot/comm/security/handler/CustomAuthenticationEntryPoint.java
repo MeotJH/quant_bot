@@ -30,6 +30,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(objectMapper.writeValueAsString("{ \"message\":\"" + authException.getMessage() + "\"}" ));
         deleteAuthorization(response);
+        authException.printStackTrace();
         log.info("Exception::::CustomAuthenticationEntryPoint.commence");
         //TODO 에러 페이지 만들기
     }

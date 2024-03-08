@@ -101,7 +101,6 @@ public class PublicDataStockService implements StockService{
     private HttpEntity<?> getHttpEntity() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-
         return new HttpEntity<>(headers);
     }
 

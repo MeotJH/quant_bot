@@ -12,17 +12,17 @@ import java.util.Map;
 @Getter
 public class OAuthUserDto extends DefaultOAuth2User {
     private String role;
-    private String email;
+    private String type;
 
 
     public OAuthUserDto(Collection<? extends GrantedAuthority> authorities
             , Map<String, Object> attributes
             , String nameAttributeKey
             , String role
-            , String email
+            , String type
     ) {
         super(authorities, attributes, nameAttributeKey);
         this.role = role;
-        this.email = email;
+        this.type = type;
     }
 }

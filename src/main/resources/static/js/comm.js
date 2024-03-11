@@ -137,7 +137,6 @@ const changeLoginTagBaseOnStatus = () => {
     const tag = document.getElementById("login-tag");
     const localStorage = window.localStorage;
     const token = getCookie("Authorization");
-    console.info(token,"tokne")
     let loginStatus = "login";
     tag.getElementsByClassName("nav-link")[0].setAttribute("href","/view/"+loginStatus);
     if(token){

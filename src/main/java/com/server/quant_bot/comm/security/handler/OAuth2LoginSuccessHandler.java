@@ -46,9 +46,6 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         //1.1 처음이면 회원가입 추가정보? 아니면 그냥할지 정해서 보내기
         //1.2 처음아니면 로그인 석세스 시키기
 
-        if(!AuthGroup.GUEST.getValue().equals(AuthGroup.GUEST.getValue())){
-            // 기존에 있던 유저 로그인 처리
-        }
 
         //새로운 유저 로그인 처리
         TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);

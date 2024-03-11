@@ -1,6 +1,7 @@
 package com.server.quant_bot.comm.security.service;
 
 import com.server.quant_bot.comm.security.dto.OAuthUserDto;
+import com.server.quant_bot.comm.security.entity.UserEntity;
 import com.server.quant_bot.comm.security.enums.AuthGroup;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,6 +12,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -22,7 +24,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
         // Role generate
-        List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(AuthGroup.GUEST.getValue());
+        List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(AuthGroup.USER.getValue());
 
         // nameAttributeKey
         String userNameAttributeName = userRequest.getClientRegistration()
@@ -34,11 +36,15 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
                 authorities
                 , oAuth2User.getAttributes()
                 , userNameAttributeName
-                , AuthGroup.GUEST.getValue()
-                , "EMAIL"
+                , AuthGroup.USER.getValue()
+                , "kakao"
         );
-        // DB 저장로직이 필요하면 추가
-        userService.initUser(dto);
+        String id = String.valueOf(oAuth2User.getAttributes().get("id"));
+
+        //처음이면 회원가입
+        if(!userService.findUserByLoginId(id).isPresent()){
+            userService.initUser(dto);
+        }
         return dto;
     }
 

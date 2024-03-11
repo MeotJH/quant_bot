@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
@@ -17,10 +18,7 @@ import org.springframework.web.filter.GenericFilterBean;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -36,12 +34,15 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         // 1. Request Header 에서 JWT 토큰 추출
         String token = resolveToken((HttpServletRequest) request);
 
-        // 2. validateToken 으로 토큰 유효성 검사
-        if (token != null && jwtTokenProvider.validateToken(token)) {
-            // 토큰이 유효할 경우 토큰에서 Authentication 객체를 가지고 와서 SecurityContext 에 저장
-            Authentication authentication = jwtTokenProvider.getAuthentication(token);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        if( token == null || !jwtTokenProvider.validateToken(token)){
+            chain.doFilter(request,response);
+            return;
         }
+
+        // 2. validateToken 으로 토큰 유효성 검사
+        // 토큰이 유효할 경우 토큰에서 Authentication 객체를 가지고 와서 SecurityContext 에 저장
+        Authentication authentication = jwtTokenProvider.getAuthentication(token);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
         chain.doFilter(request, response);
 
         //TODO ExpiredJwtException try-catch만들어서 만료되었으면 프론트에서 알림주는 기능 만들기

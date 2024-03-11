@@ -16,9 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -63,8 +61,15 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public Optional<UserEntity> findUserByLoginId(String loginId) {
+        return userRepository.findByUserId(loginId);
+    }
+
+    @Override
     public UserEntity initUser(OAuthUserDto oAuthUserDto) {
-        return UserService.super.initUser(oAuthUserDto);
+        UserEntity entity = new UserEntity();
+        entity.updateByOauth(oAuthUserDto);
+        return userRepository.save(entity);
     }
 
     @Override

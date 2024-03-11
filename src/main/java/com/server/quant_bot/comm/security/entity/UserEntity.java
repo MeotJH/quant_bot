@@ -1,6 +1,7 @@
 package com.server.quant_bot.comm.security.entity;
 
 import com.server.quant_bot.comm.entity.BaseEntity;
+import com.server.quant_bot.comm.security.dto.OAuthUserDto;
 import com.server.quant_bot.comm.security.dto.UserDto;
 import com.server.quant_bot.comm.security.mapper.UserMapper;
 import com.server.quant_bot.quant.trend_following.entity.TrendFollow;
@@ -9,15 +10,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Getter
@@ -39,6 +38,10 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @Comment("비밀번호")
     @Column(nullable = false)
     private String password;
+
+    @Comment("로그인 타입")
+    @Column(updatable = false)
+    private String type;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
@@ -90,5 +93,23 @@ public class UserEntity extends BaseEntity implements UserDetails {
         UserDto dto = (UserDto) BeforeCastedDto;
         return UserMapper.INSTANCE.userDTOToEntity(dto);
     }
+
+    public UserEntity updateByOauth(OAuthUserDto oAuthUserDto){
+
+        String role = oAuthUserDto.getRole();
+        Map<String, Object> attributes = oAuthUserDto.getAttributes();
+        Long id = (Long) attributes.get("id");
+        LinkedHashMap properties = (LinkedHashMap) attributes.get("properties");
+        String nickname = (String) properties.get("nickname");
+        List<String> roles = new ArrayList<>();
+        roles.add("USER");
+
+        this.roles = roles;
+        this.password = "";
+        this.userId = Long.toString(id);
+        this.type = oAuthUserDto.getType();
+        return this;
+    }
+
 
 }

@@ -50,7 +50,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         //새로운 유저 로그인 처리
         TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
         setTokens(response,tokenInfo);
-        response.sendRedirect(SIGN_UP_PAGE);
+        response.sendRedirect(ROOT);
 
     }
 

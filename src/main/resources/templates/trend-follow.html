@@ -9,6 +9,20 @@
 <th:block layout:fragment="content" >
     <!-- Begin Page Content -->
     <div class="container-fluid" id="app">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Active</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="#">Link</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+            </li>
+        </ul>
         <div class="input-group mb-3 mx-auto p-5" >
             <input
                     ref="searchInput"
@@ -62,6 +76,8 @@
             },
             mounted() {
                 const v = this;
+
+                warnInvest();
             },
             data() {
                 return{

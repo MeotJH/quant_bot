@@ -30,16 +30,18 @@
 <div class="d-flex" id="wrapper">
     <!-- Sidebar-->
     <div class="border-end bg-white" id="sidebar-wrapper">
+        <a href="/" style="text-decoration: none; color: black;">
         <div class="sidebar-heading border-bottom bg-light">
             <img src="/assets/icon.png" alt="QUANT_TWO_BOT" style="width: 3rem;height: 3rem;">
             <span>Quant-Two-Bot</span>
         </div>
+        </a>
         <div class="list-group list-group-flush">
             <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/">Main</a>
             <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/view/calculator">금융공학 계산기</a>
-            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/view/trend-follow">추세추종 투자법</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/view/trend-follow">추세추종 투자법 [한국주식]</a>
+<!--            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">추세추종 투자법 [가상화폐]</a>-->
             <!-- 기능 추가 아직 안했으니 닫아 놓기-->
-            <!--            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Overview</a>-->
             <!--            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Events</a>-->
             <!--            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Profile</a>-->
             <!--            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Status</a>-->
@@ -108,7 +110,6 @@
     };
 
     const parseForToast = (list) =>{
-        console.info(list,"list")
         const result = new Array();
         list.forEach( each => {
             result.push({

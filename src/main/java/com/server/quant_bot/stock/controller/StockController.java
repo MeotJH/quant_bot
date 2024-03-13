@@ -1,14 +1,14 @@
-package com.server.quant_bot.korea.controller;
+package com.server.quant_bot.stock.controller;
 
-import com.server.quant_bot.korea.dto.PublicDataStockDto;
-import com.server.quant_bot.korea.service.MarketService;
-import com.server.quant_bot.korea.service.StockService;
+import com.server.quant_bot.stock.dto.PublicDataStockDto;
+import com.server.quant_bot.stock.service.MarketService;
+import com.server.quant_bot.stock.service.StockService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.server.quant_bot.korea.dto.MarketDto;
+import com.server.quant_bot.stock.dto.MarketDto;
 
 import java.util.List;
 

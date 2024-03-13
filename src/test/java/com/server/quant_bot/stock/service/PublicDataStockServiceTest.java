@@ -1,8 +1,8 @@
-package com.server.quant_bot.korea.service;
+package com.server.quant_bot.stock.service;
 
-import com.server.quant_bot.korea.dto.PublicDataStockDto;
-import com.server.quant_bot.korea.entity.Stock;
-import com.server.quant_bot.korea.mapping.StockMapping;
+import com.server.quant_bot.stock.dto.PublicDataStockDto;
+import com.server.quant_bot.stock.entity.Stock;
+import com.server.quant_bot.stock.mapping.StockMapping;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

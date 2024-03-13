@@ -2,8 +2,8 @@ package com.server.quant_bot.quant.notification.service;
 
 import com.server.quant_bot.comm.security.entity.UserEntity;
 import com.server.quant_bot.comm.security.repository.UserRepository;
-import com.server.quant_bot.korea.entity.Stock;
-import com.server.quant_bot.korea.repository.StockRepository;
+import com.server.quant_bot.stock.entity.Stock;
+import com.server.quant_bot.stock.repository.StockRepository;
 import com.server.quant_bot.quant.notification.dto.NotiReqDto;
 import com.server.quant_bot.quant.notification.dto.NotiResponseDto;
 import com.server.quant_bot.quant.notification.dto.NotificationViewDto;

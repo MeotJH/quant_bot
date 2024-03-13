@@ -1,6 +1,6 @@
 package com.server.quant_bot.quant.trend_following.service;
 
-import com.server.quant_bot.korea.entity.Stock;
+import com.server.quant_bot.stock.entity.Stock;
 import com.server.quant_bot.quant.trend_following.dto.TrendFollowDto;
 import com.server.quant_bot.quant.trend_following.entity.TrendFollow;
 import org.springframework.stereotype.Service;

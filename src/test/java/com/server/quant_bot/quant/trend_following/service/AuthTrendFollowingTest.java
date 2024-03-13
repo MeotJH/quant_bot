@@ -2,9 +2,7 @@ package com.server.quant_bot.quant.trend_following.service;
 
 import com.server.quant_bot.comm.exception.ResourceCommException;
 import com.server.quant_bot.comm.security.service.UserService;
-import com.server.quant_bot.korea.entity.Stock;
 import com.server.quant_bot.quant.trend_following.dto.TrendFollowDto;
-import com.server.quant_bot.quant.trend_following.entity.TrendFollow;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

@@ -1,4 +1,4 @@
-package com.server.quant_bot.korea.entity;
+package com.server.quant_bot.stock.entity;
 
 import com.server.quant_bot.comm.entity.BaseEntity;
 import com.server.quant_bot.quant.trend_following.entity.TrendFollow;

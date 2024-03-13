@@ -1,6 +1,6 @@
-package com.server.quant_bot.korea.service;
+package com.server.quant_bot.stock.service;
 
-import com.server.quant_bot.korea.dto.MarketDto;
+import com.server.quant_bot.stock.dto.MarketDto;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

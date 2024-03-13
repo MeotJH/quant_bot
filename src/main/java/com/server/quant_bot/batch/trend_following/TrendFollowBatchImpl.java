@@ -3,16 +3,12 @@ package com.server.quant_bot.batch.trend_following;
 
 import com.server.quant_bot.batch.trend_following.dto.TrendFollowBatchDto;
 import com.server.quant_bot.comm.utill.DateUtill;
-import com.server.quant_bot.korea.entity.Stock;
 import com.server.quant_bot.quant.notification.entity.Notification;
 import com.server.quant_bot.quant.notification.repository.NotificationRepository;
 import com.server.quant_bot.quant.trend_following.dto.TrendFollowDto;
-import com.server.quant_bot.quant.trend_following.dto.TrendFollowListDto;
-import com.server.quant_bot.quant.trend_following.dto.TrendFollowRecord;
 import com.server.quant_bot.quant.trend_following.entity.TrendFollow;
 import com.server.quant_bot.quant.trend_following.repository.TrendFollowRepository;
 import com.server.quant_bot.quant.trend_following.service.TrendFollowing;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;

@@ -1,7 +1,7 @@
 package com.server.quant_bot.comm.initial;
 
 import com.server.quant_bot.comm.security.service.UserService;
-import com.server.quant_bot.korea.service.StockService;
+import com.server.quant_bot.stock.service.StockService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

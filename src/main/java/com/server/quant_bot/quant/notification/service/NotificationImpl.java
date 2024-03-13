@@ -4,8 +4,8 @@ import com.server.quant_bot.comm.exception.ResourceCommException;
 import com.server.quant_bot.comm.security.entity.UserEntity;
 import com.server.quant_bot.comm.security.service.UserService;
 import com.server.quant_bot.comm.utill.DateUtill;
-import com.server.quant_bot.korea.entity.Stock;
-import com.server.quant_bot.korea.service.StockService;
+import com.server.quant_bot.stock.entity.Stock;
+import com.server.quant_bot.stock.service.StockService;
 import com.server.quant_bot.quant.enums.QuantType;
 import com.server.quant_bot.quant.notification.dto.*;
 import com.server.quant_bot.quant.notification.entity.Notification;
@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service

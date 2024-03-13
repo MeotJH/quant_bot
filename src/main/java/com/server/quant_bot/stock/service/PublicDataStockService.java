@@ -1,13 +1,13 @@
-package com.server.quant_bot.korea.service;
+package com.server.quant_bot.stock.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.server.quant_bot.comm.exception.ResourceCommException;
-import com.server.quant_bot.korea.dto.PublicDataStockDto;
-import com.server.quant_bot.korea.entity.Stock;
-import com.server.quant_bot.korea.mapping.StockMapping;
-import com.server.quant_bot.korea.repository.StockRepository;
+import com.server.quant_bot.stock.dto.PublicDataStockDto;
+import com.server.quant_bot.stock.entity.Stock;
+import com.server.quant_bot.stock.mapping.StockMapping;
+import com.server.quant_bot.stock.repository.StockRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;

@@ -2,7 +2,6 @@ package com.server.quant_bot.comm.security.controller;
 
 
 import com.server.quant_bot.comm.security.service.UserService;
-import com.server.quant_bot.korea.controller.StockController;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

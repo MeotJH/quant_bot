@@ -1,4 +1,4 @@
-package com.server.quant_bot.korea.dto;
+package com.server.quant_bot.stock.dto;
 
 import lombok.Getter;
 import lombok.Setter;

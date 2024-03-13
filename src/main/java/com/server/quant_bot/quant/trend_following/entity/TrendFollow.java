@@ -2,9 +2,8 @@ package com.server.quant_bot.quant.trend_following.entity;
 
 import com.server.quant_bot.comm.entity.BaseEntity;
 import com.server.quant_bot.comm.security.entity.UserEntity;
-import com.server.quant_bot.korea.entity.Stock;
+import com.server.quant_bot.stock.entity.Stock;
 import com.server.quant_bot.quant.notification.entity.Notification;
-import com.server.quant_bot.quant.trend_following.dto.TrendFollowDto;
 import com.server.quant_bot.quant.trend_following.dto.TrendFollowEntityLikeDto;
 import com.server.quant_bot.quant.trend_following.mapper.TrendFollowEnntityLikeMapper;
 import jakarta.persistence.*;

@@ -1,7 +1,7 @@
-package com.server.quant_bot.korea.repository;
+package com.server.quant_bot.stock.repository;
 
-import com.server.quant_bot.korea.entity.Stock;
-import com.server.quant_bot.korea.mapping.StockMapping;
+import com.server.quant_bot.stock.entity.Stock;
+import com.server.quant_bot.stock.mapping.StockMapping;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

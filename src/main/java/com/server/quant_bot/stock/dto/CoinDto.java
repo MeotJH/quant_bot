@@ -22,6 +22,9 @@ public class CoinDto {
     @Setter
     @ToString
     public static class CoinDetail {
+
+        private String code;
+
         @JsonProperty("opening_price")
         private String openingPrice;
 

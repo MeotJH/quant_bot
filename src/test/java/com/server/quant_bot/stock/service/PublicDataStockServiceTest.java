@@ -41,7 +41,7 @@ class PublicDataStockServiceTest {
     void CSVToDB() {
         //given
         //when
-        List<Stock> stocks = stockService.CSVToDB();
+        List<Stock> stocks = stockService.FetchToDB();
         Stock stock = stocks.get(0);
 
         //then

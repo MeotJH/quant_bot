@@ -10,6 +10,7 @@ import com.server.quant_bot.stock.mapping.StockMapping;
 import com.server.quant_bot.stock.repository.StockRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
+@Primary
 @Service
 public class PublicDataStockService implements StockService{
 
@@ -69,7 +71,7 @@ public class PublicDataStockService implements StockService{
 
     @Override
     @Transactional( rollbackFor = Exception.class)
-    public List<Stock> CSVToDB() {
+    public List<Stock> FetchToDB() {
         String line;
         String csvSplitBy = ",";
         List<Stock> stocks = new ArrayList<>();

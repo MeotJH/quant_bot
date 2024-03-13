@@ -50,6 +50,7 @@ public class CoinInfoFetcher implements StockInfoFetcher{
 
             if (value instanceof Map) {
                 CoinDto.CoinDetail coinDetail = om.convertValue(value, CoinDto.CoinDetail.class);
+                coinDetail.setCode(entry.getKey());
                 coinDetails.put(key, coinDetail);
             }
         }

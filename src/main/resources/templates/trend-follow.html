@@ -9,20 +9,16 @@
 <th:block layout:fragment="content" >
     <!-- Begin Page Content -->
     <div class="container-fluid" id="app">
-        <ul class="nav nav-tabs">
-            <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Active</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" href="#">Link</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-            </li>
-        </ul>
+        <div class="d-flex justify-content-center">
+            <ul class="nav nav-pills my-3">
+                <li class="nav-item" v-for="(item,idx) in tabs" >
+                    <a class="nav-link"
+                       v-on:click="clickTab(idx)"
+                       :class="{ 'active': activeTab === idx }"> {{ item.name }}
+                    </a>
+                </li>
+            </ul>
+        </div>
         <div class="input-group mb-3 mx-auto p-5" >
             <input
                     ref="searchInput"
@@ -93,6 +89,17 @@
                     keyword: "",
                     stocks:[],
                     chart: {},
+                    activeTab: 0,
+                    tabs: [
+                        {
+                            name: "한국주식",
+                            code: "KOREA"
+                        },
+                        {
+                            name: "가상화폐",
+                            code: "COIN"
+                        },
+                    ],
                 }
             },
             computed:{
@@ -131,8 +138,8 @@
                 },
                 changeKeyword(e){
                     const v = this;
-                    v.keyword = e.target.value
-                    v.searchByKeyword(this.keyword)
+                    v.keyword = e.target.value;
+                    v.searchByKeyword(this.keyword);
                 },
                 async searchByKeyword(keyword){
                     const v = this;
@@ -157,6 +164,18 @@
                     }else{
                         quantAlert(resultData.message, 'danger');
                     }
+                },
+                clickTab(idx){
+                    const v = this;
+                    v.clearView();
+
+                    this.tabs[idx];
+                    this.activeTab = idx;
+                },
+                clearView(){
+                    const v = this;
+                    v.destroyIfExist();
+                    Object.assign(v.$data, v.$options.data.call(v));
                 },
 
                 /**

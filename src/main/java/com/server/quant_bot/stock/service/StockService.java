@@ -15,7 +15,7 @@ public interface StockService<E> {
 
     default List<E> FetchToDB(){ return null; }
 
-    default Optional<Stock> findStockByStockCode(String stockCode) {return Optional.ofNullable(null);}
+    default Optional<E> findStockByStockCode(String stockCode) {return Optional.ofNullable(null);}
 
     default List<StockMapping> getStocksByStockLike(String keyword){ return null;}
 }

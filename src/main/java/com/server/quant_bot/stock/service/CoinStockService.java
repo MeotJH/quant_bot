@@ -1,10 +1,9 @@
 package com.server.quant_bot.stock.service;
 
+import com.server.quant_bot.comm.exception.ResourceCommException;
 import com.server.quant_bot.stock.dto.CoinDto;
 import com.server.quant_bot.stock.dto.PublicDataStockDto;
 import com.server.quant_bot.stock.entity.Coin;
-import com.server.quant_bot.stock.entity.Stock;
-import com.server.quant_bot.stock.mapping.StockMapping;
 import com.server.quant_bot.stock.repository.CoinRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -48,12 +47,12 @@ public class CoinStockService<E> implements StockService{
     }
 
     @Override
-    public Optional<Stock> findStockByStockCode(String stockCode) {
-        return StockService.super.findStockByStockCode(stockCode);
+    public Optional<E> findStockByStockCode(String code) {
+        return (Optional<E>) Optional.ofNullable(coinRepository.findByCode(code).orElseThrow(() -> new ResourceCommException("Coin이 존재하지 않습니다.")));
     }
 
     @Override
-    public List<StockMapping> getStocksByStockLike(String keyword) {
-        return StockService.super.getStocksByStockLike(keyword);
+    public List<E> getStocksByStockLike(String keyword) {
+        return (List<E>) coinRepository.findByCodeLike(keyword);
     }
 }

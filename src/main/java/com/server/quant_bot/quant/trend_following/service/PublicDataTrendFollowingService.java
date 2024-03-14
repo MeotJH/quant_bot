@@ -3,11 +3,15 @@ package com.server.quant_bot.quant.trend_following.service;
 import com.server.quant_bot.comm.utill.DateUtill;
 import com.server.quant_bot.stock.dto.PublicDataStockDto;
 import com.server.quant_bot.stock.entity.Stock;
+import com.server.quant_bot.stock.enums.StockType;
+import com.server.quant_bot.stock.event.StockServiceEvent;
 import com.server.quant_bot.stock.service.StockService;
 import com.server.quant_bot.quant.trend_following.dto.*;
 import com.server.quant_bot.quant.trend_following.entity.TrendFollow;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import java.text.NumberFormat;
@@ -15,18 +19,22 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
+@Primary
 @Service
 @RequiredArgsConstructor
 public class PublicDataTrendFollowingService implements TrendFollowing {
 
+    private final Map<String,StockService> stockServices;
     private final StockService stockService;
     private final AuthTrendFollowing authTrendFollowing;
     private final int TREND_FOLLOIWNG_DEFAULT_DAY = 75;
     private final int TREND_FOLLOIWNGS_DEFAULT_DAY = 250;
     private final String DATE_TYPE_PATTERN = "yyyyMMdd";
+    private StockType stockType = StockType.KOREA_STOCK;
 
     /**
      * ticker인 baseDt 날짜의 추세평균이동 값 가져온다.
@@ -37,7 +45,7 @@ public class PublicDataTrendFollowingService implements TrendFollowing {
     @Override
     public TrendFollowDto getOneday(String ticker, String baseDt) {
         String beginDateStr = getTrendFollowsStartDate(baseDt);
-        List<PublicDataStockDto> allByAfterBeginDate = stockService.getAllByAfterBeginDate(ticker, beginDateStr);
+        List<PublicDataStockDto> allByAfterBeginDate = getStockService().getAllByAfterBeginDate(ticker, beginDateStr);
 
         TrendFollowRecord result = calculateTrendFollowOne(allByAfterBeginDate);
 
@@ -63,7 +71,7 @@ public class PublicDataTrendFollowingService implements TrendFollowing {
     @Override
     public TrendFollowListDto getDays(String ticker, String baseDt) {
         String beginDateStr = getTrendFollowsStartDate(baseDt);
-        List<PublicDataStockDto> allByAfterBeginDate = stockService.getAllByAfterBeginDate(ticker, beginDateStr);
+        List<PublicDataStockDto> allByAfterBeginDate = getStockService().getAllByAfterBeginDate(ticker, beginDateStr);
 
         List<TrendFollowRecordForList> results = calculateTrendFollowsV2(allByAfterBeginDate);
         return toTrendFollowDtos(results);
@@ -188,5 +196,17 @@ public class PublicDataTrendFollowingService implements TrendFollowing {
     private String getTrendFollowsStartDate(String baseDt) {
         LocalDate date = LocalDate.parse(baseDt, DateTimeFormatter.ofPattern(DATE_TYPE_PATTERN));
         return date.minusDays(TREND_FOLLOIWNGS_DEFAULT_DAY).format(DateTimeFormatter.ofPattern(DATE_TYPE_PATTERN));
+    }
+
+    private StockService getStockService(){
+        if(stockType == null){
+            return stockService;
+        }
+        return stockServices.get(stockType.STOCK_SERVICE);
+    }
+
+    @EventListener
+    private void findStockService(StockServiceEvent event){
+        this.stockType = event.getType();
     }
 }

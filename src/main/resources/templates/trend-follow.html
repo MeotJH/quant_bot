@@ -118,7 +118,9 @@
                     if( v.stock.name === ""){
                         return;
                     }
-                    v.initData = await quantFetch("/api/v1/trend-follow/"+ v.stock.name) ;
+
+                    const endPoint = `/api/v2/trend-follow/${v.tabs[v.activeTab].code}/${v.stock.name}`
+                    v.initData = await quantFetch(endPoint) ;
                     await v.createChart();
                 },
                 async createChart(){
@@ -127,7 +129,9 @@
                     if( v.stock.name === ""){
                         return;
                     }
-                    const stockData = await quantFetch("/api/v1/trend-follow/"+ v.stock.name + "/list") ;
+
+                    const endPoint = `/api/v2/trend-follows/${v.tabs[v.activeTab].code}/${v.stock.name}`
+                    const stockData = await quantFetch(endPoint);
                     v.chart = callChart("myChart",stockData);
                 },
                 destroyIfExist(){

@@ -9,13 +9,13 @@ import java.util.Optional;
 
 public interface StockService<E> {
 
-    default List<PublicDataStockDto> get(String ticker){return null;}
+    default List<E> get(String ticker){return null;}
 
-    default List<PublicDataStockDto> getAllByAfterBeginDate(String ticker,String beginDt){return null;}
+    default List<E> getAllByAfterBeginDate(String ticker,String beginDt){return null;}
 
     default List<E> FetchToDB(){ return null; }
 
     default Optional<E> findStockByStockCode(String stockCode) {return Optional.ofNullable(null);}
 
-    default List<StockMapping> getStocksByStockLike(String keyword){ return null;}
+    default List<E> getStocksByStockLike(String keyword){ return null;}
 }

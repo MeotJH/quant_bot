@@ -21,8 +21,13 @@ public class CoinStockService<E> implements StockService{
     private final CoinRepository coinRepository;
 
     @Override
-    public List<PublicDataStockDto> get(String ticker) {
+    public List<E> get(String ticker) {
         return StockService.super.get(ticker);
+    }
+
+    @Override
+    public List<E> getAllByAfterBeginDate(String ticker, String beginDt) {
+        return StockService.super.getAllByAfterBeginDate(ticker, beginDt);
     }
 
     @Override

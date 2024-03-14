@@ -16,7 +16,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(StockController.class)
+@WebMvcTest(KoreaStockController.class)
 @ComponentScan( basePackages = {"com.server.quant_bot"} )
 @Import(SecurityConfig.class)
 class StockControllerTest {

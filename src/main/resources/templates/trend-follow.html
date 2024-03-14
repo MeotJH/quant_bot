@@ -109,7 +109,7 @@
             },
             watch:{
                 keyword: function (val){
-                    console.info(val,"watched");
+                    //console.info(val,"watched");
                 }
             },
             methods: {
@@ -150,7 +150,8 @@
                     if(keyword === ""){
                         return;
                     }
-                    v.stocks = await quantFetch("/api/v1/korea/stocks/"+ keyword);
+                    const endPoint = `/api/v1/${v.tabs[v.activeTab].code}/stocks/${keyword}`
+                    v.stocks = await quantFetch(endPoint);
                 },
                 clickSearchBar(){
                     const v = this;

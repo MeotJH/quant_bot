@@ -7,12 +7,11 @@ import lombok.ToString;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Getter
 @Setter
 @ToString
-public class CoinDto {
+public class CoinAllInfoDto {
     private String status;
     private Map<String, Object> data = new HashMap<>();
     private Map<String, CoinDetail> coinDetails = new HashMap<>();

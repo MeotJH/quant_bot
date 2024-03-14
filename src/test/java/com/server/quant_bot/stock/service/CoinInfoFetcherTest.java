@@ -1,13 +1,12 @@
 package com.server.quant_bot.stock.service;
 
-import com.server.quant_bot.stock.dto.CoinDto;
+import com.server.quant_bot.stock.dto.CoinAllInfoDto;
+import com.server.quant_bot.stock.dto.CoinCandleDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.List;
 
 @SpringBootTest
 class CoinInfoFetcherTest {
@@ -22,10 +21,24 @@ class CoinInfoFetcherTest {
         String bitCoin = "BTC";
 
         //when
-        CoinDto coinDto = coinInfoFetcher.getAll();
+        CoinAllInfoDto coinDto = coinInfoFetcher.getAll();
     
         //then
         Assertions.assertThat(coinDto.getCoinDetails().get(bitCoin)).isNotNull();
+    
+    }
+    
+    @Test
+    @DisplayName("비트코인 시계열 데이터 전체를 가져와야한다")
+    void getByTimeSeriesTest() {
+        //given
+        String bitCoin = "BTC";
+                
+        //when
+        CoinCandleDto byTimeSeries = coinInfoFetcher.getByTimeSeries(bitCoin);
+
+        //then
+        Assertions.assertThat( byTimeSeries ).isNotNull();
     
     }
 

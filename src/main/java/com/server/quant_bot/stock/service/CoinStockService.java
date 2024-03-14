@@ -1,8 +1,8 @@
 package com.server.quant_bot.stock.service;
 
 import com.server.quant_bot.comm.exception.ResourceCommException;
-import com.server.quant_bot.stock.dto.CoinDto;
-import com.server.quant_bot.stock.dto.PublicDataStockDto;
+import com.server.quant_bot.stock.dto.CoinAllInfoDto;
+import com.server.quant_bot.stock.dto.CoinCandleDto;
 import com.server.quant_bot.stock.entity.Coin;
 import com.server.quant_bot.stock.repository.CoinRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 @RequiredArgsConstructor
 @Service
@@ -27,6 +26,8 @@ public class CoinStockService<E> implements StockService{
 
     @Override
     public List<E> getAllByAfterBeginDate(String ticker, String beginDt) {
+        CoinCandleDto byTimeSeries = stockInfoFetcher.getByTimeSeries(ticker);
+        List<CoinCandleDto.Series> series = byTimeSeries.getSeries();
         return StockService.super.getAllByAfterBeginDate(ticker, beginDt);
     }
 
@@ -38,7 +39,7 @@ public class CoinStockService<E> implements StockService{
             return all;
         }
 
-        for (Map.Entry<String, CoinDto.CoinDetail> entry : stockInfoFetcher.getAll().getCoinDetails().entrySet()){
+        for (Map.Entry<String, CoinAllInfoDto.CoinDetail> entry : stockInfoFetcher.getAll().getCoinDetails().entrySet()){
             all.add(
                     (E) coinRepository.save(
                             new Coin().toEntity(

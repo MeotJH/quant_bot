@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.server.quant_bot.comm.exception.ResourceCommException;
 import com.server.quant_bot.stock.dto.PublicDataStockDto;
+import com.server.quant_bot.stock.dto.StockDto;
 import com.server.quant_bot.stock.entity.Stock;
 import com.server.quant_bot.stock.mapping.StockMapping;
 import com.server.quant_bot.stock.repository.StockRepository;
@@ -46,7 +47,7 @@ public class PublicDataStockService implements StockService{
 
     //TODO 이거 지금 name으로 검색하는것 같은데 code로 새로운 임플 만들기
     @Override
-    public List<PublicDataStockDto>  get(String ticker) {
+    public List<StockDto>  get(String ticker) {
         ResponseEntity<String> response = restTemplate.exchange(
                 getUrlDefaultBuilder(ticker).build(true).toUri()
                 , HttpMethod.GET
@@ -57,7 +58,7 @@ public class PublicDataStockService implements StockService{
     }
 
     @Override
-    public List<PublicDataStockDto>  getAllByAfterBeginDate(String ticker, String beginDt) {
+    public List<StockDto>  getAllByAfterBeginDate(String ticker, String beginDt) {
 
         URI uri = getUrlDefaultBuilder(ticker)
                 .queryParam("numOfRows", "1000")
@@ -125,8 +126,8 @@ public class PublicDataStockService implements StockService{
                 .queryParam("likeItmsNm", getEncode(ticker));
     }
 
-    private List<PublicDataStockDto> getDtos(ResponseEntity<String> response) {
-        List<PublicDataStockDto> dtos = new ArrayList<>();
+    private List<StockDto> getDtos(ResponseEntity<String> response) {
+        List<StockDto> dtos = new ArrayList<>();
         try {
             JsonNode root = om.readTree(response.getBody());
             root
@@ -138,7 +139,15 @@ public class PublicDataStockService implements StockService{
                     .forEachRemaining( each -> {
 
                         try {
-                            dtos.add(om.treeToValue(each, PublicDataStockDto.class));
+                            PublicDataStockDto publicDataStockDto = om.treeToValue(each, PublicDataStockDto.class);
+                            dtos.add(
+                                    StockDto.builder()
+                                            .closingPrice(
+                                                    Double.valueOf(  publicDataStockDto.getClpr()  )
+                                            )
+                                            .baseDate( publicDataStockDto.getBasDt() )
+                                            .build()
+                            );
                         } catch (JsonProcessingException e) {
                             throw new RuntimeException(e);
                         }
@@ -151,11 +160,12 @@ public class PublicDataStockService implements StockService{
         }
     }
 
-    private void defineDataExist(List<PublicDataStockDto> dtos) {
+    private void defineDataExist(List<StockDto> dtos) {
 
         if(dtos.isEmpty()){
             throw new ResourceCommException("결과값이 없습니다.");
         }
     }
+
 
 }

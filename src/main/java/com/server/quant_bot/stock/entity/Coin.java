@@ -1,8 +1,7 @@
 package com.server.quant_bot.stock.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.server.quant_bot.stock.dto.CoinDto;
+import com.server.quant_bot.stock.dto.CoinAllInfoDto;
 import com.server.quant_bot.stock.mapper.CoinMapper;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -78,7 +77,7 @@ public class Coin {
     @Column
     private String fluctateRate24H;
 
-    public Coin toEntity(CoinDto.CoinDetail dto){
+    public Coin toEntity(CoinAllInfoDto.CoinDetail dto){
         return CoinMapper.INSTANCE.DtoToEntity(dto);
     }
 }

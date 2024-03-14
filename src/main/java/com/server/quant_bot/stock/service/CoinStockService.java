@@ -6,6 +6,7 @@ import com.server.quant_bot.stock.dto.CoinAllInfoDto;
 import com.server.quant_bot.stock.dto.CoinCandleDto;
 import com.server.quant_bot.stock.dto.StockDto;
 import com.server.quant_bot.stock.entity.Coin;
+import com.server.quant_bot.stock.mapping.StockMapping;
 import com.server.quant_bot.stock.repository.CoinRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.time.format.DateTimeFormatter;
 
 @RequiredArgsConstructor
 @Service
@@ -77,11 +77,11 @@ public class CoinStockService<E> implements StockService{
 
     @Override
     public Optional<E> findStockByStockCode(String code) {
-        return (Optional<E>) Optional.ofNullable(coinRepository.findByCode(code).orElseThrow(() -> new ResourceCommException("Coin이 존재하지 않습니다.")));
+        return (Optional<E>) Optional.ofNullable(coinRepository.findByStockCode(code).orElseThrow(() -> new ResourceCommException("Coin이 존재하지 않습니다.")));
     }
 
     @Override
     public List<E> getStocksByStockLike(String keyword) {
-        return (List<E>) coinRepository.findByCodeLike(keyword);
+        return (List<E>) coinRepository.findByStockCodeLike("%"+keyword+"%");
     }
 }

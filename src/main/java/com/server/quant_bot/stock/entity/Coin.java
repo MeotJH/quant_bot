@@ -27,11 +27,11 @@ public class Coin {
 
     @Comment("코인명")
     @Column
-    private String name;
+    private String stockName;
 
     @Comment("코인코드")
     @Column
-    private String code;
+    private String stockCode;
 
     @Comment("시가 00시 기준")
     @Column
@@ -78,6 +78,8 @@ public class Coin {
     private String fluctateRate24H;
 
     public Coin toEntity(CoinAllInfoDto.CoinDetail dto){
-        return CoinMapper.INSTANCE.DtoToEntity(dto);
+        Coin coin = CoinMapper.INSTANCE.DtoToEntity(dto);
+        coin.stockCode = dto.getCode();
+        return coin;
     }
 }

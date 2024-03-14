@@ -11,10 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -74,7 +71,7 @@ public class CoinInfoFetcher implements StockInfoFetcher{
         List<List> data = response.getData();
 
         List<CoinCandleDto.Series> series= new ArrayList<>();
-        for (int i = 0; i < data.size(); i++) {
+        for (int i = data.size()-1; i >= 0; i--) {
             series.add(
                     new CoinCandleDto.Series()
                             .toDto( data.get(i) )

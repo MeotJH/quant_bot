@@ -14,6 +14,8 @@ public class DateUtill {
 
     private DateUtill(){};
 
+    public static String DEFAULT_DATE_TYPE = "yyyyMMdd";
+
     public static LocalDate getStrToLocalDate(String date, String pattern){
         return LocalDate.parse(date, DateTimeFormatter.ofPattern(pattern));
     }

@@ -1,16 +1,23 @@
 package com.server.quant_bot.stock.service;
 
 import com.server.quant_bot.comm.exception.ResourceCommException;
+import com.server.quant_bot.comm.utill.DateUtill;
 import com.server.quant_bot.stock.dto.CoinAllInfoDto;
 import com.server.quant_bot.stock.dto.CoinCandleDto;
+import com.server.quant_bot.stock.dto.StockDto;
 import com.server.quant_bot.stock.entity.Coin;
 import com.server.quant_bot.stock.repository.CoinRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.time.format.DateTimeFormatter;
 
 @RequiredArgsConstructor
 @Service
@@ -20,15 +27,31 @@ public class CoinStockService<E> implements StockService{
     private final CoinRepository coinRepository;
 
     @Override
-    public List<E> get(String ticker) {
+    public List<StockDto> get(String ticker) {
         return StockService.super.get(ticker);
     }
 
     @Override
-    public List<E> getAllByAfterBeginDate(String ticker, String beginDt) {
+    public List<StockDto> getAllByAfterBeginDate(String ticker, String beginDt) {
         CoinCandleDto byTimeSeries = stockInfoFetcher.getByTimeSeries(ticker);
         List<CoinCandleDto.Series> series = byTimeSeries.getSeries();
-        return StockService.super.getAllByAfterBeginDate(ticker, beginDt);
+
+        List<StockDto> dtos = new ArrayList<>();
+        for(CoinCandleDto.Series each : series){
+
+            String baseDate = DateUtill
+                    .localDateTimeToString(
+                            LocalDateTime.ofInstant(Instant.ofEpochSecond(each.getTime()), ZoneId.systemDefault())
+                            , DateUtill.DEFAULT_DATE_TYPE
+                    );
+            StockDto dto = StockDto
+                    .builder()
+                    .closingPrice(Double.valueOf(each.getClosingPrice()))
+                    .baseDate(baseDate)
+                    .build();
+            dtos.add(dto);
+        }
+        return dtos;
     }
 
     @Override

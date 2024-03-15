@@ -57,6 +57,10 @@ public class UserServiceImpl implements UserService{
                          , "{bcrypt}$2a$10$ngsfScZHJl4UvZEpfMZQJ.8kC8qcPJcJCYkJcf1x2T6/vWV42ocqi"
                         ,  roles)
         );
+        Optional<UserEntity> byUserId = userRepository.findByUserId("userId");
+        if(byUserId.isPresent()){
+            return byUserId.get();
+        }
         return userRepository.save(entity);
     }
 

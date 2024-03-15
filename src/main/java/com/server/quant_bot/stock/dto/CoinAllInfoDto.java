@@ -61,8 +61,5 @@ public class CoinAllInfoDto {
         @JsonProperty("fluctate_rate_24H")
         private String fluctateRate24H;
 
-        public static CoinDetail toDto(){
-
-        }
     }
 }

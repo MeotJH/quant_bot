@@ -16,8 +16,7 @@ import java.util.UUID;
 public interface CoinRepository extends JpaRepository<Coin, UUID> {
 
     Optional<Coin> findByStockCode(String code);
-
-    @Query(value = " select stock_code as stockName , stock_code as stockCode from tb_coin where stock_code like :code ", nativeQuery = true)
-    List<StockMapping> findByStockCodeLike(@Param("code") String code);
+    Optional<Coin> findByStockName(String stockName);
+    List<StockMapping> findByStockNameLike(@Param("code") String code);
 
 }

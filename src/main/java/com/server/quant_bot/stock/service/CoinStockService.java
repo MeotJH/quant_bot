@@ -82,6 +82,6 @@ public class CoinStockService<E> implements StockService{
 
     @Override
     public List<E> getStocksByStockLike(String keyword) {
-        return (List<E>) coinRepository.findByStockCodeLike("%"+keyword+"%");
+        return (List<E>) coinRepository.findByStockNameLike("%"+keyword+"%");
     }
 }

@@ -24,6 +24,10 @@ public class CoinAllInfoDto {
 
         private String code;
 
+        private String stockName;
+
+        private String stockEngName;
+
         @JsonProperty("opening_price")
         private String openingPrice;
 
@@ -56,5 +60,9 @@ public class CoinAllInfoDto {
 
         @JsonProperty("fluctate_rate_24H")
         private String fluctateRate24H;
+
+        public static CoinDetail toDto(){
+
+        }
     }
 }

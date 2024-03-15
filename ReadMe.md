@@ -4,7 +4,8 @@
 
 Quantobot is a web application that makes quantitative investing accessible.
 
-- github : https://github.com/MeotJH/quant_bot
+- ### github : https://github.com/MeotJH/quant_bot
+- ### web-app : http://quant-bot.iptime.org
 
 ### 📚 목차 index
 

@@ -10,6 +10,7 @@ import com.server.quant_bot.stock.entity.Stock;
 import com.server.quant_bot.stock.mapping.StockMapping;
 import com.server.quant_bot.stock.repository.StockRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.ClassPathResource;
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @RequiredArgsConstructor
 @Primary
 @Service
@@ -49,6 +51,9 @@ public class PublicDataStockService implements StockService{
     private final RestTemplate restTemplate;
     private final StockRepository stockRepository;
 
+    @Value("${finance.market.korea}")
+    private String[] markets;
+
     //TODO 이거 지금 name으로 검색하는것 같은데 code로 새로운 임플 만들기
     @Override
     public List<StockDto>  get(String ticker) {
@@ -63,7 +68,7 @@ public class PublicDataStockService implements StockService{
 
     @Override
     public List<StockDto>  getAllByAfterBeginDate(String ticker, String beginDt) {
-
+        log.info("ticker :::"+ ticker);
         URI uri = getUrlDefaultBuilder(ticker)
                 .queryParam("numOfRows", "1000")
                 .queryParam("beginBasDt", beginDt)
@@ -78,7 +83,7 @@ public class PublicDataStockService implements StockService{
     @Transactional( rollbackFor = Exception.class)
     public List<Stock> FetchToDB() throws IOException {
 
-        if(stockRepository.findAll().size() > 0){
+        if(stockRepository.findByMarketIn(markets).size() > 0){
             return new ArrayList<>();
         }
 

@@ -12,6 +12,7 @@ import java.util.Optional;
 public interface TrendFollowing {
 
     default TrendFollowDto getOneday(String ticker, String baseDt){return null;}
+    default TrendFollowDto getOneday(Stock stock){return null;}
 
     default TrendFollowListDto getDays(String ticker, String baseDt){return null;}
 

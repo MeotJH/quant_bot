@@ -6,9 +6,12 @@ import com.server.quant_bot.stock.dto.CoinAllInfoDto;
 import com.server.quant_bot.stock.dto.CoinCandleDto;
 import com.server.quant_bot.stock.dto.StockDto;
 import com.server.quant_bot.stock.entity.Coin;
+import com.server.quant_bot.stock.entity.Stock;
 import com.server.quant_bot.stock.mapping.StockMapping;
 import com.server.quant_bot.stock.repository.CoinRepository;
+import com.server.quant_bot.stock.repository.StockRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -25,6 +28,10 @@ public class CoinStockService<E> implements StockService{
 
     private final StockInfoFetcher stockInfoFetcher;
     private final CoinRepository coinRepository;
+    private final StockRepository stockRepository;
+
+    @Value("${finance.market.crypto}")
+    private final String[] MARKETS;
 
     @Override
     public List<StockDto> get(String ticker) {
@@ -54,20 +61,37 @@ public class CoinStockService<E> implements StockService{
         return dtos;
     }
 
+
     @Override
     public List<E> FetchToDB() {
+        /**
+         * TODO Stock 리팩토링중
+         *  stock , coin이 나누어 있는데
+         *  coin 테이블의 code, stockName, stockEngName 없애고
+         *  stock 부모 coin 자식으로 만들기
+         *  지금은 stock랑 coin이 연관이 없음
+         */
         List<E> all = (List<E>) coinRepository.findAll();
 
-        if( !all.isEmpty() ){
+        if( isCoinsNotEmpty() ){
             return all;
         }
 
         for (Map.Entry<String, CoinAllInfoDto.CoinDetail> entry : stockInfoFetcher.getAll().getCoinDetails().entrySet()){
+            // coins에 값 넣어주기
             all.add(
                     (E) coinRepository.save(
                             new Coin().toEntity(
                                     entry.getValue()
                             )
+                    )
+            );
+            
+            // stock에 암호화폐값 넣기
+            stockRepository.save(
+                    new Stock().toEntity(
+                            entry.getValue()
+                            ,MARKETS[0]
                     )
             );
         }
@@ -84,4 +108,9 @@ public class CoinStockService<E> implements StockService{
     public List<E> getStocksByStockLike(String keyword) {
         return (List<E>) coinRepository.findByStockNameLike("%"+keyword+"%");
     }
+
+    private boolean isCoinsNotEmpty() {
+        return (!coinRepository.findAll().isEmpty()) && !(stockRepository.findByMarketIn(MARKETS).size() == 0);
+    }
+
 }

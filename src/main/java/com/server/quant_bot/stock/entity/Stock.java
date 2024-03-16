@@ -2,9 +2,11 @@ package com.server.quant_bot.stock.entity;
 
 import com.server.quant_bot.comm.entity.BaseEntity;
 import com.server.quant_bot.quant.trend_following.entity.TrendFollow;
+import com.server.quant_bot.stock.dto.CoinAllInfoDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.Comment;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,12 +37,18 @@ public class Stock extends BaseEntity {
     @OneToMany(mappedBy = "stock")
     private List<TrendFollow> trendFollows = new ArrayList<TrendFollow>();
 
-
-
     public void updateCsv(String[] dto){
         this.stockCode = dto[0];
         this.stockName = dto[1];
         this.market = dto[2];
+    }
+
+    public Stock toEntity(CoinAllInfoDto.CoinDetail dto, String market){
+
+        this.stockCode = dto.getCode();
+        this.stockName = dto.getStockName();
+        this.market = market;
+        return this;
     }
 
     @Override

@@ -8,6 +8,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
+@Transactional(rollbackFor = Exception.class)
 public class InitData {
 
     private final Map<String, StockService> stockServices;
@@ -30,9 +32,8 @@ public class InitData {
         stockServices.get(StockType.KOREA_STOCK.STOCK_SERVICE).FetchToDB();
         //유저 1명 세팅 TODO ADMIN으로 권한주기
         userService.initUser();
-        //test
-        StockService<Coin> stockService = stockServices.get(StockType.COIN.STOCK_SERVICE);
-        List<Coin> coins = stockService.FetchToDB();
+        //코인 정보 init
+        stockServices.get(StockType.COIN.STOCK_SERVICE).FetchToDB();
     }
 
 }

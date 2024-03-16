@@ -12,6 +12,8 @@ import java.util.UUID;
 @Repository
 public interface StockRepository extends JpaRepository<Stock, UUID> {
 
+    List<Stock> findByMarketIn(String[] markets);
+
     Optional<Stock> findByStockCode(String stockCode);
 
     List<StockMapping> findStocksByStockNameLike(String keyword);

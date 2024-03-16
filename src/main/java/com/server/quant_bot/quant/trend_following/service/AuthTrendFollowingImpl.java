@@ -49,7 +49,7 @@ public class AuthTrendFollowingImpl implements AuthTrendFollowing{
     private void isDuplicate(TrendFollowDto requestDto) {
         Boolean isExist = Boolean.FALSE;
         Optional<UserEntity> userByLoginId = userService.findUserByLoginId();
-        Optional<Stock> stockByStockCode = stockService.findStockByStockCode(requestDto.getStock());
+        Optional<Stock> stockByStockCode = stockService.findStockByStockCode(requestDto.getStock().getStockCode());
 
         if(userByLoginId.isPresent() && stockByStockCode.isPresent()){
             isExist = trendFollowRepository.existsByStockAndIsBuyAndUser(stockByStockCode.get(), requestDto.getIsBuy(), userByLoginId.get());
@@ -87,7 +87,7 @@ public class AuthTrendFollowingImpl implements AuthTrendFollowing{
         return Optional.ofNullable(
                 new TrendFollowEntityLikeDto(
                         findUserBySecurity().get()
-                        ,findStockByStockCode(requestDto.getStock()).get()
+                        ,findStockByStockCode(requestDto.getStock().getStockCode()).get()
                         ,requestDto.getTrendFollowPrice()
                         ,requestDto.getIsBuy()
                         ,requestDto.getBaseDateClosePrice()

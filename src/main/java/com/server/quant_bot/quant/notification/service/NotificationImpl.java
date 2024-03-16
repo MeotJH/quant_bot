@@ -15,11 +15,13 @@ import com.server.quant_bot.quant.trend_following.entity.TrendFollow;
 import com.server.quant_bot.quant.trend_following.repository.TrendFollowRepository;
 import com.server.quant_bot.quant.trend_following.service.TrendFollowing;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(rollbackFor = Exception.class)
@@ -118,7 +120,7 @@ public class NotificationImpl implements NotificationService {
         while(iterator.hasNext()){
             TrendFollow trendFollow = iterator.next();
             Notification notification = trendFollow.getNotification();
-            TrendFollowDto today = trendFollowing.getOneday(trendFollow.getStock().getStockName(), DateUtill.getToday());
+            TrendFollowDto today = trendFollowing.getOneday(trendFollow.getStock());
 
             if( notification == null ){
                 continue;

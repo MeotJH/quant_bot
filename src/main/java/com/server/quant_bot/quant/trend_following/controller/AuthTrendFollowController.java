@@ -30,7 +30,6 @@ public class AuthTrendFollowController {
 
     @PostMapping
     public TrendFollowDto saveTrendFollow(@RequestBody TrendFollowDto dto){
-        log.info("data is :: {}",dto.toString());
         return trendFollowing.save(dto).get();
     }
 }

@@ -1,7 +1,7 @@
 package com.server.quant_bot.quant.trend_following.service;
 
 import com.server.quant_bot.comm.utill.DateUtill;
-import com.server.quant_bot.stock.dto.PublicDataStockDto;
+import com.server.quant_bot.stock.util.StockEventPublisher;
 import com.server.quant_bot.stock.dto.StockDto;
 import com.server.quant_bot.stock.entity.Stock;
 import com.server.quant_bot.stock.enums.StockType;
@@ -9,6 +9,7 @@ import com.server.quant_bot.stock.event.StockServiceEvent;
 import com.server.quant_bot.stock.service.StockService;
 import com.server.quant_bot.quant.trend_following.dto.*;
 import com.server.quant_bot.quant.trend_following.entity.TrendFollow;
+import jakarta.persistence.EnumType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
@@ -32,6 +33,7 @@ public class PublicDataTrendFollowingService implements TrendFollowing {
     private final Map<String,StockService> stockServices;
     private final StockService stockService;
     private final AuthTrendFollowing authTrendFollowing;
+    private final StockEventPublisher eventPublisher;
     private final int TREND_FOLLOIWNG_DEFAULT_DAY = 75;
     private final int TREND_FOLLOIWNGS_DEFAULT_DAY = 250;
     private final String DATE_TYPE_PATTERN = "yyyyMMdd";
@@ -47,6 +49,33 @@ public class PublicDataTrendFollowingService implements TrendFollowing {
     public TrendFollowDto getOneday(String ticker, String baseDt) {
         String beginDateStr = getTrendFollowsStartDate(baseDt);
         List<StockDto> allByAfterBeginDate = getStockService().getAllByAfterBeginDate(ticker, beginDateStr);
+
+        TrendFollowRecord result = calculateTrendFollowOne(allByAfterBeginDate);
+
+        log.info(result.trendFollowPrice() + " ::: TrendFollowPrice");
+        log.info(result.baseDateClosePrice() + " ::: TodayClosePrice");
+
+        boolean isBuy = result.trendFollowPrice() < result.baseDateClosePrice();
+
+        return TrendFollowDto
+                .builder()
+                .trendFollowPrice( getDoubleToMoney( result.trendFollowPrice() )  )
+                .baseDateClosePrice( getDoubleToMoney( result.baseDateClosePrice() ) )
+                .isBuy(isBuy)
+                .build();
+    }
+
+    @Override
+    public TrendFollowDto getOneday(Stock stock) {
+        String beginDateStr = getTrendFollowsStartDate(DateUtill.getToday());
+
+        log.info(getStockService(stock.getMarket()).toString()+":::::: servicename");
+        log.info(stock.getMarket()+"::::::::market");
+        List<StockDto> allByAfterBeginDate = getStockService(stock.getMarket())
+                                                        .getAllByAfterBeginDate(
+                                                                stock.getStockName()
+                                                                , beginDateStr
+                                                        );
 
         TrendFollowRecord result = calculateTrendFollowOne(allByAfterBeginDate);
 
@@ -94,12 +123,11 @@ public class PublicDataTrendFollowingService implements TrendFollowing {
         List<TrendFollowUserPageDto> responseDtos = new ArrayList<>();
 
         trendDtoByUserId.forEach( savedDay -> {
-
-            TrendFollowDto today = getOneday(savedDay.getStockName(), DateUtill.getToday());
+            TrendFollowDto today = getOneday(savedDay.getStock());
             responseDtos.add(
 
                     new TrendFollowUserPageDto(
-                              savedDay.getStock()
+                              savedDay.getStock().getStockCode()
                             , savedDay.getStockName()
                             , today.getBaseDateClosePrice()
                             , savedDay.getBaseDateClosePrice()
@@ -199,11 +227,18 @@ public class PublicDataTrendFollowingService implements TrendFollowing {
         return date.minusDays(TREND_FOLLOIWNGS_DEFAULT_DAY).format(DateTimeFormatter.ofPattern(DATE_TYPE_PATTERN));
     }
 
+    private StockService getStockService(String market){
+        return stockServices.get(
+                StockType.getStockServiceByType(market)
+        );
+    }
     private StockService getStockService(){
         if(stockType == null){
             return stockService;
         }
-        return stockServices.get(stockType.STOCK_SERVICE);
+        StockService stockService = stockServices.get(stockType.STOCK_SERVICE);
+        eventPublisher.processStockData("korea");
+        return stockService;
     }
 
     @EventListener

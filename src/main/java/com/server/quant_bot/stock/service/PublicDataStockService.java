@@ -12,6 +12,8 @@ import com.server.quant_bot.stock.repository.StockRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +21,9 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -72,11 +76,18 @@ public class PublicDataStockService implements StockService{
 
     @Override
     @Transactional( rollbackFor = Exception.class)
-    public List<Stock> FetchToDB() {
+    public List<Stock> FetchToDB() throws IOException {
+
+        if(stockRepository.findAll().size() > 0){
+            return new ArrayList<>();
+        }
+
+        // Load the resource
         String line;
         String csvSplitBy = ",";
         List<Stock> stocks = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(CSV_PATH)) ) {
+        Resource resource = new ClassPathResource(CSV_PATH);
+        try (BufferedReader br = new BufferedReader(new FileReader( resource.getFile())) ) {
 
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(csvSplitBy);

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -23,13 +24,12 @@ public class InitData {
      * 스프링 시작될때 넣어야 하는 기준데이터
      */
     @PostConstruct
-    private void init(){
+    private void init() throws IOException {
         //TODO jpa 설정 -> auto면 실행시키기
         //코스피 및 코스닥 정보 init
-        //stockServices.get(StockType.KOREA_STOCK.STOCK_SERVICE).FetchToDB();
-
+        stockServices.get(StockType.KOREA_STOCK.STOCK_SERVICE).FetchToDB();
         //유저 1명 세팅 TODO ADMIN으로 권한주기
-        //userService.initUser();
+        userService.initUser();
         //test
         StockService<Coin> stockService = stockServices.get(StockType.COIN.STOCK_SERVICE);
         List<Coin> coins = stockService.FetchToDB();

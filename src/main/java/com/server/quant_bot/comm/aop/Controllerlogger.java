@@ -22,7 +22,7 @@ public class Controllerlogger {
         log.info("In Controller");
         Signature signature = joinPoint.getSignature();
 
-        log.info(signature.getDeclaringTypeName());
+        log.info(signature.getDeclaringTypeName() + "." + signature.getName());
         Object[] args = joinPoint.getArgs();
 
         for (Object each: args){

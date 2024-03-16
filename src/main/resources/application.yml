@@ -17,7 +17,7 @@ finance:
   market:
     url: https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=%EB%84%A4%EC%9D%B4%EB%B2%84%EC%A6%9D%EA%B6%8C
   csv:
-    path: /Users/meot/Database/data_0138_20231106_utf8.csv
+    path: assets/data_0138_20231106_utf8.csv
 
 
 view:

@@ -3,10 +3,10 @@ package com.server.quant_bot.stock.entity;
 import com.server.quant_bot.comm.entity.BaseEntity;
 import com.server.quant_bot.quant.trend_following.entity.TrendFollow;
 import com.server.quant_bot.stock.dto.CoinAllInfoDto;
+import com.server.quant_bot.stock.dto.PublicDataStockDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.Comment;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +43,7 @@ public class Stock extends BaseEntity {
         this.market = dto[2];
     }
 
-    public Stock toEntity(CoinAllInfoDto.CoinDetail dto, String market){
+    public Stock update(CoinAllInfoDto.CoinDetail dto, String market){
 
         this.stockCode = dto.getCode();
         this.stockName = dto.getStockName();
@@ -53,6 +53,10 @@ public class Stock extends BaseEntity {
 
     @Override
     public BaseEntity update(Object dto) {
-        return null;
+        PublicDataStockDto castedDto = (PublicDataStockDto) dto;
+        this.stockCode = castedDto.getIsinCd();
+        this.stockName = castedDto.getItmsNm();
+        this.market = castedDto.getMrktCtg();
+        return this;
     }
 }

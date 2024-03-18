@@ -27,7 +27,7 @@ public class CoinCandleDto {
         private String minPrice;
         private String tradingVolume;
 
-        public Series toDto(List list){
+        public Series toDtoFromList(List list){
             int i = 0;
             this.time = (Long) list.get(i++);
             this.openingPrice = (String) list.get(i++);

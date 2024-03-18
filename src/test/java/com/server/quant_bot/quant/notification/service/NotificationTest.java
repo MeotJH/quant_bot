@@ -70,9 +70,10 @@ class NotificationTest {
     void onTest() {
         //given
         String stockCd = "035900";
+        Stock stock = stockRepository.findByStockCode(stockCd).get();
         TrendFollowDto dto = TrendFollowDto
                 .builder()
-                .stock(stockCd)
+                .stock(stock)
                 .isBuy(false)
                 .baseDateClosePrice("104,972.34")
                 .trendFollowPrice("97,100")
@@ -96,9 +97,10 @@ class NotificationTest {
     void offTest() {
         //given
         String stockCd = "035900";
+        Stock stock = stockRepository.findByStockCode(stockCd).get();
         TrendFollowDto dto = TrendFollowDto
                 .builder()
-                .stock(stockCd)
+                .stock(stock)
                 .isBuy(false)
                 .baseDateClosePrice("104,972.34")
                 .trendFollowPrice("97,100")

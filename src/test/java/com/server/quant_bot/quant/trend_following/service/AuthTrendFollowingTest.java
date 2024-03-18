@@ -3,6 +3,8 @@ package com.server.quant_bot.quant.trend_following.service;
 import com.server.quant_bot.comm.exception.ResourceCommException;
 import com.server.quant_bot.comm.security.service.UserService;
 import com.server.quant_bot.quant.trend_following.dto.TrendFollowDto;
+import com.server.quant_bot.stock.entity.Stock;
+import com.server.quant_bot.stock.repository.StockRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -28,14 +30,19 @@ class AuthTrendFollowingImplTest {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    StockRepository stockRepository;
     
     @Test
     @DisplayName("유저를 저장한 후 저장된 값과 저장했던 값이 같아야 한다.")
     void saveTest() {
         //given
+        String SANSUNG = "035900";
+        Stock stock = stockRepository.findByStockCode(SANSUNG).get();
         TrendFollowDto dto = TrendFollowDto
                                 .builder()
-                                    .stock("035900")
+                                    .stock(stock)
                                     .isBuy(false)
                                     .baseDateClosePrice("104,972.34")
                                     .trendFollowPrice("97,100")
@@ -57,9 +64,11 @@ class AuthTrendFollowingImplTest {
     @DisplayName("유저ID를 기준으로 DB에서 추세이동선데이터를 가져와야한다.")
     void findTrendDtoByUserIdTest() {
         //given
+        String SANSUNG = "035900";
+        Stock stock = stockRepository.findByStockCode(SANSUNG).get();
         TrendFollowDto dto = TrendFollowDto
                 .builder()
-                .stock("035900")
+                .stock(stock)
                 .isBuy(false)
                 .baseDateClosePrice("104,972.34")
                 .trendFollowPrice("97,100")
@@ -82,9 +91,11 @@ class AuthTrendFollowingImplTest {
     @DisplayName("동일한 데이터를 저장하면 에러가 난다.")
     void saveDuplicateTest() {
         //given
+        String SANSUNG = "035900";
+        Stock stock = stockRepository.findByStockCode(SANSUNG).get();
         TrendFollowDto dto = TrendFollowDto
                 .builder()
-                .stock("035900")
+                .stock(stock)
                 .isBuy(false)
                 .baseDateClosePrice("104,972.34")
                 .trendFollowPrice("97,100")

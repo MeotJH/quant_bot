@@ -71,6 +71,9 @@ public class TrendFollowBatchImpl implements TrendFollowBatch{
     }
 
     private Boolean isNotificationApproval(TrendFollow entity){
+        if(entity.getNotification() == null){
+            return false;
+        }
         return entity.getNotification().getApproval();
     }
 

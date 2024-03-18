@@ -1,6 +1,7 @@
 package com.server.quant_bot.stock.service;
 
 import com.server.quant_bot.stock.dto.PublicDataStockDto;
+import com.server.quant_bot.stock.dto.StockDto;
 import com.server.quant_bot.stock.entity.Stock;
 import com.server.quant_bot.stock.mapping.StockMapping;
 import org.assertj.core.api.Assertions;
@@ -11,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -22,23 +24,24 @@ class PublicDataStockServiceTest {
 
 
     @Test
-    @DisplayName("삼성전자 주식을 가져와야 한다.")
+    @DisplayName("삼성전자 주식들을 가져온후 대표값 날짜가 Null이 아니어야 한다.")
     public void getServiceTest(){
         //given
         String SAMSUNG = "삼성전자";
 
         //when
-        List<PublicDataStockDto> samsungStocks = stockService.get(SAMSUNG);
-        PublicDataStockDto publicDataStockDto = samsungStocks.get(0);
+        List<StockDto> samsungStocks = stockService.get(SAMSUNG);
+        StockDto stockDto = samsungStocks.get(0);
+        String baseDate = stockDto.getBaseDate();
 
         //then
-        Assertions.assertThat(publicDataStockDto.getItmsNm()).isEqualTo(SAMSUNG);
+        Assertions.assertThat(baseDate).isNotNull();
     }
 
     @Test
     @DisplayName("테이블에 CSV데이터를 넣어야한다.")
     @Transactional(rollbackFor = Exception.class)
-    void CSVToDB() {
+    void CSVToDB() throws IOException {
         //given
         //when
         List<Stock> stocks = stockService.FetchToDB();

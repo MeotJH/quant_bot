@@ -126,7 +126,7 @@ public class CoinInfoFetcher implements StockInfoFetcher{
         for (int i = data.size()-1; i >= 0; i--) {
             series.add(
                     new CoinCandleDto.Series()
-                            .toDto( data.get(i) )
+                            .toDtoFromList( data.get(i) )
             );
         }
         response.setSeries(series);

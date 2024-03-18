@@ -4,7 +4,7 @@ import com.server.quant_bot.comm.exception.ResourceCommException;
 import lombok.Getter;
 public enum StockType {
 
-    KOREA_STOCK("korea", new String[]{"KOSPI", "KOSDAQ", "KOSPI GLOVAL"},"publicDataStockService","publicDataTrendFollowingService"),
+    KOREA_STOCK("korea", new String[]{"KOSPI", "KOSDAQ", "KOSPI GLOBAL", "KOSDAQ GLOBAL"},"publicDataStockService","publicDataTrendFollowingService"),
     COIN("coin",new String[]{"CRYPTO"},"coinStockService","coinTrendFollowingService");
 
     public String TYPE;

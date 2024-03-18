@@ -82,9 +82,9 @@ public class PublicDataStockService implements StockService{
     @Override
     @Transactional( rollbackFor = Exception.class)
     public List<Stock> FetchToDB() throws IOException {
-
-        if(stockRepository.findByMarketIn(markets).size() > 0){
-            return new ArrayList<>();
+        List<Stock> byMarketIn = stockRepository.findByMarketIn(markets);
+        if(byMarketIn.size() > 0){
+            return byMarketIn;
         }
 
         // Load the resource

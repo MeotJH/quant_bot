@@ -9,7 +9,9 @@ POJO
 @Getter
 public class PublicDataStockDto {
 
-    //기준일자
+    /**
+     * 기준일자
+     */
     private String basDt;
 
     //단축코드

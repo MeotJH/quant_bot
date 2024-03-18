@@ -7,8 +7,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
+@Transactional(rollbackFor = Exception.class)
 class CoinInfoFetcherTest {
 
     @Autowired
@@ -32,7 +34,7 @@ class CoinInfoFetcherTest {
     @DisplayName("비트코인 시계열 데이터 전체를 가져와야한다")
     void getByTimeSeriesTest() {
         //given
-        String bitCoin = "BTC";
+        String bitCoin = "비트코인";
                 
         //when
         CoinCandleDto byTimeSeries = coinInfoFetcher.getByTimeSeries(bitCoin);

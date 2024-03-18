@@ -7,7 +7,6 @@ import com.server.quant_bot.stock.dto.CoinCandleDto;
 import com.server.quant_bot.stock.dto.StockDto;
 import com.server.quant_bot.stock.entity.Coin;
 import com.server.quant_bot.stock.entity.Stock;
-import com.server.quant_bot.stock.mapping.StockMapping;
 import com.server.quant_bot.stock.repository.CoinRepository;
 import com.server.quant_bot.stock.repository.StockRepository;
 import lombok.RequiredArgsConstructor;
@@ -89,7 +88,7 @@ public class CoinStockService<E> implements StockService{
             
             // stock에 암호화폐값 넣기
             stockRepository.save(
-                    new Stock().toEntity(
+                    new Stock().update(
                             entry.getValue()
                             ,MARKETS[0]
                     )

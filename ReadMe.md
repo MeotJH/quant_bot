@@ -28,9 +28,10 @@ Quantobot is a web application that makes quantitative investing accessible.
 
 - BackEnd : Spring
 - FrontEnd : Vue (client-side) by Cdn, BootStrap, Thymeleaf (sever-side)
-- Databse : ORM(JPA), H2(local,development-enviroment), PostgreSQL (production-enviroment not yet)
+- Databse : ORM(JPA), H2(local,development-enviroment), PostgreSQL (production-enviroment)
 - CI/CD : gitHub, jenkins, linux
 - Test : Junit5
+- ETC : JWT, OAuth2.0(카카오 간편로그인)
 
 ## 사용법 How to use
 

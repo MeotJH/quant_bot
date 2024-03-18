@@ -46,25 +46,50 @@ Quantobot is a web application that makes quantitative investing accessible.
 
 ---
 
-- 추세추종 투자법 :
+- 금융 공학 계산기
+  - 
+  - ### 은퇴자금 계산기
+  - <img src="./img_for_md/financeCalculator1.png" width="1000rem" height="1000rem" title="px(픽셀) 크기 설정" alt="main"></img>
+    - 은퇴 후 1년간 지출할 지출액 (3천만원)
+    - 은퇴 후 투자수익으로 얻을 기대수익 (8%)
+    - 물가상승률 보수적으로 (3%)
+    - 현재로 부터 은퇴까지 남은 년수를 입력 (15년)
+    - **결과값으로 934,780,450원 9억3천만원 정도가 나온 모습**
+  <img src="./img_for_md/financeCalculator2.png" width="1000rem" height="1000rem" title="px(픽셀) 크기 설정" alt="main"></img>
+  - ### 적립식 복리 계산기
+  - <img src="./img_for_md/financeCalculator3.png" width="1000rem" height="1000rem" title="px(픽셀) 크기 설정" alt="main"></img>
+
+주식투자는 복리로 수익률이 오른다 그렇다면 **현재 5천만원을 가지고 있고 1년에 1000만원씩 주식투자해서 매년 8%수익이 난다면 20년 후엔 얼마가 될까?** 를 계산해준다.
+
+
+ <img src="./img_for_md/financeCalculator4.png" width="1000rem" height="1000rem" title="px(픽셀) 크기 설정" alt="main"></img>
+  
+  - ### 전세 vs 월세 가성비 계산기
+    - 전세와 월세중 지금 어디에 살아야 가성비가 좋을까?
+      <img src="./img_for_md/financeCalculator5.png" width="1000rem" height="1000rem" title="px(픽셀) 크기 설정" alt="main"></img>
+
+---
+
+- 추세추종 투자법
+  - 
 
   - 메뉴에 들어가서 원하는 주식명을 입력한다.
 
-    - 메뉴 들어가는 모습
+    - 메뉴 들어가는 모습 [ 현재 **한국주식**, **암호화폐** 가능 ]
 
-    <img src="./img_for_md/trend-follow1.png" width="1000rem" height="400rem" title="px(픽셀) 크기 설정" alt="main"></img>
+    <img src="./img_for_md/trend-follow1.png" width="1000rem" height="500rem" title="px(픽셀) 크기 설정" alt="main"></img>
 
     - 검색 모달이 띄워지는 모습
 
-    <img src="./img_for_md/trend-follow2.png" width="1000rem" height="400rem" title="px(픽셀) 크기 설정" alt="main"></img>
+    <img src="./img_for_md/trend-follow2.png" width="1000rem" height="500rem" title="px(픽셀) 크기 설정" alt="main"></img>
 
     - 검색해 원하는 종목명을 파악하는 모습
 
-    <img src="./img_for_md/trend-follow3.png" width="1000rem" height="400rem" title="px(픽셀) 크기 설정" alt="main"></img>
+    <img src="./img_for_md/trend-follow3.png" width="1000rem" height="500rem" title="px(픽셀) 크기 설정" alt="main"></img>
 
   - 검색한 종목에 대한 정보와 차트가 표현된다.
 
-    - 추세추종 투자법에 따라 금일 매수가 추천되었다.
+    - 추세추종 투자법에 따라 금일 매도가 추천되었다.
 
     <img src="./img_for_md/trend-follow4.png" width="1000rem" height="400rem" title="px(픽셀) 크기 설정" alt="main"></img>
 

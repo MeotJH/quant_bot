@@ -1,6 +1,7 @@
 package com.server.quant_bot.stock.repository;
 
 import com.server.quant_bot.stock.entity.Stock;
+import com.server.quant_bot.stock.enums.StockType;
 import com.server.quant_bot.stock.mapping.StockMapping;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -16,5 +17,5 @@ public interface StockRepository extends JpaRepository<Stock, UUID> {
 
     Optional<Stock> findByStockCode(String stockCode);
 
-    List<StockMapping> findStocksByStockNameLike(String keyword);
+    List<StockMapping> findStocksByStockNameLikeAndMarketIn(String keyword, String[] markets);
 }

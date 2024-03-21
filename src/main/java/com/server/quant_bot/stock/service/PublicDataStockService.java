@@ -7,6 +7,7 @@ import com.server.quant_bot.comm.exception.ResourceCommException;
 import com.server.quant_bot.stock.dto.PublicDataStockDto;
 import com.server.quant_bot.stock.dto.StockDto;
 import com.server.quant_bot.stock.entity.Stock;
+import com.server.quant_bot.stock.enums.StockType;
 import com.server.quant_bot.stock.mapping.StockMapping;
 import com.server.quant_bot.stock.repository.StockRepository;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +55,6 @@ public class PublicDataStockService implements StockService{
     @Value("${finance.market.korea}")
     private String[] markets;
 
-    //TODO 이거 지금 name으로 검색하는것 같은데 code로 새로운 임플 만들기
     @Override
     public List<StockDto>  get(String ticker) {
         ResponseEntity<String> response = restTemplate.exchange(
@@ -114,7 +114,7 @@ public class PublicDataStockService implements StockService{
 
     @Override
     public List<StockMapping> getStocksByStockLike(String keyword) {
-        return stockRepository.findStocksByStockNameLike("%"+keyword+"%");
+        return stockRepository.findStocksByStockNameLikeAndMarketIn("%"+keyword+"%", StockType.KOREA_STOCK.MARKET);
     }
 
     private HttpEntity<?> getHttpEntity() {

@@ -68,8 +68,6 @@ public class AuthTrendFollowingImpl implements AuthTrendFollowing{
         for (TrendFollow each : trendFollows) {
 
             TrendFollowEntityLikeDto dto = each.toDto();
-
-            //TODO 이부분 캡슐화 하기
             TrendFollowDto trendFollowDto = EntityLikeToResponseMapper.INSTANCE.EntityLikeToDto(dto);
             dtos.add(trendFollowDto);
 

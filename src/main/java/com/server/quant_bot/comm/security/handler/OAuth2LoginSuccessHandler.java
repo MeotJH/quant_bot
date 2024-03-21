@@ -43,8 +43,8 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         log.info("OAuth2 Login 성공!");
         DefaultOAuth2User oAuth2User = (DefaultOAuth2User) authentication.getPrincipal();
         // TODO 1. 처음인지 아닌지 분기처리 - DefaultOAuth2User 추가해서 관여 + 디비에 적재하고 후에 여기로 오는것
-        //1.1 처음이면 회원가입 추가정보? 아니면 그냥할지 정해서 보내기
-        //1.2 처음아니면 로그인 석세스 시키기
+        //  1.1 처음이면 회원가입 추가정보? 아니면 그냥할지 정해서 보내기
+        //  1.2 처음아니면 로그인 석세스 시키기
 
 
         //새로운 유저 로그인 처리

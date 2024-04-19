@@ -35,7 +35,7 @@ const quantFetch = function (url,data = {
                 .then(async response => {
                     if (!response.ok) {
                         if(response.status == 401 || response.status == 403){
-                            quantAlert('권한이 없습니다.', 'danger');
+                            quantAlert('권한이 없습니다. 로그인해주세요.', 'danger');
                             return response.json();
                         }
                         if(response instanceof Object){

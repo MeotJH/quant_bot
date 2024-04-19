@@ -67,7 +67,10 @@ public class SecurityConfig {
                                                  ,antMatcher("/assets/**")
                                                  ,antMatcher("/api/**/**")
                                                  ,antMatcher("/")
-                                                 ,antMatcher("/view/**") )
+                                                 ,antMatcher("/view/**")
+                                                 // swagger 를 위한 url open
+                                                 ,antMatcher("/swagger-ui/**")
+                                                 ,antMatcher("/api-docs/**"))
                                     .permitAll()
                                 .requestMatchers(antMatcher("/api/**/auth/**")
                                                  ,antMatcher("/auth/**"))

@@ -3,18 +3,18 @@ spring:
     console:
       enabled: true
 
-  datasource:
-    url: jdbc:h2:tcp://localhost/~/quant_bot
-    #url: jdbc:h2:mem:quant_bot
-    driver-class-name: org.h2.Driver
-    username: rlawlsgks
-    password: rlawlsgks
-
 #  datasource:
-#    url: jdbc:postgresql://192.168.0.7:5432/postgres
-#    driver-class-name: org.postgresql.Driver
-#    username: postgres
-#    password: password
+#    url: jdbc:h2:tcp://localhost/~/quant_bot
+    #url: jdbc:h2:mem:quant_bot
+#    driver-class-name: org.h2.Driver
+#    username: rlawlsgks
+#    password: rlawlsgks
+
+  datasource:
+    url: jdbc:postgresql://192.168.0.7:5432/postgres
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: password
     #암호화하기
 
   # 설정들은 spring.io에서 doc에서 찾아서 공부해야한다.

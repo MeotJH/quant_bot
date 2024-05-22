@@ -4,6 +4,7 @@ import com.server.quant_bot.comm.exception.ResourceCommException;
 import com.server.quant_bot.comm.security.entity.UserEntity;
 import com.server.quant_bot.comm.security.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,7 +22,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
         return userRepository.findByUserId(userId)
                 .map(this::createUserDetails)
-                .orElseThrow(() -> new ResourceCommException("해당하는 유저를 찾을 수 없습니다."));
+                .orElseThrow(() -> new ResourceCommException("해당하는 유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
     }
 
     // 해당하는 User 의 데이터가 존재한다면 UserDetails 객체로 만들어서 리턴

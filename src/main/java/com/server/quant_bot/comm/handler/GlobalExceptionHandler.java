@@ -12,10 +12,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceCommException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<ErrorResponse> handleResourceNotFound(ResourceCommException ex) {
-        ErrorResponse response = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        HttpStatus httpStatus = ex.getHttpStatus();
+        if(httpStatus == null){
+            httpStatus = HttpStatus.BAD_REQUEST;
+        }
+        ErrorResponse response = new ErrorResponse(httpStatus.value(), ex.getMessage());
+        return new ResponseEntity<>(response, httpStatus);
     }
 
 

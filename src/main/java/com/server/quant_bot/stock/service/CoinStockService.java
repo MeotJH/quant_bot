@@ -45,11 +45,7 @@ public class CoinStockService<E> implements StockService{
         List<StockDto> dtos = new ArrayList<>();
         for(CoinCandleDto.Series each : series){
 
-            String baseDate = DateUtill
-                    .localDateTimeToString(
-                            LocalDateTime.ofInstant(Instant.ofEpochSecond(each.getTime()), ZoneId.systemDefault())
-                            , DateUtill.DEFAULT_DATE_TYPE
-                    );
+            String baseDate = each.getTime().toString();
             StockDto dto = StockDto
                     .builder()
                     .closingPrice(Double.valueOf(each.getClosingPrice()))

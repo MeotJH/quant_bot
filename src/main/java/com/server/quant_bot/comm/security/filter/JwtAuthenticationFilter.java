@@ -51,26 +51,27 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     // Request Header 에서 토큰 정보 추출
     private String resolveToken(HttpServletRequest request) throws UnsupportedEncodingException {
 
-        if( request.getCookies() == null){
-            return null;
+        Cookie cookie = new Cookie("Authorization", null);
+        if( request.getCookies() != null){
+            List<Cookie> authorization =
+                    Arrays
+                            .stream( request.getCookies() )
+                            .filter( each -> each.getName().equals("Authorization") )
+                            .collect( Collectors.toList() );
+
+            cookie = authorization.size() == 1 ? authorization.get(0) : null;
         }
 
-        String contextPath = request.getContextPath();
-        log.info(contextPath);
-
-        List<Cookie> authorization =
-                                        Arrays
-                                            .stream( request.getCookies() )
-                                            .filter( each -> each.getName().equals("Authorization") )
-                                            .collect( Collectors.toList() );
-
-        Cookie cookie = authorization.size() == 1 ? authorization.get(0) : null;
-        if(cookie == null){
+        String auth = request.getHeader("Authorization");
+        if(cookie == null || auth == null){
             return null;
+        }
+        if(cookie.getValue() != null){
+            auth = cookie.getValue();
         }
 
         //front 에서 던질때 encode한걸 던지고있다.
-        String bearerToken = URLDecoder.decode(cookie.getValue(), "UTF-8");
+        String bearerToken = URLDecoder.decode(auth, "UTF-8");
         log.info("::::::cookie.Authorization::::::::{}",bearerToken);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
             return bearerToken.substring(7);

@@ -25,7 +25,7 @@ class TrendFollowBatchImplTest {
     @DisplayName("추세평균 테스트를 한다.")
     void doJobTest() {
         //when
-        trendFollowBatch.doJob();
+        trendFollowBatch.checkNotificationStatus();
         //then
 
     }

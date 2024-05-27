@@ -8,6 +8,7 @@ import com.server.quant_bot.comm.security.repository.UserRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
+@Slf4j
 @Service
 @Transactional(rollbackFor = Exception.class)
 @RequiredArgsConstructor
@@ -29,18 +31,10 @@ public class UserServiceImpl implements UserService{
 
     @Transactional
     public TokenInfo login(String userId, String password, HttpServletResponse response) {
-        // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
-        // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
+
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userId, password);
-
-        // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
-        // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
-        // 3. 인증 정보를 기반으로 JWT 토큰 생성
         TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
-
-        // 4. refreshToken을 http_only로 cookie에 세팅
         setRefreshTokenToCookieHttpOnly(response,tokenInfo);
 
         return tokenInfo;
@@ -78,6 +72,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public Optional<UserEntity> findUserByLoginId() {
+        log.info(":::findUserByLoginId:::{}",SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<UserEntity> byUserId = userRepository.findByUserId( principal.getUsername() );
         return byUserId;

@@ -28,12 +28,15 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
     private final JwtTokenProvider jwtTokenProvider;
 
+    private final String AUTHORIZATION = "Authorization";
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
         // 1. Request Header 에서 JWT 토큰 추출
         String token = resolveToken((HttpServletRequest) request);
 
+        log.info("::::::Jwt token::::::::{}",token);
         if( token == null || !jwtTokenProvider.validateToken(token)){
             chain.doFilter(request,response);
             return;
@@ -51,18 +54,22 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     // Request Header 에서 토큰 정보 추출
     private String resolveToken(HttpServletRequest request) throws UnsupportedEncodingException {
 
-        Cookie cookie = new Cookie("Authorization", null);
+        Cookie cookie = new Cookie(AUTHORIZATION, null);
         if( request.getCookies() != null){
             List<Cookie> authorization =
                     Arrays
-                            .stream( request.getCookies() )
-                            .filter( each -> each.getName().equals("Authorization") )
-                            .collect( Collectors.toList() );
+                        .stream( request.getCookies() )
+                        .filter(
+                            each -> each
+                                    .getName()
+                                    .equals(AUTHORIZATION)
+                                    )
+                                    .collect( Collectors.toList() );
 
-            cookie = authorization.size() == 1 ? authorization.get(0) : null;
+            cookie = authorization.size() == 1 ? authorization.get(0) : new Cookie(AUTHORIZATION, null);
         }
 
-        String auth = request.getHeader("Authorization");
+        String auth = request.getHeader(AUTHORIZATION);
         if(cookie == null || auth == null){
             return null;
         }
@@ -73,7 +80,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         //front 에서 던질때 encode한걸 던지고있다.
         String bearerToken = URLDecoder.decode(auth, "UTF-8");
         log.info("::::::cookie.Authorization::::::::{}",bearerToken);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
+        if ( StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer") ) {
             return bearerToken.substring(7);
         }
 

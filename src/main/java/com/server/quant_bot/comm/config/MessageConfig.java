@@ -7,14 +7,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class SmsSdkConfig {
+public class MessageConfig {
 
     private final String API_KEY;
     private final String API_SECRET;
 
-    SmsSdkConfig(@Value("${message.api-key}") String apiKey, @Value("${message.api-secret}") String apisecret){
+    MessageConfig(@Value("${message.api-key}") String apiKey, @Value("${message.api-secret}") String apiSecret){
         this.API_KEY = apiKey;
-        this.API_SECRET = apisecret;
+        this.API_SECRET = apiSecret;
     }
 
     @Bean

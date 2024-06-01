@@ -61,6 +61,9 @@ dependencies {
 	// swagger
 	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.2.0'
 
+	// twilio sdk ( SNS 보내는 라이브러리 )
+	implementation 'net.nurigo:sdk:4.3.0'
+
 }
 
 tasks.named('test') {

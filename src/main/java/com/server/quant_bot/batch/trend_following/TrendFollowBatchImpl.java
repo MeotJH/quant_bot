@@ -48,16 +48,14 @@ public class TrendFollowBatchImpl implements TrendFollowBatch{
     @Scheduled(cron = "0 10 16 * * *") // Schedule to run every day at 16:00
     @Override
     public void sendNotification() {
-        /**
-         * 1. 모든 유저의 TrendFollow를 가져온다. List<TrendFollow> findTrendFollowAll
-         * 2. TrendFollow객체의 StockCode로 금일 추세평균가와 금일 종가를 가져와 비교할 데이터들 리스트를 가져온다 createCompares
-         *      2.1 오늘의 매수여부를 판단한다. isBuyToday
-         * 3. 저장했던 값과 새로 비교한 값의 isBuy Status가 다른지 확인한다. setNotifySignal
-         *  3.1 Status가 다르다면 해당 TrendFollow -> Notification 객체 Status에 True라고 값을 넣는다. saveStatus
-         */
         List<TrendFollow> trendFollowAll = findTrendFollowAll();
-        List<TrendFollowBatchDto> compares = createCompares(trendFollowAll);
-        setNotifySignal(compares);
+
+        trendFollowAll.forEach(trendFollow -> {
+            Boolean status = trendFollow.getNotification().getStatus();
+            if(status){
+                //상태 바뀌었습니다 확인하세요-> SMS 보내기
+            }
+        });
     }
 
 
@@ -96,7 +94,7 @@ public class TrendFollowBatchImpl implements TrendFollowBatch{
 
     private void setNotifySignal(List<TrendFollowBatchDto> compares){
         compares.forEach( each -> {
-            Boolean status = each.savedIsBuy().equals( each.todayIsBuy() ) ? false : true ;
+            Boolean status = !each.savedIsBuy().equals(each.todayIsBuy());
             saveStatus(each,status);
             doLog(each,status);
         });
